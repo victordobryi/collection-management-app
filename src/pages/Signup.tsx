@@ -1,7 +1,8 @@
 import React from 'react';
+import FormComponent from '../components/Form';
 
 const Signup = () => {
-  return <div></div>;
+  return <FormComponent type="signup" />;
 };
 
 export default Signup;
