@@ -1,5 +1,4 @@
 import React from 'react';
-import Main from './pages/Main';
 import Container from 'react-bootstrap/Container';
 import './styles/main.scss';
 import Header from './components/Header';
@@ -13,7 +12,7 @@ export const App = () => {
       <BrowserRouter>
         <Header />
         <main>
-          <Container>
+          <Container className="d-flex align-items-center justify-content-center flex-column">
             <AppRouter isAuth={isAuth} />
           </Container>
         </main>

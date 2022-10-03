@@ -23,7 +23,7 @@ const SelectLang = () => {
           <Flag code={selectedCountry} width={40} height={30} />
         </Dropdown.Toggle>
         <Dropdown.Menu style={{ minWidth: '75px' }}>
-          {countries.map(({ code, title }) => (
+          {countries.map(({ code }) => (
             <Dropdown.Item
               key={code}
               eventKey={code}
