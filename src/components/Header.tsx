@@ -3,9 +3,13 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import DropdownComponent from './SelectLang/SelectLang';
 import Search from './Search';
+import { useAppDispatch, useAppSelector } from '../redux-hooks';
+import { userLogout } from '../store/action-creators/users';
 
 const Header = () => {
-  const isAuth = false;
+  const { isAuth } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
       <Container>
@@ -33,7 +37,9 @@ const Header = () => {
                 <Nav.Link>Users</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/main">
-                <Nav.Link eventKey={2}>LogOut</Nav.Link>
+                <Nav.Link onClick={() => dispatch(userLogout())} eventKey={2}>
+                  LogOut
+                </Nav.Link>
               </LinkContainer>
               <DropdownComponent />
             </Nav>

@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom';
+import AdminPanel from '../pages/AdminPanel';
 import Login from '../pages/Login';
 import Main from '../pages/Main';
 import Error from '../pages/NotFound';
@@ -46,7 +47,42 @@ export const publicRoutes: IRoutes[] = [
 export const privateRoutes: IRoutes[] = [
   {
     path: RoutesName.LOGIN,
+    component: <Navigate to={RoutesName.USERS} />
+  },
+  {
+    path: RoutesName.SIGNUP,
+    component: <Navigate to={RoutesName.USERS} />
+  },
+  {
+    path: RoutesName.USERS,
+    component: <Users />
+  },
+  {
+    path: RoutesName.MAIN,
+    component: <Main />
+  },
+  {
+    path: RoutesName.USER,
+    component: <User />
+  },
+  {
+    path: '/',
+    component: <Navigate to="/main" />
+  },
+  {
+    path: '*',
+    component: <Error />
+  }
+];
+
+export const adminRoutes: IRoutes[] = [
+  {
+    path: RoutesName.LOGIN,
     component: <Navigate to={RoutesName.ADMIN_PANEL} />
+  },
+  {
+    path: RoutesName.ADMIN_PANEL,
+    component: <AdminPanel />
   },
   {
     path: RoutesName.USERS,
