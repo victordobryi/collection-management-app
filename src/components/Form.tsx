@@ -17,14 +17,16 @@ const FormComponent = ({ type }: ILogin) => {
       .required('Password is required')
       .min(6, 'Password must be at least 6 characters')
       .max(40, 'Password must not exceed 40 characters'),
-    confirmPassword: Yup.string()
-      .required('Confirm Password is required')
-      .oneOf([Yup.ref('password'), null], 'Confirm Password does not match')
+    confirmPassword:
+      type !== 'login'
+        ? Yup.string()
+            .required('Confirm Password is required')
+            .oneOf(
+              [Yup.ref('password'), null],
+              'Confirm Password does not match'
+            )
+        : Yup.string()
   });
-
-  const handleSubmit = () => {
-    console.log('submit');
-  };
 
   return (
     <Formik
@@ -35,7 +37,9 @@ const FormComponent = ({ type }: ILogin) => {
         confirmPassword: ''
       }}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={(values) => {
+        console.log(values);
+      }}
     >
       {() => (
         <>
