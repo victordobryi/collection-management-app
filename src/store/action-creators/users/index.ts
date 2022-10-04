@@ -29,8 +29,7 @@ export const userLogout = () => async (dispatch: AppDispatch) => {
 };
 
 export const userSignup =
-  (username: string, password: string, language: string) =>
-  async (dispatch: AppDispatch) => {
+  (username: string, password: string) => async (dispatch: AppDispatch) => {
     try {
       dispatch(authSlice.actions.setLoading(true));
       const response = (await UserService.getUsers()).data;
@@ -38,7 +37,7 @@ export const userSignup =
         (user) => user.username === username
       );
       if (!loginedUser) {
-        (await UserService.addUser({ username, password, language })).data;
+        (await UserService.addUser({ username, password })).data;
         dispatch(authSlice.actions.setAuth(true));
       } else {
         dispatch(authSlice.actions.setError('Юзер уже авторизирован!'));

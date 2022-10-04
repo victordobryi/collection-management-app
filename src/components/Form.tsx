@@ -11,7 +11,7 @@ interface ILogin {
 }
 
 const FormComponent = ({ type }: ILogin) => {
-  const { error, lang } = useAppSelector((state) => state.auth);
+  const { error } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { setError } = authSlice.actions;
 
@@ -49,10 +49,10 @@ const FormComponent = ({ type }: ILogin) => {
         confirmPassword: ''
       }}
       validationSchema={validationSchema}
-      onSubmit={({ password, username, confirmPassword }) => {
+      onSubmit={({ password, username }) => {
         type === 'login'
           ? dispatch(userLogin(username, password))
-          : dispatch(userSignup(username, password, lang));
+          : dispatch(userSignup(username, password));
       }}
     >
       {() => (

@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
+import React from 'react';
+import { Container, Spinner } from 'react-bootstrap';
 import './styles/main.scss';
 import Header from './components/Header';
 import AppRouter from './router/AppRouter';
 import { BrowserRouter } from 'react-router-dom';
 import { useAppSelector } from './redux-hooks';
-import { Spinner } from 'react-bootstrap';
 
 export const App = () => {
-  const { isAuth, isLoading } = useAppSelector((state) => state.auth);
+  const { isLoading } = useAppSelector((state) => state.auth);
+
   return (
     <>
       <BrowserRouter>
@@ -20,7 +20,7 @@ export const App = () => {
             </Spinner>
           ) : (
             <Container className="d-flex align-items-center justify-content-center flex-column">
-              <AppRouter isAuth={isAuth} />
+              <AppRouter />
             </Container>
           )}
         </main>

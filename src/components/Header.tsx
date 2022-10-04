@@ -1,10 +1,11 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import DropdownComponent from './SelectLang/SelectLang';
 import Search from './Search';
 import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { userLogout } from '../store/action-creators/users';
+import SelectLang from './SelectLang/SelectLang';
+import SelectMode from './SelectMode/SelectMode';
 
 const Header = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
@@ -22,17 +23,18 @@ const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Search />
           {!isAuth ? (
-            <Nav className="ms-auto">
+            <Nav className="ms-auto d-flex align-items-center">
               <LinkContainer to="/signup">
                 <Nav.Link>SignUp</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/login">
                 <Nav.Link eventKey={2}>LogIn</Nav.Link>
               </LinkContainer>
-              <DropdownComponent />
+              <SelectLang />
+              <SelectMode />
             </Nav>
           ) : (
-            <Nav className="ms-auto">
+            <Nav className="ms-auto d-flex align-items-center">
               <LinkContainer to="/users">
                 <Nav.Link>Users</Nav.Link>
               </LinkContainer>
@@ -41,7 +43,8 @@ const Header = () => {
                   LogOut
                 </Nav.Link>
               </LinkContainer>
-              <DropdownComponent />
+              <SelectLang />
+              <SelectMode />
             </Nav>
           )}
         </Navbar.Collapse>

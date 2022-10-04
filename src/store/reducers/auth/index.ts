@@ -6,7 +6,6 @@ interface Auth {
   error: string;
   isAdmin: boolean;
   lang: 'pl' | 'gb';
-  isDarkMode: boolean;
 }
 
 const initialState: Auth = {
@@ -14,8 +13,7 @@ const initialState: Auth = {
   isLoading: false,
   error: '',
   isAdmin: false,
-  lang: 'gb',
-  isDarkMode: true
+  lang: 'gb'
 };
 
 export const authSlice = createSlice({
@@ -38,9 +36,6 @@ export const authSlice = createSlice({
     },
     setLang(state, action: PayloadAction<'pl' | 'gb'>) {
       state.lang = action.payload;
-    },
-    setDarkMode(state, action: PayloadAction<boolean>) {
-      state.isDarkMode = action.payload;
     }
   }
 });
