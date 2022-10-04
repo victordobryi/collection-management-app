@@ -12,6 +12,7 @@ export const userLogin =
       );
       if (currentUser && !currentUser.isBlocked) {
         dispatch(authSlice.actions.setAuth(true));
+        localStorage.setItem('isAuth', 'true');
       } else if (currentUser?.isBlocked) {
         dispatch(authSlice.actions.setError('Юзер заблокирован!'));
       } else {
@@ -24,6 +25,7 @@ export const userLogin =
   };
 
 export const userLogout = () => async (dispatch: AppDispatch) => {
+  localStorage.removeItem('isAuth');
   dispatch(authSlice.actions.setAuth(false));
   dispatch(authSlice.actions.setError(''));
 };
@@ -39,6 +41,7 @@ export const userSignup =
       if (!loginedUser) {
         (await UserService.addUser({ username, password })).data;
         dispatch(authSlice.actions.setAuth(true));
+        localStorage.setItem('isAuth', 'true');
       } else {
         dispatch(authSlice.actions.setError('Юзер уже авторизирован!'));
       }

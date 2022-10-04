@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 import './styles/main.scss';
 import Header from './components/Header';
 import AppRouter from './router/AppRouter';
 import { BrowserRouter } from 'react-router-dom';
-import { useAppSelector } from './redux-hooks';
+import { useAppDispatch, useAppSelector } from './redux-hooks';
+import { authSlice } from './store/reducers/auth';
 
 export const App = () => {
   const { isLoading } = useAppSelector((state) => state.auth);
+  const { setAuth } = authSlice.actions;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem('isAuth');
+    isAuth ? dispatch(setAuth(true)) : dispatch(setAuth(false));
+  }, []);
 
   return (
     <>
