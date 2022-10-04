@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
-import { Button, FormGroup } from 'react-bootstrap';
+import { Alert, Button, FormGroup } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { useAppDispatch, useAppSelector } from '../redux-hooks';
+import { userLogin, userSignup } from '../store/action-creators/users';
+import { authSlice } from '../store/reducers/auth';
 
 interface ILogin {
   type: 'login' | 'signup';
 }
 
 const FormComponent = ({ type }: ILogin) => {
+  const { error } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const { setError } = authSlice.actions;
+
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required('Lastname is required')
@@ -28,17 +35,24 @@ const FormComponent = ({ type }: ILogin) => {
         : Yup.string()
   });
 
+  useEffect(() => {
+    window.setTimeout(() => {
+      dispatch(setError(''));
+    }, 5000);
+  }, [error]);
+
   return (
     <Formik
       initialValues={{
         username: '',
-        email: '',
         password: '',
         confirmPassword: ''
       }}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={({ password, username }) => {
+        type === 'login'
+          ? dispatch(userLogin(username, password))
+          : dispatch(userSignup(username, password));
       }}
     >
       {() => (
@@ -97,6 +111,19 @@ const FormComponent = ({ type }: ILogin) => {
               </Button>
             </FormGroup>
           </Form>
+          {error ? (
+            <Alert
+              variant="danger"
+              onClose={() => dispatch(authSlice.actions.setError(''))}
+              dismissible
+              className="overlay"
+            >
+              <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+              <p>{error}</p>
+            </Alert>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </Formik>

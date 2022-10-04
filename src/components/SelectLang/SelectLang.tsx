@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import Flag from 'react-world-flags';
 import './select-lang.scss';
@@ -8,15 +8,26 @@ const SelectLang = () => {
     { code: 'gb', title: 'United Kingdom' },
     { code: 'pl', title: 'Poland' }
   ]);
-
   const [selectedCountry, setSelectedCountry] = useState<string>('gb');
+
+  useEffect(() => {
+    const currentLang = localStorage.getItem('lang') as 'gb' | 'pl';
+    if (currentLang) {
+      setSelectedCountry(currentLang);
+    } else {
+      localStorage.setItem('lang', 'gb');
+    }
+  }, []);
 
   return (
     <Form>
       <Dropdown
         onSelect={(eventKey) => {
           const country = countries.find(({ code }) => eventKey === code);
-          setSelectedCountry(country!.code);
+          if (country) {
+            setSelectedCountry(country.code);
+            localStorage.setItem('lang', country.code);
+          }
         }}
       >
         <Dropdown.Toggle variant="secondary" className="d-flex">

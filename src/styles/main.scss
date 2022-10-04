@@ -2,6 +2,7 @@
 @import 'fonts';
 @import '~bootstrap/scss/bootstrap';
 @import 'reset';
+@import 'darkMode';
 
 html,
 body {
@@ -43,4 +44,24 @@ main {
 
 .ms-n5 {
   margin-left: -48px;
+}
+
+.overlay {
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  animation: anim 5s ease;
+  position: absolute;
+  bottom: 10px;
+}
+
+@keyframes anim {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

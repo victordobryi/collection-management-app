@@ -1,13 +1,18 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { privateRoutes, publicRoutes } from './routes';
+import { useAppSelector } from '../redux-hooks';
+import { adminRoutes, privateRoutes, publicRoutes } from './routes';
 
-interface IAppRouter {
-  isAuth: boolean;
-}
+const AppRouter = () => {
+  const { isAuth, isAdmin } = useAppSelector((state) => state.auth);
 
-const AppRouter = ({ isAuth }: IAppRouter) => {
-  return isAuth ? (
+  return isAuth && isAdmin ? (
+    <Routes>
+      {adminRoutes.map(({ path, component }, index) => (
+        <Route key={index} path={path} element={component} />
+      ))}
+    </Routes>
+  ) : isAuth && !isAdmin ? (
     <Routes>
       {privateRoutes.map(({ path, component }, index) => (
         <Route key={index} path={path} element={component} />
