@@ -5,6 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { userLogin, userSignup } from '../store/action-creators/users';
 import { authSlice } from '../store/reducers/auth';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface ILogin {
   type: 'login' | 'signup';
@@ -14,6 +15,7 @@ const FormComponent = ({ type }: ILogin) => {
   const { error } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { setError } = authSlice.actions;
+  const { t } = useTranslation();
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -57,14 +59,16 @@ const FormComponent = ({ type }: ILogin) => {
     >
       {() => (
         <>
-          <h2>{type.toUpperCase()}</h2>
+          <Trans i18nKey={type.toUpperCase()}>
+            <h2>{type.toUpperCase()}</h2>
+          </Trans>
           <Form>
             <FormGroup className="mt-3">
               <Field
                 name="username"
                 type="text"
                 className="form-control"
-                placeholder="Username"
+                placeholder={t('Username')}
               />
               <ErrorMessage
                 name="username"
@@ -77,7 +81,7 @@ const FormComponent = ({ type }: ILogin) => {
                 name="password"
                 type="password"
                 className="form-control"
-                placeholder="Password"
+                placeholder={t('Password')}
               />
               <ErrorMessage
                 name="password"
@@ -91,7 +95,7 @@ const FormComponent = ({ type }: ILogin) => {
                   name="confirmPassword"
                   type="password"
                   className="form-control"
-                  placeholder="Confirm Password"
+                  placeholder={t('Confirm Password')}
                 />
                 <ErrorMessage
                   name="confirmPassword"
@@ -104,10 +108,12 @@ const FormComponent = ({ type }: ILogin) => {
             )}
             <FormGroup className="mt-3 d-flex justify-content-between">
               <Button type="submit" variant="dark">
-                {type[0].toUpperCase() + type.slice(1)}
+                <Trans i18nKey={type[0].toUpperCase() + type.slice(1)}>
+                  {type[0].toUpperCase() + type.slice(1)}
+                </Trans>
               </Button>
               <Button type="reset" variant="warning">
-                Reset
+                {t('Reset')}
               </Button>
             </FormGroup>
           </Form>
@@ -118,7 +124,7 @@ const FormComponent = ({ type }: ILogin) => {
               dismissible
               className="overlay"
             >
-              <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+              <Alert.Heading>{t('Oh snap! You got an error!')}</Alert.Heading>
               <p>{error}</p>
             </Alert>
           ) : (

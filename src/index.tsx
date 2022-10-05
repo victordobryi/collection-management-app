@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { App } from './App';
 import { setupStore } from './store/store';
+import './localization/app';
 
 const store = setupStore();
 

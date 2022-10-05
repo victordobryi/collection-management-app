@@ -5,15 +5,13 @@ interface Auth {
   isLoading: boolean;
   error: string;
   isAdmin: boolean;
-  lang: 'pl' | 'gb';
 }
 
 const initialState: Auth = {
   isAuth: false,
   isLoading: false,
   error: '',
-  isAdmin: false,
-  lang: 'gb'
+  isAdmin: false
 };
 
 export const authSlice = createSlice({
@@ -33,9 +31,6 @@ export const authSlice = createSlice({
     },
     setAdmin(state, action: PayloadAction<boolean>) {
       state.isAdmin = action.payload;
-    },
-    setLang(state, action: PayloadAction<'pl' | 'gb'>) {
-      state.lang = action.payload;
     }
   }
 });
