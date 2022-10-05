@@ -6,14 +6,11 @@ export interface FormData {
 }
 
 export interface IUser {
-  isAuth?: boolean;
   isAdmin?: boolean;
   isBlocked?: boolean;
-  id?: string;
-  language?: string;
-  isDarkMode?: boolean;
+  id: string;
   username: string;
-  password: string;
+  password?: string;
 }
 
 export interface UserResponse {

@@ -16,7 +16,7 @@ export enum RoutesName {
   LOGIN = '/login',
   MAIN = '/main',
   USERS = '/users',
-  USER = '/users/:id',
+  USER = '/user/:id',
   SIGNUP = '/signup',
   ADMIN_PANEL = '/admin'
 }
