@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
-import { Alert, Button, FormGroup } from 'react-bootstrap';
+import { Alert, Button, FormGroup, Spinner } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { userLogin, userSignup } from '../store/action-creators/users';
@@ -12,7 +12,7 @@ interface ILogin {
 }
 
 const FormComponent = ({ type }: ILogin) => {
-  const { error } = useAppSelector((state) => state.auth);
+  const { error, isLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { setError } = authSlice.actions;
   const { t } = useTranslation();
@@ -57,81 +57,87 @@ const FormComponent = ({ type }: ILogin) => {
           : dispatch(userSignup(username, password));
       }}
     >
-      {() => (
-        <>
-          <Trans i18nKey={type.toUpperCase()}>
-            <h2>{type.toUpperCase()}</h2>
-          </Trans>
-          <Form>
-            <FormGroup className="mt-3">
-              <Field
-                name="username"
-                type="text"
-                className="form-control"
-                placeholder={t('Username')}
-              />
-              <ErrorMessage
-                name="username"
-                component="div"
-                className="text-danger"
-              />
-            </FormGroup>
-            <FormGroup className="mt-3">
-              <Field
-                name="password"
-                type="password"
-                className="form-control"
-                placeholder={t('Password')}
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="text-danger"
-              />
-            </FormGroup>
-            {type === 'signup' ? (
+      {() =>
+        isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : (
+          <>
+            <Trans i18nKey={type.toUpperCase()}>
+              <h2>{type.toUpperCase()}</h2>
+            </Trans>
+            <Form>
               <FormGroup className="mt-3">
                 <Field
-                  name="confirmPassword"
-                  type="password"
+                  name="username"
+                  type="text"
                   className="form-control"
-                  placeholder={t('Confirm Password')}
+                  placeholder={t('Username')}
                 />
                 <ErrorMessage
-                  name="confirmPassword"
+                  name="username"
                   component="div"
                   className="text-danger"
                 />
               </FormGroup>
+              <FormGroup className="mt-3">
+                <Field
+                  name="password"
+                  type="password"
+                  className="form-control"
+                  placeholder={t('Password')}
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-danger"
+                />
+              </FormGroup>
+              {type === 'signup' ? (
+                <FormGroup className="mt-3">
+                  <Field
+                    name="confirmPassword"
+                    type="password"
+                    className="form-control"
+                    placeholder={t('Confirm Password')}
+                  />
+                  <ErrorMessage
+                    name="confirmPassword"
+                    component="div"
+                    className="text-danger"
+                  />
+                </FormGroup>
+              ) : (
+                <></>
+              )}
+              <FormGroup className="mt-3 d-flex justify-content-between">
+                <Button type="submit" variant="dark">
+                  <Trans i18nKey={type[0].toUpperCase() + type.slice(1)}>
+                    {type[0].toUpperCase() + type.slice(1)}
+                  </Trans>
+                </Button>
+                <Button type="reset" variant="warning">
+                  {t('Reset')}
+                </Button>
+              </FormGroup>
+            </Form>
+            {error ? (
+              <Alert
+                variant="danger"
+                onClose={() => dispatch(authSlice.actions.setError(''))}
+                dismissible
+                className="overlay"
+              >
+                <Alert.Heading>{t('Oh snap! You got an error!')}</Alert.Heading>
+                <p>{error}</p>
+              </Alert>
             ) : (
               <></>
             )}
-            <FormGroup className="mt-3 d-flex justify-content-between">
-              <Button type="submit" variant="dark">
-                <Trans i18nKey={type[0].toUpperCase() + type.slice(1)}>
-                  {type[0].toUpperCase() + type.slice(1)}
-                </Trans>
-              </Button>
-              <Button type="reset" variant="warning">
-                {t('Reset')}
-              </Button>
-            </FormGroup>
-          </Form>
-          {error ? (
-            <Alert
-              variant="danger"
-              onClose={() => dispatch(authSlice.actions.setError(''))}
-              dismissible
-              className="overlay"
-            >
-              <Alert.Heading>{t('Oh snap! You got an error!')}</Alert.Heading>
-              <p>{error}</p>
-            </Alert>
-          ) : (
-            <></>
-          )}
-        </>
-      )}
+          </>
+        )
+      }
     </Formik>
   );
 };
