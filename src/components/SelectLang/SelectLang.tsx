@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import Flag from 'react-world-flags';
 import './select-lang.scss';
+import { useTranslation } from 'react-i18next';
 
 const SelectLang = () => {
   const [countries] = useState([
@@ -9,15 +10,23 @@ const SelectLang = () => {
     { code: 'pl', title: 'Poland' }
   ]);
   const [selectedCountry, setSelectedCountry] = useState<string>('gb');
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const currentLang = localStorage.getItem('lang') as 'gb' | 'pl';
     if (currentLang) {
-      setSelectedCountry(currentLang);
+      toggleLanguage(currentLang);
     } else {
       localStorage.setItem('lang', 'gb');
+      toggleLanguage('gb');
     }
   }, []);
+
+  const toggleLanguage = (country: string) => {
+    i18n.changeLanguage(country);
+    setSelectedCountry(country);
+    localStorage.setItem('lang', country);
+  };
 
   return (
     <Form>
@@ -25,8 +34,7 @@ const SelectLang = () => {
         onSelect={(eventKey) => {
           const country = countries.find(({ code }) => eventKey === code);
           if (country) {
-            setSelectedCountry(country.code);
-            localStorage.setItem('lang', country.code);
+            toggleLanguage(country.code);
           }
         }}
       >

@@ -6,10 +6,12 @@ import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { userLogout } from '../store/action-creators/users';
 import SelectLang from './SelectLang/SelectLang';
 import SelectMode from './SelectMode/SelectMode';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
@@ -25,10 +27,10 @@ const Header = () => {
           {!isAuth ? (
             <Nav className="ms-auto d-flex align-items-center">
               <LinkContainer to="/signup">
-                <Nav.Link>SignUp</Nav.Link>
+                <Nav.Link>{t('SignUp')}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/login">
-                <Nav.Link eventKey={2}>LogIn</Nav.Link>
+                <Nav.Link eventKey={2}>{t('LogIn')}</Nav.Link>
               </LinkContainer>
               <SelectLang />
               <SelectMode />
@@ -36,11 +38,11 @@ const Header = () => {
           ) : (
             <Nav className="ms-auto d-flex align-items-center">
               <LinkContainer to="/users">
-                <Nav.Link>Users</Nav.Link>
+                <Nav.Link>{t('Users')}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/main">
                 <Nav.Link onClick={() => dispatch(userLogout())} eventKey={2}>
-                  LogOut
+                  {t('LogOut')}
                 </Nav.Link>
               </LinkContainer>
               <SelectLang />
