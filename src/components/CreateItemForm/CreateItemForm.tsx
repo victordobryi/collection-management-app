@@ -31,9 +31,10 @@ const CreateItemForm = ({
       title,
       likes: 0,
       id,
-      createTime: Date.now(),
+      createTime: String(Date.now()),
       additionalInputs: JSON.stringify(newInputsData)
     };
+    console.log(item);
     try {
       setLoading(true);
       ItemService.addItem(item);
