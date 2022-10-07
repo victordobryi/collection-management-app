@@ -1,11 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import { IItem, ItemResponse } from '../models/IItem';
+import { IItem, ItemResponse, ItemsResponse } from '../models/IItem';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/items/';
 
 export default class ItemService {
-  static async getItems(): Promise<AxiosResponse<ItemResponse>> {
-    return axios.get<ItemResponse>(URL);
+  static async getItems(): Promise<AxiosResponse<ItemsResponse>> {
+    return axios.get<ItemsResponse>(URL);
   }
   static async getItem(
     id: number | string
