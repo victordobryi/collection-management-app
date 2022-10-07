@@ -1,9 +1,10 @@
 export interface ICollection {
   id: string;
   title: string;
-  description?: string;
+  description: string;
   theme: string;
-  img: string;
+  img?: string;
+  additionalInputs?: string;
 }
 
 export interface CollectionResponse {
