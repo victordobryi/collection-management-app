@@ -7,7 +7,12 @@ export interface ICollection {
   additionalInputs?: string;
 }
 
-export interface CollectionResponse {
+export interface CollectionsResponse {
   message: string;
   data: ICollection[];
+}
+
+export interface CollectionResponse {
+  message: string;
+  data: ICollection;
 }

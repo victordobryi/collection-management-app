@@ -1,11 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
-import { ICollection, CollectionResponse } from '../models/ICollection';
+import {
+  ICollection,
+  CollectionResponse,
+  CollectionsResponse
+} from '../models/ICollection';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/collections/';
 
 export default class CollectionService {
-  static async getCollections(): Promise<AxiosResponse<CollectionResponse>> {
-    return axios.get<CollectionResponse>(URL);
+  static async getCollections(): Promise<AxiosResponse<CollectionsResponse>> {
+    return axios.get<CollectionsResponse>(URL);
   }
   static async getCollection(
     id: number | string

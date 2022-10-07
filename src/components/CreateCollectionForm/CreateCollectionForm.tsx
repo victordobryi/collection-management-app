@@ -43,7 +43,6 @@ const CreateCollectionForm = ({
   const createCollection = async () => {
     const url = await mediaUploader(media);
     setUrl(url[0]);
-    console.log(JSON.stringify(additionalProps));
     const collection: ICollection = {
       title,
       description,
