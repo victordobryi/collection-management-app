@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CollectionService from '../API/CollectionService';
 import { ICollection } from '../models/ICollection';
 import { Button, Container, Spinner, Row, Modal } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
 import CreateCollectionForm from '../components/CreateCollectionForm/CreateCollectionForm';
 
@@ -12,6 +12,7 @@ const User = () => {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setShow(false);
@@ -20,6 +21,10 @@ const User = () => {
   const handleShow = () => {
     setShow(true);
     setIsVisible(true);
+  };
+
+  const goBack = () => {
+    navigate('/users/');
   };
 
   useEffect(() => {
@@ -44,9 +49,14 @@ const User = () => {
 
   return (
     <Container className="d-flex align-items-center flex-column flex-grow-1 mt-3">
-      <Button className="align-self-end" onClick={handleShow}>
-        Create Collection
-      </Button>
+      <Container className="d-flex justify-content-between">
+        <Button className="align-self-start" onClick={goBack}>
+          Go back
+        </Button>
+        <Button className="align-self-end" onClick={handleShow}>
+          Create Collection
+        </Button>
+      </Container>
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>

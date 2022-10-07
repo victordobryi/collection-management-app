@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Modal, Row, Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CollectionService from '../API/CollectionService';
 import ItemService from '../API/ItemsService';
 import CreateItemForm from '../components/CreateItemForm/CreateItemForm';
@@ -13,6 +13,7 @@ const Collection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [additionalProps, setAdditionalProps] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +39,20 @@ const Collection = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const goBack = () => {
+    navigate(`/user/${id}`);
+  };
+
   return (
     <Container className="d-flex align-items-center flex-column flex-grow-1 mt-3">
-      <Button className="align-self-end" onClick={handleShow}>
-        Create Item
-      </Button>
+      <Container className="d-flex justify-content-between">
+        <Button className="align-self-start" onClick={goBack}>
+          Go back
+        </Button>
+        <Button className="align-self-end" onClick={handleShow}>
+          Create Item
+        </Button>
+      </Container>
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
