@@ -23,7 +23,7 @@ export const App = () => {
       <BrowserRouter>
         <Header />
         <main>
-          <Container className="d-flex align-items-center justify-content-center flex-column">
+          <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
             <AppRouter />
           </Container>
         </main>
