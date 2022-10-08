@@ -12,6 +12,7 @@ const Collection = () => {
   const [items, setItems] = useState<IItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
+  const [userId, setUserId] = useState('');
   const [additionalProps, setAdditionalProps] = useState('');
   const navigate = useNavigate();
 
@@ -22,11 +23,14 @@ const Collection = () => {
         const itemsData = (await ItemService.getItems()).data;
         const collection = (await CollectionService.getCollection(id!)).data;
         if (id) {
-          const currentItems = itemsData.data.filter((item) => item.id === id);
+          const currentItems = itemsData.data.filter(
+            (item) => item.collectionId === id
+          );
           setItems(currentItems);
         }
         if (collection) {
           setAdditionalProps(collection.data.additionalInputs!);
+          setUserId(collection.data.userId);
         }
       } catch (error) {
         console.log(error);
@@ -40,12 +44,12 @@ const Collection = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const goBack = () => {
-    navigate(`/user/${id}`);
+    navigate(`/user/${userId}`);
   };
 
   return (
-    <Container className="d-flex align-items-center flex-column flex-grow-1 mt-3">
-      <Container className="d-flex justify-content-between">
+    <>
+      <Container className="d-flex justify-content-between  mt-3 ">
         <Button className="align-self-start" onClick={goBack}>
           Go back
         </Button>
@@ -53,35 +57,41 @@ const Collection = () => {
           Create Item
         </Button>
       </Container>
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      ) : (
-        <Row className="d-flex flex-wrap gap-3 mt-5">
-          {items.map(
-            ({ createTime, id, likes, title, additionalInputs }, index) => (
-              <ItemContainer
-                key={index}
-                id={id}
-                likes={likes}
-                title={title}
-                additionalInputs={additionalInputs}
-                createTime={createTime}
-              />
+      <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
+        <Row className="d-flex flex-wrap gap-3 mt-5 ">
+          {isLoading ? (
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          ) : (
+            items.map(
+              (
+                { createTime, likes, title, additionalInputs, collectionId },
+                index
+              ) => (
+                <ItemContainer
+                  key={index}
+                  id={collectionId}
+                  likes={likes}
+                  title={title}
+                  additionalInputs={additionalInputs}
+                  createTime={createTime}
+                  collectionId={collectionId}
+                />
+              )
             )
           )}
         </Row>
-      )}
-      <Modal show={show} onHide={handleClose}>
-        <CreateItemForm
-          handleClose={handleClose}
-          id={id!}
-          setLoading={setIsLoading}
-          additionalInputs={additionalProps}
-        />
-      </Modal>
-    </Container>
+        <Modal show={show} onHide={handleClose}>
+          <CreateItemForm
+            handleClose={handleClose}
+            collectionId={id!}
+            setLoading={setIsLoading}
+            additionalInputs={additionalProps}
+          />
+        </Modal>
+      </Container>
+    </>
   );
 };
 

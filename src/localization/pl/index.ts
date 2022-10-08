@@ -4,7 +4,7 @@ export const translationsPL = {
   LogIn: 'Logowanie',
   Users: 'Użytkownicy',
   LogOut: 'Wyloguj',
-  search: 'szukaj',
+  Search: 'Szukaj',
   Username: 'Nazwa użytkownika',
   Password: 'Hasło',
   'Confirm Password': 'Potwierdź Hasło',

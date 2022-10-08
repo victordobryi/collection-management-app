@@ -44,7 +44,7 @@ const AdditionalModal = ({
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Select onChange={(e) => setType(e.target.value)}>
               <option disabled>Сhoose the type of the new property</option>
-              <option value="input">Input</option>
+              <option value="text">Text</option>
               <option value="textarea">Textarea</option>
               <option value="checkbox">Checkbox</option>
               <option value="number">Number</option>

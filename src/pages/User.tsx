@@ -34,7 +34,7 @@ const User = () => {
         const dbCollections = (await CollectionService.getCollections()).data;
         if (id) {
           const ownCollections = dbCollections.data.filter(
-            (collection) => collection.id === id
+            (collection) => collection.userId === id
           );
           setCollections(ownCollections);
         }
@@ -48,8 +48,8 @@ const User = () => {
   }, []);
 
   return (
-    <Container className="d-flex align-items-center flex-column flex-grow-1 mt-3">
-      <Container className="d-flex justify-content-between">
+    <>
+      <Container className="d-flex justify-content-between mt-3">
         <Button className="align-self-start" onClick={goBack}>
           Go back
         </Button>
@@ -57,43 +57,54 @@ const User = () => {
           Create Collection
         </Button>
       </Container>
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      ) : (
-        <Row className="d-flex flex-wrap gap-3 mt-5">
-          {collections.map(
-            (
-              { description, title, theme, img, id, additionalInputs },
-              index
-            ) => (
-              <CollectionContainer
-                key={index}
-                id={id}
-                description={description}
-                title={title}
-                theme={theme}
-                img={img}
-                additionalInputs={additionalInputs}
-              />
-            )
-          )}
-        </Row>
-      )}
-      <Modal
-        show={show}
-        onHide={handleClose}
-        style={{ visibility: `${isVisible ? 'visible' : 'hidden'}` }}
-      >
-        <CreateCollectionForm
-          handleClose={handleClose}
-          id={id!}
-          setLoading={setIsLoading}
-          setIsVisible={setIsVisible}
-        />
-      </Modal>
-    </Container>
+      <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : (
+          <Row className="d-flex flex-wrap gap-3 mt-5">
+            {collections.map(
+              (
+                {
+                  description,
+                  title,
+                  theme,
+                  img,
+                  userId,
+                  additionalInputs,
+                  id
+                },
+                index
+              ) => (
+                <CollectionContainer
+                  key={index}
+                  description={description}
+                  title={title}
+                  theme={theme}
+                  img={img}
+                  additionalInputs={additionalInputs}
+                  userId={userId}
+                  id={id}
+                />
+              )
+            )}
+          </Row>
+        )}
+        <Modal
+          show={show}
+          onHide={handleClose}
+          style={{ visibility: `${isVisible ? 'visible' : 'hidden'}` }}
+        >
+          <CreateCollectionForm
+            handleClose={handleClose}
+            userId={id!}
+            setLoading={setIsLoading}
+            setIsVisible={setIsVisible}
+          />
+        </Modal>
+      </Container>
+    </>
   );
 };
 

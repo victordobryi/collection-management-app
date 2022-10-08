@@ -8,7 +8,7 @@ import AdditionalModal from './AdditionalModal';
 
 interface ModalProps {
   handleClose: () => void;
-  id: string;
+  userId: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -20,7 +20,7 @@ export interface additionalProps {
 
 const CreateCollectionForm = ({
   handleClose,
-  id,
+  userId,
   setLoading,
   setIsVisible
 }: ModalProps) => {
@@ -47,7 +47,7 @@ const CreateCollectionForm = ({
       title,
       description,
       theme,
-      id,
+      userId,
       img: url[0],
       additionalInputs: JSON.stringify(additionalProps)
     };

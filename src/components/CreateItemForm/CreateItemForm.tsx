@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import ItemService from '../../API/ItemsService';
 import { IItem } from '../../models/IItem';
 import { additionalProps } from '../CreateCollectionForm/CreateCollectionForm';
 
 interface ModalProps {
   handleClose: () => void;
-  id: string;
+  collectionId: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   additionalInputs: string;
 }
@@ -17,7 +17,7 @@ export interface newInputsData {
 }
 
 const CreateItemForm = ({
-  id,
+  collectionId,
   handleClose,
   setLoading,
   additionalInputs
@@ -25,16 +25,16 @@ const CreateItemForm = ({
   const [title, setTitle] = useState('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
   const newInputs: additionalProps[] = JSON.parse(additionalInputs);
+  const [isChecked, setIsChecked] = useState(false);
 
   const createItem = async () => {
     const item: IItem = {
       title,
       likes: 0,
-      id,
+      collectionId,
       createTime: String(Date.now()),
       additionalInputs: JSON.stringify(newInputsData)
     };
-    console.log(item);
     try {
       setLoading(true);
       ItemService.addItem(item);
@@ -65,15 +65,31 @@ const CreateItemForm = ({
           {newInputs.map(({ name, type }, index) => (
             <Form.Group className="mb-3" key={index}>
               <Form.Label>{name}</Form.Label>
-              <Form.Control
-                type={type}
-                onChange={(e) =>
-                  setNewInputsData((values) => ({
-                    ...values,
-                    [name]: e.target.value
-                  }))
-                }
-              />
+              {type === 'checkbox' ? (
+                <Form.Check
+                  checked={isChecked}
+                  onChange={(e) => {
+                    setIsChecked(!isChecked);
+                    setNewInputsData((values) => ({
+                      ...values,
+                      [name]: !isChecked
+                    }));
+                  }}
+                />
+              ) : (
+                <>
+                  <Form.Control
+                    type={type}
+                    as={type === 'textarea' ? 'textarea' : undefined}
+                    onChange={(e) =>
+                      setNewInputsData((values) => ({
+                        ...values,
+                        [name]: e.target.value
+                      }))
+                    }
+                  />
+                </>
+              )}
             </Form.Group>
           ))}
         </Form>
