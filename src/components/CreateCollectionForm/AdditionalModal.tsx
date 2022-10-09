@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { additionalProps } from './CreateCollectionForm';
+import { useTranslation } from 'react-i18next';
 
 interface additionalModalProps {
   handleCloseAdditional: () => void;
@@ -15,6 +16,7 @@ const AdditionalModal = ({
 }: additionalModalProps) => {
   const [name, setName] = useState('');
   const [type, setType] = useState('input');
+  const { t } = useTranslation();
 
   const addNewField = () => {
     const newProps = {
@@ -30,12 +32,12 @@ const AdditionalModal = ({
   return (
     <>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>{t('Add a new item property')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Сhoose the name of the new property</Form.Label>
+            <Form.Label>{t('Сhoose the name of the new property')}</Form.Label>
             <Form.Control
               type="text"
               onChange={(e) => setName(e.target.value)}
@@ -43,8 +45,10 @@ const AdditionalModal = ({
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Select onChange={(e) => setType(e.target.value)}>
-              <option disabled>Сhoose the type of the new property</option>
-              <option value="input">Input</option>
+              <option disabled>
+                {t('Сhoose the type of the new property')}
+              </option>
+              <option value="text">Text</option>
               <option value="textarea">Textarea</option>
               <option value="checkbox">Checkbox</option>
               <option value="number">Number</option>
@@ -54,10 +58,10 @@ const AdditionalModal = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleCloseAdditional}>
-          Close
+          {t('Close')}
         </Button>
         <Button variant="primary" onClick={addNewField}>
-          Add new field
+          {t('Add new field')}
         </Button>
       </Modal.Footer>
     </>

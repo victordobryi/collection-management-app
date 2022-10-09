@@ -11,6 +11,7 @@ export interface IUser {
   id: string;
   username: string;
   password?: string;
+  img?: string;
 }
 
 export interface UserResponse {

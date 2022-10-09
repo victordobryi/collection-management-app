@@ -14,7 +14,7 @@ const Search = () => {
         <Form.Control
           className="border-end-0"
           type="search"
-          placeholder={t('search')}
+          placeholder={t('Search')}
         />
         <span>
           <Button

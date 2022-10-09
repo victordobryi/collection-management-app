@@ -1,9 +1,11 @@
 export interface IItem {
-  id: string;
+  id?: string;
+  collectionId: string;
   title: string;
   likes: number;
-  createTime: number;
+  createTime: string;
   additionalInputs?: string;
+  img?: string;
 }
 
 export interface ItemsResponse {

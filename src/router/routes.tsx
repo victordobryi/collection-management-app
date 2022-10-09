@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import AdminPanel from '../pages/AdminPanel';
 import Collection from '../pages/Collection';
+import Item from '../pages/Item';
 import Login from '../pages/Login';
 import Main from '../pages/Main';
 import Error from '../pages/NotFound';
@@ -19,6 +20,7 @@ export enum RoutesName {
   USERS = '/users',
   USER = '/user/:id',
   COLLECTION = '/collection/:id',
+  ITEM = '/item/:id',
   SIGNUP = '/signup',
   ADMIN_PANEL = '/admin'
 }
@@ -66,6 +68,10 @@ export const privateRoutes: IRoutes[] = [
   {
     path: RoutesName.USER,
     component: <User />
+  },
+  {
+    path: RoutesName.ITEM,
+    component: <Item />
   },
   {
     path: RoutesName.COLLECTION,

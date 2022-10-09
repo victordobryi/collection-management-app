@@ -31,6 +31,7 @@ const SelectLang = () => {
   return (
     <Form>
       <Dropdown
+        className="select-lang"
         onSelect={(eventKey) => {
           const country = countries.find(({ code }) => eventKey === code);
           if (country) {
