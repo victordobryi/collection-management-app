@@ -6,7 +6,7 @@ import { getCurrentDate } from '../../utils/getCurrentTime';
 import { newInputsData } from '../CreateItemForm/CreateItemForm';
 import { useNavigate } from 'react-router-dom';
 
-interface Data {
+export interface Data {
   [value: string]: string;
 }
 
