@@ -1,7 +1,7 @@
 import { addZero } from './addZero';
 import { useTranslation } from 'react-i18next';
 
-export const getCurrentDate = (time: string) => {
+export const getCurrentDate = (time: string | undefined) => {
   const { t } = useTranslation();
 
   const today = new Date(Number(time));

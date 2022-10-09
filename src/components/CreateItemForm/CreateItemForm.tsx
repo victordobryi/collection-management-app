@@ -78,7 +78,7 @@ const CreateItemForm = ({
               {type === 'checkbox' ? (
                 <Form.Check
                   checked={isChecked}
-                  onChange={(e) => {
+                  onChange={() => {
                     setIsChecked(!isChecked);
                     setNewInputsData((values) => ({
                       ...values,
