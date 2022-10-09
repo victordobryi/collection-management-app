@@ -5,6 +5,7 @@ export interface IItem {
   likes: number;
   createTime: string;
   additionalInputs?: string;
+  img?: string;
 }
 
 export interface ItemsResponse {

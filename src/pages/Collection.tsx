@@ -6,6 +6,7 @@ import ItemService from '../API/ItemsService';
 import CreateItemForm from '../components/CreateItemForm/CreateItemForm';
 import ItemContainer from '../components/ItemContainer/ItemContainer';
 import { IItem } from '../models/IItem';
+import { useTranslation } from 'react-i18next';
 
 const Collection = () => {
   const { id } = useParams();
@@ -15,6 +16,7 @@ const Collection = () => {
   const [userId, setUserId] = useState('');
   const [additionalProps, setAdditionalProps] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,10 +53,10 @@ const Collection = () => {
     <>
       <Container className="d-flex justify-content-between  mt-3 ">
         <Button className="align-self-start" onClick={goBack}>
-          Go back
+          {t('Go back')}
         </Button>
         <Button className="align-self-end" onClick={handleShow}>
-          Create Item
+          {t('Create Item')}
         </Button>
       </Container>
       <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
@@ -66,17 +68,26 @@ const Collection = () => {
           ) : (
             items.map(
               (
-                { createTime, likes, title, additionalInputs, collectionId },
+                {
+                  createTime,
+                  likes,
+                  title,
+                  additionalInputs,
+                  img,
+                  collectionId,
+                  id
+                },
                 index
               ) => (
                 <ItemContainer
                   key={index}
-                  id={collectionId}
+                  id={id}
                   likes={likes}
                   title={title}
                   additionalInputs={additionalInputs}
                   createTime={createTime}
                   collectionId={collectionId}
+                  img={img}
                 />
               )
             )

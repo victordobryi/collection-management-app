@@ -5,6 +5,7 @@ import { Button, Container, Spinner, Row, Modal } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
 import CreateCollectionForm from '../components/CreateCollectionForm/CreateCollectionForm';
+import { useTranslation } from 'react-i18next';
 
 const User = () => {
   const [collections, setCollections] = useState<ICollection[]>([]);
@@ -13,6 +14,7 @@ const User = () => {
   const [show, setShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleClose = () => {
     setShow(false);
@@ -51,10 +53,10 @@ const User = () => {
     <>
       <Container className="d-flex justify-content-between mt-3">
         <Button className="align-self-start" onClick={goBack}>
-          Go back
+          {t('Go back')}
         </Button>
         <Button className="align-self-end" onClick={handleShow}>
-          Create Collection
+          {t('Create Collection')}
         </Button>
       </Container>
       <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">

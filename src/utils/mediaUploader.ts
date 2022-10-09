@@ -1,4 +1,4 @@
-export const mediaUploader = async (files: File[]) => {
+export const mediaUploader = async (files: File[], folder: string) => {
   const media = [];
 
   for (const file of files) {
@@ -6,7 +6,7 @@ export const mediaUploader = async (files: File[]) => {
     formData.append('file', file);
     formData.append('upload_preset', 'dn5vtba0');
     formData.append('cloud_name', 'dekeamxhx');
-    formData.append('folder', 'collections');
+    formData.append('folder', folder);
 
     try {
       const res = await fetch(
