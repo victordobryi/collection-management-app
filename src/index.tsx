@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { App } from './App';
 import { setupStore } from './store/store';
+import SocketContextComponent from './context/SocketContextComponent';
 import './localization/app';
 
 const store = setupStore();
@@ -12,8 +13,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <SocketContextComponent>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </SocketContextComponent>
   </React.StrictMode>
 );

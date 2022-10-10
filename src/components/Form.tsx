@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import * as Yup from 'yup';
 import { Alert, Button, FormGroup, Spinner } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { userLogin, userSignup } from '../store/action-creators/users';
 import { authSlice } from '../store/reducers/auth';
 import { useTranslation, Trans } from 'react-i18next';
+import SocketContext from '../context/SocketContext';
 
 interface ILogin {
   type: 'login' | 'signup';
@@ -16,6 +17,7 @@ const FormComponent = ({ type }: ILogin) => {
   const dispatch = useAppDispatch();
   const { setError } = authSlice.actions;
   const { t } = useTranslation();
+  const { socket } = useContext(SocketContext).SocketState;
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -52,9 +54,11 @@ const FormComponent = ({ type }: ILogin) => {
       }}
       validationSchema={validationSchema}
       onSubmit={({ password, username }) => {
-        type === 'login'
-          ? dispatch(userLogin(username, password))
-          : dispatch(userSignup(username, password));
+        if (socket) {
+          type === 'login'
+            ? dispatch(userLogin(username, password, socket))
+            : dispatch(userSignup(username, password, socket));
+        }
       }}
     >
       {() =>

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import ItemService from '../../API/ItemsService';
 import { IItem } from '../../models/IItem';
 import { mediaUploader } from '../../utils/mediaUploader';
 import { additionalProps } from '../CreateCollectionForm/CreateCollectionForm';
+import SocketContext from '../../context/SocketContext';
 
 interface ModalProps {
   handleClose: () => void;
@@ -28,6 +29,7 @@ const CreateItemForm = ({
   const newInputs: additionalProps[] = JSON.parse(additionalInputs);
   const [isChecked, setIsChecked] = useState(false);
   const [media, setMedia] = useState<File[]>([]);
+  const { socket } = useContext(SocketContext).SocketState;
 
   const createItem = async () => {
     handleClose();
@@ -43,6 +45,9 @@ const CreateItemForm = ({
     };
     try {
       await ItemService.addItem(item);
+      if (socket) {
+        socket.emit('add_NewItem', JSON.stringify(item));
+      }
     } catch (error) {
       throw new Error('error');
     } finally {

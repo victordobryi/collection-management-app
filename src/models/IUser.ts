@@ -8,7 +8,7 @@ export interface FormData {
 export interface IUser {
   isAdmin?: boolean;
   isBlocked?: boolean;
-  id: string;
+  id?: string;
   username: string;
   password?: string;
   img?: string;

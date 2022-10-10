@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form, Modal, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CollectionService from '../../API/CollectionService';
 import { ICollection } from '../../models/ICollection';
 import { mediaUploader } from '../../utils/mediaUploader';
 import AdditionalModal from './AdditionalModal';
+import SocketContext from '../../context/SocketContext';
 
 interface ModalProps {
   handleClose: () => void;
@@ -32,6 +33,7 @@ const CreateCollectionForm = ({
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   const [active, setActive] = useState(false);
+  const { socket } = useContext(SocketContext).SocketState;
 
   const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -52,7 +54,10 @@ const CreateCollectionForm = ({
       additionalInputs: JSON.stringify(additionalProps)
     };
     try {
-      CollectionService.addCollection(collection);
+      await CollectionService.addCollection(collection);
+      if (socket) {
+        socket.emit('add_NewCollection', JSON.stringify(collection));
+      }
     } catch (error) {
       throw new Error('error');
     } finally {
