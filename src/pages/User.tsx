@@ -65,7 +65,13 @@ const User = () => {
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         ) : (
-          <Row className="d-flex flex-wrap gap-3 mt-5">
+          <Row
+            className="d-flex flex-wrap gap-3 mt-5 justify-content-center"
+            xl={4}
+            lg={4}
+            md={3}
+            sm={2}
+          >
             {collections.map(
               (
                 {

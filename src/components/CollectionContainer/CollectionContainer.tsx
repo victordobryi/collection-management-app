@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ICollection } from '../../models/ICollection';
 import { useTranslation, Trans } from 'react-i18next';
+import './collection-container.scss';
 
 const CollectionContainer = ({
   id,
@@ -17,7 +18,7 @@ const CollectionContainer = ({
   return (
     <Card
       onClick={() => navigate(`/collection/${id}`)}
-      style={{ width: '15rem', padding: '20px', height: '450px' }}
+      style={{ height: '450px' }}
     >
       <Card.Header
         style={{

@@ -26,11 +26,10 @@ const ItemContainer = ({
 
   const navigate = useNavigate();
 
+  const goToItem = () => navigate(`/item/${id}`);
+
   return (
-    <Card
-      style={{ width: '15rem', padding: '20px', height: '550px' }}
-      onClick={() => navigate(`/item/${id}`)}
-    >
+    <Card style={{ width: '15rem', padding: '20px', height: '550px' }}>
       <Card.Header
         style={{
           backgroundImage: `url(${img})`,
@@ -38,17 +37,18 @@ const ItemContainer = ({
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat'
         }}
+        onClick={goToItem}
       ></Card.Header>
-      <Card.Body>
+      <Card.Body onClick={goToItem}>
         <Card.Title>{title}</Card.Title>
         {newData.map(({ name, value }, index) => (
           <Card.Text key={index}>{`${name}: ${value}`}</Card.Text>
         ))}
-        <Button variant="primary">
-          <AiOutlineHeart /> {likes}
-        </Button>
       </Card.Body>
-      <Card.Footer>{getCurrentDate(createTime)}</Card.Footer>
+      <Button variant="primary" onClick={() => console.log('1')}>
+        <AiOutlineHeart /> {likes}
+      </Button>
+      <Card.Footer onClick={goToItem}>{getCurrentDate(createTime)}</Card.Footer>
     </Card>
   );
 };
