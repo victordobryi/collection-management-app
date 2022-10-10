@@ -5,6 +5,7 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { getCurrentDate } from '../../utils/getCurrentTime';
 import { newInputsData } from '../CreateItemForm/CreateItemForm';
 import { useNavigate } from 'react-router-dom';
+import './item-container.scss';
 
 export interface Data {
   [value: string]: string;
@@ -29,7 +30,7 @@ const ItemContainer = ({
   const goToItem = () => navigate(`/item/${id}`);
 
   return (
-    <Card style={{ width: '15rem', padding: '20px', height: '550px' }}>
+    <Card className="card-container">
       <Card.Header
         style={{
           backgroundImage: `url(${img})`,
