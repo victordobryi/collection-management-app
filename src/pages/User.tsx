@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import CollectionService from '../API/CollectionService';
 import { ICollection } from '../models/ICollection';
 import { Button, Container, Spinner, Row, Modal } from 'react-bootstrap';
@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
 import CreateCollectionForm from '../components/CreateCollectionForm/CreateCollectionForm';
 import { useTranslation } from 'react-i18next';
+import SocketContext from '../context/SocketContext';
 
 const User = () => {
   const [collections, setCollections] = useState<ICollection[]>([]);
@@ -15,6 +16,8 @@ const User = () => {
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { collections: contextCollections } =
+    useContext(SocketContext).SocketState;
 
   const handleClose = () => {
     setShow(false);
@@ -47,7 +50,7 @@ const User = () => {
       }
     };
     fetchCollections();
-  }, []);
+  }, [contextCollections]);
 
   return (
     <>

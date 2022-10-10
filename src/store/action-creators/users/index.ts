@@ -1,9 +1,11 @@
 import { AppDispatch } from '../../store';
 import UserService from '../../../API/UserService';
 import { authSlice } from '../../reducers/auth';
+import { Socket } from 'socket.io-client';
 
 export const userLogin =
-  (username: string, password: string) => async (dispatch: AppDispatch) => {
+  (username: string, password: string, socket: Socket) =>
+  async (dispatch: AppDispatch) => {
     try {
       dispatch(authSlice.actions.setLoading(true));
       const response = (await UserService.getUsers()).data;
@@ -12,6 +14,7 @@ export const userLogin =
       );
       if (currentUser && !currentUser.isBlocked) {
         dispatch(authSlice.actions.setAuth(true));
+        socket.emit('add_NewUser', JSON.stringify(currentUser));
         localStorage.setItem('isAuth', 'true');
       } else if (currentUser?.isBlocked) {
         dispatch(authSlice.actions.setError('Юзер заблокирован!'));
@@ -31,7 +34,8 @@ export const userLogout = () => async (dispatch: AppDispatch) => {
 };
 
 export const userSignup =
-  (username: string, password: string) => async (dispatch: AppDispatch) => {
+  (username: string, password: string, socket: Socket) =>
+  async (dispatch: AppDispatch) => {
     try {
       dispatch(authSlice.actions.setLoading(true));
       const response = (await UserService.getUsers()).data;
@@ -39,8 +43,11 @@ export const userSignup =
         (user) => user.username === username
       );
       if (!loginedUser) {
-        (await UserService.addUser({ username, password })).data;
+        const newUser = (
+          await UserService.addUser({ username, password, img: '' })
+        ).data.data;
         dispatch(authSlice.actions.setAuth(true));
+        socket.emit('add_NewUser', JSON.stringify(newUser));
         localStorage.setItem('isAuth', 'true');
       } else {
         dispatch(authSlice.actions.setError('Юзер уже авторизирован!'));

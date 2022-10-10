@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Modal, Row, Spinner } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import CollectionService from '../API/CollectionService';
@@ -7,6 +7,7 @@ import CreateItemForm from '../components/CreateItemForm/CreateItemForm';
 import ItemContainer from '../components/ItemContainer/ItemContainer';
 import { IItem } from '../models/IItem';
 import { useTranslation } from 'react-i18next';
+import SocketContext from '../context/SocketContext';
 
 const Collection = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const Collection = () => {
   const [additionalProps, setAdditionalProps] = useState('');
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { items: contextItems } = useContext(SocketContext).SocketState;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +43,7 @@ const Collection = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [contextItems]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

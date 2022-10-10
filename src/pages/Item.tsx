@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button, Card, Container, Spinner } from 'react-bootstrap';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { getCurrentDate } from '../utils/getCurrentTime';
 import { useTranslation } from 'react-i18next';
 import { Data } from '../components/ItemContainer/ItemContainer';
 import { newInputsData } from '../components/CreateItemForm/CreateItemForm';
+import SocketContext from '../context/SocketContext';
 
 const Item = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const Item = () => {
   const [currentItem, setCurrentItem] = useState<IItem>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { items } = useContext(SocketContext).SocketState;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +35,7 @@ const Item = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [items]);
 
   const goBack = () => {
     navigate(`/collection/${collectionId}`);
