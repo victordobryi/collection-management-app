@@ -14,7 +14,12 @@ export interface IUser {
   img?: string;
 }
 
-export interface UserResponse {
+export interface UsersResponse {
   message: string;
   data: IUser[];
+}
+
+export interface UserResponse {
+  message: string;
+  data: IUser;
 }

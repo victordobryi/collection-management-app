@@ -1,11 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import { IUser, UserResponse } from '../models/IUser';
+import { IUser, UserResponse, UsersResponse } from '../models/IUser';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/users/';
 
 export default class UserService {
-  static async getUsers(): Promise<AxiosResponse<UserResponse>> {
-    return axios.get<UserResponse>(URL);
+  static async getUsers(): Promise<AxiosResponse<UsersResponse>> {
+    return axios.get<UsersResponse>(URL);
   }
   static async getUser(
     id: number | string
@@ -14,11 +14,11 @@ export default class UserService {
   }
   static async updateUser(
     newUser: IUser,
-    id: number
+    id: string
   ): Promise<AxiosResponse<UserResponse>> {
     return axios.put(URL + id, newUser);
   }
-  static async deleteUser(id: number): Promise<AxiosResponse<UserResponse>> {
+  static async deleteUser(id: string): Promise<AxiosResponse<UserResponse>> {
     return axios.delete(URL + id);
   }
   static async addUser(newUser: IUser): Promise<AxiosResponse<UserResponse>> {

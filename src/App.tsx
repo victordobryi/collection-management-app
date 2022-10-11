@@ -7,11 +7,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { useAppDispatch } from './redux-hooks';
 import { authSlice } from './store/reducers/auth';
 import { useTranslation } from 'react-i18next';
+import { isUser } from './store/action-creators/users';
 
 export const App = () => {
   const { setAuth } = authSlice.actions;
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    dispatch(isUser());
+  });
 
   useEffect(() => {
     const isAuth = localStorage.getItem('isAuth');
