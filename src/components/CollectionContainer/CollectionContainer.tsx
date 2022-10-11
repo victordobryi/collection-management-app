@@ -19,6 +19,7 @@ const CollectionContainer = ({
     <Card
       onClick={() => navigate(`/collection/${id}`)}
       style={{ height: '450px' }}
+      className="p-3"
     >
       <Card.Header
         style={{
