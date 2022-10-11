@@ -36,9 +36,11 @@ const Users = () => {
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
-        usersFromDb.map(({ username, id }) => (
-          <UserContainer key={id} username={username} id={id} />
-        ))
+        usersFromDb.map(({ username, id }) =>
+          username !== 'admin' ? (
+            <UserContainer key={id} username={username} id={id} />
+          ) : null
+        )
       )}
     </Row>
   );

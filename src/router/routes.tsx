@@ -35,8 +35,24 @@ export const publicRoutes: IRoutes[] = [
     component: <Signup />
   },
   {
+    path: RoutesName.USERS,
+    component: <Users />
+  },
+  {
     path: RoutesName.MAIN,
     component: <Main />
+  },
+  {
+    path: RoutesName.USER,
+    component: <User />
+  },
+  {
+    path: RoutesName.ITEM,
+    component: <Item />
+  },
+  {
+    path: RoutesName.COLLECTION,
+    component: <Collection />
   },
   {
     path: '/',
@@ -107,6 +123,14 @@ export const adminRoutes: IRoutes[] = [
   {
     path: RoutesName.USER,
     component: <User />
+  },
+  {
+    path: RoutesName.ITEM,
+    component: <Item />
+  },
+  {
+    path: RoutesName.COLLECTION,
+    component: <Collection />
   },
   {
     path: '/',

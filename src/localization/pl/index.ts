@@ -35,5 +35,6 @@ export const translationsPL = {
   'Add a new item property': 'Dodaj nową właściwość elementu',
   'Сhoose the name of the new property': 'Wybierz nazwę nowej nieruchomości',
   'Сhoose the type of the new property': 'Wybierz typ nowej nieruchomości',
-  'Add new field': 'Dodaj nowe pole'
+  'Add new field': 'Dodaj nowe pole',
+  'Admin-panel': 'Panel-admina'
 };

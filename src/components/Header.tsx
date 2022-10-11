@@ -9,7 +9,7 @@ import SelectMode from './SelectMode/SelectMode';
 import { useTranslation } from 'react-i18next';
 
 const Header = () => {
-  const { isAuth } = useAppSelector((state) => state.auth);
+  const { isAuth, isAdmin } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -24,31 +24,38 @@ const Header = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Search />
-          {!isAuth ? (
-            <Nav className="ms-auto d-flex align-items-center">
-              <LinkContainer to="/signup">
-                <Nav.Link>{t('SignUp')}</Nav.Link>
+          <Nav className="ms-auto d-flex align-items-center">
+            {isAdmin ? (
+              <LinkContainer to="/admin">
+                <Nav.Link>{t('Admin-panel')}</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/login">
-                <Nav.Link eventKey={2}>{t('LogIn')}</Nav.Link>
-              </LinkContainer>
-              <SelectLang />
-              <SelectMode />
-            </Nav>
-          ) : (
-            <Nav className="ms-auto d-flex align-items-center">
-              <LinkContainer to="/users">
-                <Nav.Link>{t('Users')}</Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/main">
-                <Nav.Link onClick={() => dispatch(userLogout())} eventKey={2}>
-                  {t('LogOut')}
-                </Nav.Link>
-              </LinkContainer>
-              <SelectLang />
-              <SelectMode />
-            </Nav>
-          )}
+            ) : null}
+            <LinkContainer to="/users">
+              <Nav.Link>{t('Users')}</Nav.Link>
+            </LinkContainer>
+            {!isAuth ? (
+              <>
+                <LinkContainer to="/signup">
+                  <Nav.Link>{t('SignUp')}</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/login">
+                  <Nav.Link eventKey={2}>{t('LogIn')}</Nav.Link>
+                </LinkContainer>
+                <SelectLang />
+                <SelectMode />
+              </>
+            ) : (
+              <>
+                <LinkContainer to="/main">
+                  <Nav.Link onClick={() => dispatch(userLogout())} eventKey={2}>
+                    {t('LogOut')}
+                  </Nav.Link>
+                </LinkContainer>
+                <SelectLang />
+                <SelectMode />
+              </>
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
