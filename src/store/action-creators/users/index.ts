@@ -13,7 +13,10 @@ export const userLogin =
         (user) => user.username === username && user.password === password
       );
       if (currentUser && !currentUser.isBlocked) {
+        const isAdmin =
+          username === 'admin' && password === 'admin13233' ? true : false;
         dispatch(authSlice.actions.setAuth(true));
+        isAdmin ? dispatch(authSlice.actions.setAdmin(true)) : null;
         socket.emit('add_NewUser', JSON.stringify(currentUser));
         localStorage.setItem('isAuth', 'true');
       } else if (currentUser?.isBlocked) {
@@ -43,10 +46,13 @@ export const userSignup =
         (user) => user.username === username
       );
       if (!loginedUser) {
+        const isAdmin =
+          username === 'admin' && password === 'admin13233' ? true : false;
         const newUser = (
-          await UserService.addUser({ username, password, img: '' })
+          await UserService.addUser({ username, password, img: '', isAdmin })
         ).data.data;
         dispatch(authSlice.actions.setAuth(true));
+        isAdmin ? dispatch(authSlice.actions.setAdmin(true)) : null;
         socket.emit('add_NewUser', JSON.stringify(newUser));
         localStorage.setItem('isAuth', 'true');
       } else {

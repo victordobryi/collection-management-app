@@ -33,5 +33,6 @@ export const translationsGB = {
   'Add new item property': 'Add new item property',
   'Сhoose the name of the new property': 'Сhoose the name of the new property',
   'Сhoose the type of the new property': 'Сhoose the type of the new property',
-  'Add new field': 'Add new field'
+  'Add new field': 'Add new field',
+  'Admin-panel': 'Admin-panel'
 };
