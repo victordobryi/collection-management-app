@@ -46,7 +46,7 @@ const ItemContainer = ({
           <Card.Text key={index}>{`${name}: ${value}`}</Card.Text>
         ))}
       </Card.Body>
-      <Button variant="primary" onClick={() => console.log('1')}>
+      <Button variant="primary">
         <AiOutlineHeart /> {likes}
       </Button>
       <Card.Footer onClick={goToItem}>{getCurrentDate(createTime)}</Card.Footer>

@@ -39,20 +39,18 @@ const Toolbar = ({ checkboxes }: IToolbar) => {
   const toggleIsAdmin = async (state: boolean) => {
     try {
       await dispatch(isUser());
-      changedUsers.forEach(
-        ({ id, password, username, isAdmin, isBlocked, img }) => {
-          const newUser = {
-            id,
-            password,
-            username,
-            isAdmin: state,
-            isBlocked,
-            img
-          };
-          UserService.updateUser(newUser, String(id));
-          state ? dispatch(admin(String(id))) : dispatch(notAdmin(String(id)));
-        }
-      );
+      changedUsers.forEach(({ id, password, username, isBlocked, img }) => {
+        const newUser = {
+          id,
+          password,
+          username,
+          isAdmin: state,
+          isBlocked,
+          img
+        };
+        UserService.updateUser(newUser, String(id));
+        state ? dispatch(admin(String(id))) : dispatch(notAdmin(String(id)));
+      });
     } catch (error) {
       throw new Error('Error');
     }
@@ -61,22 +59,20 @@ const Toolbar = ({ checkboxes }: IToolbar) => {
   const toggleBlockUsers = async (state: boolean) => {
     try {
       await dispatch(isUser());
-      changedUsers.forEach(
-        ({ id, password, username, isAdmin, isBlocked, img }) => {
-          const newUser = {
-            id,
-            password,
-            username,
-            isAdmin,
-            isBlocked: state,
-            img
-          };
-          UserService.updateUser(newUser, String(id));
-          state
-            ? dispatch(blockUsers(String(id)))
-            : dispatch(unblockUsers(String(id)));
-        }
-      );
+      changedUsers.forEach(({ id, password, username, isAdmin, img }) => {
+        const newUser = {
+          id,
+          password,
+          username,
+          isAdmin,
+          isBlocked: state,
+          img
+        };
+        UserService.updateUser(newUser, String(id));
+        state
+          ? dispatch(blockUsers(String(id)))
+          : dispatch(unblockUsers(String(id)));
+      });
     } catch (error) {
       throw new Error('Error');
     }
