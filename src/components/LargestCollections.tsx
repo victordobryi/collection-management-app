@@ -17,7 +17,6 @@ const LargestCollections = () => {
     useContext(SocketContext).SocketState;
 
   useEffect(() => {
-    setCollections([]);
     const fetchCollections = async () => {
       try {
         setIsLoading(true);
@@ -30,13 +29,13 @@ const LargestCollections = () => {
           },
           {}
         );
-
+        const arr = [];
         for (const key in sortedObj) {
-          const collection = dbCollections.data.filter(
-            ({ id }, index) => id === key
-          );
-          setCollections((prev) => [...prev, ...collection]);
+          const collection = dbCollections.data.filter(({ id }) => id === key);
+          // setCollections((prev) => [...prev, collection[0]]);
+          arr.push(collection[0]);
         }
+        setCollections(arr);
       } catch (error) {
         console.log(error);
       } finally {
