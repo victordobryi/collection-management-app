@@ -44,6 +44,10 @@ const SocketContextComponent: React.FunctionComponent<PropsWithChildren> = (
       SocketDispatch({ type: 'add_user', payload: user });
     });
 
+    socket.on('update_user', (user: string) => {
+      SocketDispatch({ type: 'update_user', payload: user });
+    });
+
     socket.on('add_comment', (message: string) => {
       SocketDispatch({ type: 'add_comment', payload: message });
     });
@@ -52,8 +56,16 @@ const SocketContextComponent: React.FunctionComponent<PropsWithChildren> = (
       SocketDispatch({ type: 'add_item', payload: item });
     });
 
+    socket.on('update_item', (item: string) => {
+      SocketDispatch({ type: 'update_item', payload: item });
+    });
+
     socket.on('add_collection', (collection: string) => {
       SocketDispatch({ type: 'add_collection', payload: collection });
+    });
+
+    socket.on('update_collection', (collection: string) => {
+      SocketDispatch({ type: 'update_collection', payload: collection });
     });
 
     socket.on('user_connected', (users: string[]) => {

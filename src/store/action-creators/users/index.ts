@@ -35,6 +35,7 @@ export const userLogout = () => async (dispatch: AppDispatch) => {
   localStorage.removeItem('isAuth');
   localStorage.removeItem('id');
   dispatch(authSlice.actions.setAuth(false));
+  dispatch(authSlice.actions.setAdmin(false));
   dispatch(authSlice.actions.setError(''));
 };
 
