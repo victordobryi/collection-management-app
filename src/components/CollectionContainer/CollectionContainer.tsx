@@ -26,7 +26,8 @@ const CollectionContainer = ({
           backgroundImage: `url(${img})`,
           height: '60%',
           backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat'
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center'
         }}
       ></Card.Header>
       <Card.Body>

@@ -27,7 +27,10 @@ export type TSocketContextActions =
   | 'add_user'
   | 'add_comment'
   | 'add_item'
-  | 'add_collection';
+  | 'add_collection'
+  | 'update_user'
+  | 'update_item'
+  | 'update_collection';
 export type TSocketContextPayload = string | string[] | Socket | number;
 
 export interface ISocketContextActions {
@@ -56,6 +59,11 @@ export const SocketReducer = (
         ...state,
         users: [...state.users, action.payload as string]
       };
+    case 'update_user':
+      return {
+        ...state,
+        users: [...state.users, action.payload as string]
+      };
     case 'add_comment':
       return {
         ...state,
@@ -66,7 +74,17 @@ export const SocketReducer = (
         ...state,
         items: [...state.items, action.payload as string]
       };
+    case 'update_item':
+      return {
+        ...state,
+        items: [...state.items, action.payload as string]
+      };
     case 'add_collection':
+      return {
+        ...state,
+        collections: [...state.collections, action.payload as string]
+      };
+    case 'update_collection':
       return {
         ...state,
         collections: [...state.collections, action.payload as string]

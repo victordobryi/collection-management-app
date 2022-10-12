@@ -9,7 +9,7 @@ export interface IUser {
   isAdmin?: boolean;
   isBlocked?: boolean;
   id?: string;
-  username: string;
+  username?: string;
   password?: string;
   img?: string;
 }
