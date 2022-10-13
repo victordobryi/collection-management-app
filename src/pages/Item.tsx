@@ -13,16 +13,22 @@ import Avatar from 'react-avatar';
 import { mediaUploader } from '../utils/mediaUploader';
 import { EditText, EditTextarea, onSaveProps } from 'react-edit-text';
 import { BsFillPencilFill } from 'react-icons/bs';
+import { AiOutlineClose } from 'react-icons/ai';
+import UsePrevPage from '../hooks/UsePrevPage';
+import { DeleteItem } from '../utils/deleteData';
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 
 const Item = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [show, setShow] = useState(false);
   const [currentItem, setCurrentItem] = useState<IItem>();
   const { socket, items } = useContext(SocketContext).SocketState;
   const [newTitle, setNewTitle] = useState('');
   const [text, setText] = useState<string | undefined>('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
+  const prev = UsePrevPage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +63,9 @@ const Item = () => {
       newData.push({ name: name, value: data[k], type: type });
     }
   }
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (setIsLoading) {
@@ -104,6 +113,20 @@ const Item = () => {
     }
   };
 
+  const deleteItem = async () => {
+    if (setIsLoading) {
+      try {
+        setIsLoading(true);
+        await DeleteItem({ itemId: id });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        prev.goBack();
+        setIsLoading(false);
+      }
+    }
+  };
+
   return isLoading ? (
     <Spinner animation="border" role="status">
       <span className="visually-hidden">Loading...</span>
@@ -118,6 +141,16 @@ const Item = () => {
           onMouseEnter={() => (id ? setHovered(true) : null)}
           onMouseLeave={() => setHovered(false)}
         >
+          <AiOutlineClose
+            style={{
+              position: 'absolute',
+              top: 5,
+              right: 5,
+              visibility: hovered ? 'visible' : 'hidden',
+              cursor: 'pointer'
+            }}
+            onClick={handleShow}
+          />
           <Card.Header
             style={{
               backgroundColor: 'transparent'
@@ -206,6 +239,7 @@ const Item = () => {
           <Card.Footer>{date}</Card.Footer>
         </Card>
       </Container>
+      <ConfirmModal show={show} onHide={handleClose} deleteFunc={deleteItem} />
     </>
   );
 };

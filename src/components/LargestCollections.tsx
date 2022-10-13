@@ -24,7 +24,7 @@ const LargestCollections = () => {
         const itemsData = (await ItemService.getItems()).data;
         const sortedObj = itemsData.data.reduce<SortedData>(
           (acc, { collectionId }) => {
-            acc[collectionId] = (acc[collectionId] || 0) + 1;
+            acc[String(collectionId)] = (acc[String(collectionId)] || 0) + 1;
             return acc;
           },
           {}
@@ -32,7 +32,6 @@ const LargestCollections = () => {
         const arr = [];
         for (const key in sortedObj) {
           const collection = dbCollections.data.filter(({ id }) => id === key);
-          // setCollections((prev) => [...prev, collection[0]]);
           arr.push(collection[0]);
         }
         setCollections(arr);
@@ -60,23 +59,10 @@ const LargestCollections = () => {
           md={3}
           sm={2}
         >
-          {collections.map(
-            (
-              { description, title, theme, img, userId, additionalInputs, id },
-              index
-            ) =>
-              index < 5 ? (
-                <CollectionContainer
-                  key={index}
-                  description={description}
-                  title={title}
-                  theme={theme}
-                  img={img}
-                  additionalInputs={additionalInputs}
-                  userId={userId}
-                  id={id}
-                />
-              ) : null
+          {collections.map((collection, index) =>
+            index < 5 ? (
+              <CollectionContainer key={index} collection={collection} />
+            ) : null
           )}
         </Row>
       )}

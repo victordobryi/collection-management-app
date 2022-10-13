@@ -36,5 +36,9 @@ export const translationsPL = {
   'Сhoose the name of the new property': 'Wybierz nazwę nowej nieruchomości',
   'Сhoose the type of the new property': 'Wybierz typ nowej nieruchomości',
   'Add new field': 'Dodaj nowe pole',
-  'Admin-panel': 'Panel-admina'
+  'Admin-panel': 'Panel-admina',
+  'Сonfirm your action': 'Potwierdź swoje działanie',
+  'Are you sure you want to delete it?': 'Czy na pewno chcesz go usunąć?',
+  No: 'Nie',
+  Yes: 'Tak'
 };

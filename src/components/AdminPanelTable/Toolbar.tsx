@@ -8,6 +8,7 @@ import UserService from '../../API/UserService';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { isUser } from '../../store/action-creators/users';
 import { userSlice } from '../../store/reducers/users';
+import { DeleteUser } from '../../utils/deleteData';
 import './toolbar.scss';
 
 interface IToolbar {
@@ -28,7 +29,7 @@ const Toolbar = ({ checkboxes }: IToolbar) => {
     try {
       dispatch(isUser());
       changedUsers.forEach(({ id }) => {
-        UserService.deleteUser(String(id));
+        DeleteUser(String(id));
         dispatch(deleteUsers(String(id)));
       });
     } catch (error) {
