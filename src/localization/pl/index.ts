@@ -40,5 +40,6 @@ export const translationsPL = {
   'Сonfirm your action': 'Potwierdź swoje działanie',
   'Are you sure you want to delete it?': 'Czy na pewno chcesz go usunąć?',
   No: 'Nie',
-  Yes: 'Tak'
+  Yes: 'Tak',
+  'My page': 'Moja strona'
 };

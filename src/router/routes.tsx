@@ -22,7 +22,8 @@ export enum RoutesName {
   COLLECTION = '/collection/:id',
   ITEM = '/item/:id',
   SIGNUP = '/signup',
-  ADMIN_PANEL = '/admin'
+  ADMIN_PANEL = '/admin',
+  MY_PAGE = '/user/:id'
 }
 
 export const publicRoutes: IRoutes[] = [
@@ -94,6 +95,10 @@ export const privateRoutes: IRoutes[] = [
     component: <Collection />
   },
   {
+    path: RoutesName.MY_PAGE,
+    component: <User />
+  },
+  {
     path: '/',
     component: <Navigate to="/main" />
   },
@@ -122,6 +127,10 @@ export const adminRoutes: IRoutes[] = [
   },
   {
     path: RoutesName.USER,
+    component: <User />
+  },
+  {
+    path: RoutesName.MY_PAGE,
     component: <User />
   },
   {

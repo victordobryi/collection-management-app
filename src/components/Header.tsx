@@ -12,6 +12,7 @@ const Header = () => {
   const { isAuth, isAdmin } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const id = localStorage.getItem('id');
 
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
@@ -25,6 +26,11 @@ const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Search />
           <Nav className="ms-auto d-flex align-items-center">
+            {id ? (
+              <LinkContainer to={`/user/${id}`}>
+                <Nav.Link>{t('My page')}</Nav.Link>
+              </LinkContainer>
+            ) : null}
             {isAdmin ? (
               <LinkContainer to="/admin">
                 <Nav.Link>{t('Admin-panel')}</Nav.Link>

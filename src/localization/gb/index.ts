@@ -38,5 +38,6 @@ export const translationsGB = {
   'Сonfirm your action': 'Сonfirm your action',
   'Are you sure you want to delete it?': 'Are you sure you want to delete it?',
   No: 'No',
-  Yes: 'Yes'
+  Yes: 'Yes',
+  'My page': 'My page'
 };
