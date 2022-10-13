@@ -18,7 +18,7 @@ export default class CollectionService {
   }
   static async updateCollection(
     newCollection: ICollection,
-    id: number
+    id: string
   ): Promise<AxiosResponse<CollectionResponse>> {
     return axios.put(URL + id, newCollection);
   }

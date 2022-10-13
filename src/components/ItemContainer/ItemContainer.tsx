@@ -20,9 +20,13 @@ const ItemContainer = ({
   img
 }: IItem) => {
   const data: Data = JSON.parse(additionalInputs!);
+
   const newData: newInputsData[] = [];
+
   for (const k in data) {
-    newData.push({ name: k, value: data[k] });
+    const type = k.split('+')[1];
+    const name = k.split('+')[0];
+    newData.push({ name: name, value: data[k], type: type });
   }
 
   const navigate = useNavigate();

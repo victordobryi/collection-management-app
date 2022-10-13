@@ -16,6 +16,7 @@ interface ModalProps {
 export interface newInputsData {
   name: string;
   value: string;
+  type: string;
 }
 
 const CreateItemForm = ({
@@ -27,7 +28,6 @@ const CreateItemForm = ({
   const [title, setTitle] = useState('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
   const newInputs: additionalProps[] = JSON.parse(additionalInputs);
-  const [isChecked, setIsChecked] = useState(false);
   const [media, setMedia] = useState<File[]>([]);
   const { socket } = useContext(SocketContext).SocketState;
 
@@ -82,12 +82,10 @@ const CreateItemForm = ({
               <Form.Label>{name}</Form.Label>
               {type === 'checkbox' ? (
                 <Form.Check
-                  checked={isChecked}
-                  onChange={() => {
-                    setIsChecked(!isChecked);
+                  onChange={(e) => {
                     setNewInputsData((values) => ({
                       ...values,
-                      [name]: !isChecked
+                      [name + '+' + type]: e.target.checked
                     }));
                   }}
                 />
@@ -99,7 +97,7 @@ const CreateItemForm = ({
                     onChange={(e) =>
                       setNewInputsData((values) => ({
                         ...values,
-                        [name]: e.target.value
+                        [name + '+' + type]: e.target.value
                       }))
                     }
                   />
