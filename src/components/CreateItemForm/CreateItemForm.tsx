@@ -9,6 +9,7 @@ import SocketContext from '../../context/SocketContext';
 interface ModalProps {
   handleClose: () => void;
   collectionId: string;
+  userId: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   additionalInputs: string;
 }
@@ -21,6 +22,7 @@ export interface newInputsData {
 
 const CreateItemForm = ({
   collectionId,
+  userId,
   handleClose,
   setLoading,
   additionalInputs
@@ -39,6 +41,7 @@ const CreateItemForm = ({
       title,
       likes: 0,
       collectionId,
+      userId,
       img: url[0] || '',
       createTime: String(Date.now()),
       additionalInputs: JSON.stringify(newInputsData)

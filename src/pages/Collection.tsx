@@ -55,7 +55,11 @@ const Collection = () => {
     </Spinner>
   ) : (
     <>
-      <ContainerButtons createText="Create Item" handleShow={handleShow} />
+      <ContainerButtons
+        createText="Create Item"
+        handleShow={handleShow}
+        userId={String(collection?.userId)}
+      />
       <Container>
         {collection ? (
           <CollectionContainer
@@ -97,6 +101,7 @@ const Collection = () => {
         <CreateItemForm
           handleClose={handleClose}
           collectionId={id!}
+          userId={String(collection?.userId)}
           setLoading={setIsLoading}
           additionalInputs={additionalProps}
         />

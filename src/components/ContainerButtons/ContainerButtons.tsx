@@ -1,25 +1,35 @@
 import React from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import UsePrevPage from '../../hooks/UsePrevPage';
+import { ICollection } from '../../models/ICollection';
+import { IItem } from '../../models/IItem';
+import { IUser } from '../../models/IUser';
+import { useAppSelector } from '../../redux-hooks';
 
 interface IContainerButtons {
   createText?: string;
   handleShow?: () => void;
+  userId: string;
 }
 
-const ContainerButtons = ({ createText, handleShow }: IContainerButtons) => {
-  const navigate = useNavigate();
+const ContainerButtons = ({
+  createText,
+  handleShow,
+  userId
+}: IContainerButtons) => {
   const { t } = useTranslation();
   const prev = UsePrevPage();
+  const { isAdmin } = useAppSelector((state) => state.auth);
+  const localStorageId = localStorage.getItem('id');
+  const isUserId = localStorageId === userId || isAdmin;
 
   return (
     <Container className="d-flex justify-content-between my-3">
       <Button className="align-self-start" onClick={() => prev.goBack()}>
         {t('Go back')}
       </Button>
-      {handleShow ? (
+      {handleShow && isUserId ? (
         <Button className="align-self-end" onClick={handleShow}>
           {t(`${createText}`)}
         </Button>

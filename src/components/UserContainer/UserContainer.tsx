@@ -9,7 +9,7 @@ import { mediaUploader } from '../../utils/mediaUploader';
 import SocketContext from '../../context/SocketContext';
 import { AiOutlineClose } from 'react-icons/ai';
 import UsePrevPage from '../../hooks/UsePrevPage';
-import { useAppDispatch } from '../../redux-hooks';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import { DeleteUser } from '../../utils/deleteData';
@@ -29,6 +29,9 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { socket } = useContext(SocketContext).SocketState;
   const prev = UsePrevPage();
   const dispatch = useAppDispatch();
+  const { isAdmin } = useAppSelector((state) => state.auth);
+  const localStorageId = localStorage.getItem('id');
+  const isUserId = localStorageId === userId || isAdmin;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -94,7 +97,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
             position: 'absolute',
             top: 5,
             right: 5,
-            visibility: hovered ? 'visible' : 'hidden',
+            visibility: hovered && isUserId ? 'visible' : 'hidden',
             cursor: 'pointer'
           }}
           onClick={handleShow}
@@ -111,7 +114,8 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
                 style={{
                   cursor: 'pointer',
                   marginTop: '0.5rem',
-                  marginBottom: '0'
+                  marginBottom: '0',
+                  pointerEvents: isUserId ? 'auto' : 'none'
                 }}
               >
                 <Avatar name={username} size="120" round="100%" src={img} />
@@ -128,14 +132,15 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
         <Card.Body
           style={{
             fontSize: '1.3rem',
-            textAlign: 'center'
+            textAlign: 'center',
+            pointerEvents: isUserId ? 'auto' : 'none'
           }}
         >
           <EditText
             name="username"
             defaultValue={username}
             editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-            showEditButton={hovered}
+            showEditButton={hovered && isUserId}
             onChange={(e) => setName(e.target.value)}
             value={name}
             onBlur={changeName}

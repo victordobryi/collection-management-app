@@ -13,6 +13,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import { DeleteCollection } from '../../utils/deleteData';
 import UsePrevPage from '../../hooks/UsePrevPage';
+import { useAppSelector } from '../../redux-hooks';
 
 interface ICollectionContainer {
   collection: ICollection;
@@ -33,6 +34,9 @@ const CollectionContainer = ({
   const { socket } = useContext(SocketContext).SocketState;
   const [show, setShow] = useState(false);
   const prev = UsePrevPage();
+  const { isAdmin } = useAppSelector((state) => state.auth);
+  const localStorageId = localStorage.getItem('id');
+  const isUserId = localStorageId === collection?.userId || isAdmin;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -119,7 +123,7 @@ const CollectionContainer = ({
             position: 'absolute',
             top: 5,
             right: 5,
-            visibility: hovered ? 'visible' : 'hidden',
+            visibility: hovered && isUserId ? 'visible' : 'hidden',
             cursor: 'pointer'
           }}
           onClick={handleShow}
@@ -132,7 +136,8 @@ const CollectionContainer = ({
                 style={{
                   cursor: 'pointer',
                   marginTop: '0.5rem',
-                  marginBottom: '0'
+                  marginBottom: '0',
+                  pointerEvents: isUserId ? 'auto' : 'none'
                 }}
               >
                 <Avatar name={title} size="100%" src={img} />
@@ -146,14 +151,14 @@ const CollectionContainer = ({
             </Form.Group>
           </Form>
         </Card.Header>
-        <Card.Body>
+        <Card.Body style={{ pointerEvents: isUserId ? 'auto' : 'none' }}>
           <div className="d-flex align-items-baseline">
             <Card.Text>{`${t('Title')}: `}</Card.Text>
             <EditText
               name="title"
               defaultValue={title}
               editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-              showEditButton={hovered}
+              showEditButton={hovered && isUserId}
               onChange={(e) => setNewTitle(e.target.value)}
               value={newTitle}
               onBlur={changeTitle}

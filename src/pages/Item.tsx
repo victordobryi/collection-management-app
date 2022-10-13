@@ -17,6 +17,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import UsePrevPage from '../hooks/UsePrevPage';
 import { DeleteItem } from '../utils/deleteData';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
+import { useAppSelector } from '../redux-hooks';
 
 const Item = () => {
   const { id } = useParams();
@@ -29,6 +30,9 @@ const Item = () => {
   const [text, setText] = useState<string | undefined>('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
   const prev = UsePrevPage();
+  const { isAdmin } = useAppSelector((state) => state.auth);
+  const localStorageId = localStorage.getItem('id');
+  const isUserId = localStorageId === currentItem?.userId || isAdmin;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,10 +137,13 @@ const Item = () => {
     </Spinner>
   ) : (
     <>
-      <ContainerButtons />
+      <ContainerButtons userId={String(currentItem?.userId)} />
       <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
         <Card
-          style={{ width: '50%', cursor: id ? 'default' : 'pointer' }}
+          style={{
+            width: '50%',
+            cursor: id ? 'default' : 'pointer'
+          }}
           className="flex-grow-1 m-2 align-items-center"
           onMouseEnter={() => (id ? setHovered(true) : null)}
           onMouseLeave={() => setHovered(false)}
@@ -146,7 +153,7 @@ const Item = () => {
               position: 'absolute',
               top: 5,
               right: 5,
-              visibility: hovered ? 'visible' : 'hidden',
+              visibility: hovered && isUserId ? 'visible' : 'hidden',
               cursor: 'pointer'
             }}
             onClick={handleShow}
@@ -163,7 +170,8 @@ const Item = () => {
                   style={{
                     cursor: 'pointer',
                     marginTop: '0.5rem',
-                    marginBottom: '0'
+                    marginBottom: '0',
+                    pointerEvents: isUserId ? 'auto' : 'none'
                   }}
                 >
                   <Avatar
@@ -181,13 +189,16 @@ const Item = () => {
               </Form.Group>
             </Form>
           </Card.Header>
-          <Card.Body className="pb-0">
+          <Card.Body
+            className="pb-0"
+            style={{ pointerEvents: isUserId ? 'auto' : 'none' }}
+          >
             <EditText
               name="title"
               defaultValue={text}
               editButtonContent={<BsFillPencilFill />}
               editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-              showEditButton={hovered}
+              showEditButton={hovered && isUserId}
               onChange={(e) => setNewTitle(e.target.value)}
               value={newTitle}
               onBlur={changeTitle}
@@ -225,7 +236,7 @@ const Item = () => {
                     editButtonProps={{
                       style: { marginLeft: '10px', minWidth: 25 }
                     }}
-                    showEditButton={hovered}
+                    showEditButton={hovered && isUserId}
                     onSave={handleSave}
                     type={type}
                   />

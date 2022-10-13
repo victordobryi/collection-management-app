@@ -1,6 +1,7 @@
 export interface IItem {
   id?: string;
   collectionId?: string;
+  userId?: string;
   title?: string;
   likes?: number;
   createTime?: string;
