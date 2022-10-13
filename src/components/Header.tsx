@@ -15,7 +15,7 @@ const Header = () => {
 
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
-      <Container>
+      <Container style={{ fontSize: '18px' }}>
         <Navbar.Brand>
           <LinkContainer to="/">
             <Nav.Link>VK-app</Nav.Link>

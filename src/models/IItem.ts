@@ -1,9 +1,9 @@
 export interface IItem {
   id?: string;
-  collectionId: string;
-  title: string;
-  likes: number;
-  createTime: string;
+  collectionId?: string;
+  title?: string;
+  likes?: number;
+  createTime?: string;
   additionalInputs?: string;
   img?: string;
 }

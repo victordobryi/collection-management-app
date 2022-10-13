@@ -14,7 +14,7 @@ export default class ItemService {
   }
   static async updateItem(
     newItem: IItem,
-    id: number
+    id: string
   ): Promise<AxiosResponse<ItemResponse>> {
     return axios.put(URL + id, newItem);
   }

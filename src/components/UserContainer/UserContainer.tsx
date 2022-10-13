@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IUser } from '../../models/IUser';
 import Avatar from 'react-avatar';
-import { EditText, EditTextarea } from 'react-edit-text';
+import { EditText } from 'react-edit-text';
 import UserService from '../../API/UserService';
 import { mediaUploader } from '../../utils/mediaUploader';
 import SocketContext from '../../context/SocketContext';
@@ -76,7 +76,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
                 marginBottom: '0'
               }}
             >
-              <Avatar name={username} size="100" round="50px" src={img} />
+              <Avatar name={username} size="120" round="100%" src={img} />
             </Form.Label>
             <Form.Control
               type="file"
