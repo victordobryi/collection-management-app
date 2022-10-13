@@ -34,5 +34,9 @@ export const translationsGB = {
   'Сhoose the name of the new property': 'Сhoose the name of the new property',
   'Сhoose the type of the new property': 'Сhoose the type of the new property',
   'Add new field': 'Add new field',
-  'Admin-panel': 'Admin-panel'
+  'Admin-panel': 'Admin-panel',
+  'Сonfirm your action': 'Сonfirm your action',
+  'Are you sure you want to delete it?': 'Are you sure you want to delete it?',
+  No: 'No',
+  Yes: 'Yes'
 };

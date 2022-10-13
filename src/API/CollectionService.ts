@@ -23,7 +23,7 @@ export default class CollectionService {
     return axios.put(URL + id, newCollection);
   }
   static async deleteCollection(
-    id: number
+    id: string
   ): Promise<AxiosResponse<CollectionResponse>> {
     return axios.delete(URL + id);
   }

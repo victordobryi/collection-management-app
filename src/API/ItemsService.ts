@@ -18,7 +18,7 @@ export default class ItemService {
   ): Promise<AxiosResponse<ItemResponse>> {
     return axios.put(URL + id, newItem);
   }
-  static async deleteItem(id: number): Promise<AxiosResponse<ItemResponse>> {
+  static async deleteItem(id: string): Promise<AxiosResponse<ItemResponse>> {
     return axios.delete(URL + id);
   }
   static async addItem(newItem: IItem): Promise<AxiosResponse<ItemResponse>> {

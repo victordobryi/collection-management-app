@@ -8,8 +8,11 @@ import { mediaUploader } from '../../utils/mediaUploader';
 import CollectionService from '../../API/CollectionService';
 import SocketContext from '../../context/SocketContext';
 import { EditText, EditTextarea } from 'react-edit-text';
-import { BsFillPencilFill } from 'react-icons/bs';
 import Avatar from 'react-avatar';
+import { AiOutlineClose } from 'react-icons/ai';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
+import { DeleteCollection } from '../../utils/deleteData';
+import UsePrevPage from '../../hooks/UsePrevPage';
 
 interface ICollectionContainer {
   collection: ICollection;
@@ -28,11 +31,11 @@ const CollectionContainer = ({
   const { t } = useTranslation();
   const { id: collectionId } = useParams();
   const { socket } = useContext(SocketContext).SocketState;
-  // const ref = useRef<HTMLTextAreaElement | null>(null);
+  const [show, setShow] = useState(false);
+  const prev = UsePrevPage();
 
-  // const handleClick = () => {
-  //   ref.current && ref.current.focus();
-  // };
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const goToCollection = () => {
     if (collectionId !== id) {
@@ -85,79 +88,98 @@ const CollectionContainer = ({
     }
   };
 
+  const deleteCollection = async () => {
+    if (setIsLoading) {
+      try {
+        setIsLoading(true);
+        await DeleteCollection({ collectionId: String(id) });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        prev.goBack();
+        setIsLoading(false);
+      }
+    }
+  };
+
   return (
-    <Card
-      onClick={goToCollection}
-      style={{
-        width: '10rem',
-        cursor: collectionId === id ? 'default' : 'pointer'
-      }}
-      className="p-3"
-      onMouseEnter={() => (collectionId === id ? setHovered(true) : null)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <Card.Header>
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Label
-              htmlFor="avatar"
-              style={{
-                cursor: 'pointer',
-                marginTop: '0.5rem',
-                marginBottom: '0'
-              }}
-            >
-              <Avatar name={title} size="100%" src={img} />
-            </Form.Label>
-            <Form.Control
-              type="file"
-              onChange={addImage}
-              style={{ display: 'none' }}
-              id="avatar"
+    <>
+      <Card
+        onClick={goToCollection}
+        style={{
+          width: '10rem',
+          cursor: collectionId === id ? 'default' : 'pointer'
+        }}
+        className="p-3"
+        onMouseEnter={() => (collectionId === id ? setHovered(true) : null)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <AiOutlineClose
+          style={{
+            position: 'absolute',
+            top: 5,
+            right: 5,
+            visibility: hovered ? 'visible' : 'hidden',
+            cursor: 'pointer'
+          }}
+          onClick={handleShow}
+        />
+        <Card.Header>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label
+                htmlFor="avatar"
+                style={{
+                  cursor: 'pointer',
+                  marginTop: '0.5rem',
+                  marginBottom: '0'
+                }}
+              >
+                <Avatar name={title} size="100%" src={img} />
+              </Form.Label>
+              <Form.Control
+                type="file"
+                onChange={addImage}
+                style={{ display: 'none' }}
+                id="avatar"
+              />
+            </Form.Group>
+          </Form>
+        </Card.Header>
+        <Card.Body>
+          <div className="d-flex align-items-baseline">
+            <Card.Text>{`${t('Title')}: `}</Card.Text>
+            <EditText
+              name="title"
+              defaultValue={title}
+              editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
+              showEditButton={hovered}
+              onChange={(e) => setNewTitle(e.target.value)}
+              value={newTitle}
+              onBlur={changeTitle}
             />
-          </Form.Group>
-        </Form>
-      </Card.Header>
-      <Card.Body>
-        <div className="d-flex align-items-baseline">
-          <Card.Text>{`${t('Title')}: `}</Card.Text>
-          <EditText
-            name="title"
-            defaultValue={title}
-            editButtonContent={<BsFillPencilFill />}
-            editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-            showEditButton={hovered}
-            onChange={(e) => setNewTitle(e.target.value)}
-            value={newTitle}
-            onBlur={changeTitle}
-          />
-        </div>
-        <Card.Text>
-          {t('Theme')}: {<Trans i18nKey={theme}>{theme}</Trans>}
-        </Card.Text>
-        <div className="d-flex align-items-baseline">
-          <Card.Text>{`${t('Description')}:`}</Card.Text>
-          {/* <textarea
-            name="description"
-            defaultValue={description}
-            onChange={(e) => setNewDescription(e.target.value)}
-            value={newDescription}
-            onBlur={changeDescription}
-            ref={ref}
-            cols={30}
-            rows={3}
-          ></textarea> */}
-          <EditTextarea
-            name="description"
-            defaultValue={description}
-            onChange={(e) => setNewDescription(e.target.value)}
-            value={newDescription}
-            onBlur={changeDescription}
-          />
-          {hovered ? <BsFillPencilFill /> : null}
-        </div>
-      </Card.Body>
-    </Card>
+          </div>
+          <Card.Text>
+            {t('Theme')}: {<Trans i18nKey={theme}>{theme}</Trans>}
+          </Card.Text>
+          <div className="d-flex align-items-baseline">
+            <Card.Text>{`${t('Description')}:`}</Card.Text>
+            <EditTextarea
+              name="description"
+              defaultValue={description}
+              onChange={(e) => setNewDescription(e.target.value)}
+              value={newDescription}
+              onBlur={changeDescription}
+            />
+          </div>
+        </Card.Body>
+      </Card>
+      <ConfirmModal
+        show={show}
+        onHide={handleClose}
+        deleteFunc={deleteCollection}
+      />
+    </>
   );
 };
 
