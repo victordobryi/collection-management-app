@@ -5,6 +5,7 @@ import { IItem } from '../../models/IItem';
 import { mediaUploader } from '../../utils/mediaUploader';
 import { additionalProps } from '../CreateCollectionForm/CreateCollectionForm';
 import SocketContext from '../../context/SocketContext';
+import LikeService from '../../API/LikeService';
 
 interface ModalProps {
   handleClose: () => void;
@@ -39,7 +40,6 @@ const CreateItemForm = ({
     const url = await mediaUploader(media, 'items');
     const item: IItem = {
       title,
-      likes: 0,
       collectionId,
       userId,
       img: url[0] || '',
@@ -52,7 +52,7 @@ const CreateItemForm = ({
         socket.emit('add_NewItem', JSON.stringify(item));
       }
     } catch (error) {
-      throw new Error('error');
+      console.log(error);
     } finally {
       setLoading(false);
       setNewInputsData([]);

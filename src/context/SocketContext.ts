@@ -7,6 +7,7 @@ export interface ISocketContextState {
   users: string[];
   comments: string[];
   items: string[];
+  likes: string[];
   collections: string[];
 }
 
@@ -16,6 +17,7 @@ export const defaultSocketContextState: ISocketContextState = {
   users: [],
   comments: [],
   items: [],
+  likes: [],
   collections: []
 };
 
@@ -30,7 +32,9 @@ export type TSocketContextActions =
   | 'add_collection'
   | 'update_user'
   | 'update_item'
-  | 'update_collection';
+  | 'update_collection'
+  | 'add_like'
+  | 'remove_like';
 export type TSocketContextPayload = string | string[] | Socket | number;
 
 export interface ISocketContextActions {
@@ -83,6 +87,17 @@ export const SocketReducer = (
       return {
         ...state,
         collections: [...state.collections, action.payload as string]
+      };
+    case 'add_like':
+      return {
+        ...state,
+        likes: [...state.likes, action.payload as string]
+      };
+
+    case 'remove_like':
+      return {
+        ...state,
+        likes: [...state.likes, action.payload as string]
       };
     case 'update_collection':
       return {

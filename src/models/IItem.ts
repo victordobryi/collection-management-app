@@ -3,7 +3,6 @@ export interface IItem {
   collectionId?: string;
   userId?: string;
   title?: string;
-  likes?: number;
   createTime?: string;
   additionalInputs?: string;
   img?: string;
