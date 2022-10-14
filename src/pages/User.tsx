@@ -64,6 +64,7 @@ const User = () => {
       <ContainerButtons
         createText="Create Collection"
         handleShow={handleShow}
+        userId={String(user?.id)}
       />
       <Container>
         {user ? (

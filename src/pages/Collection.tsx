@@ -55,7 +55,11 @@ const Collection = () => {
     </Spinner>
   ) : (
     <>
-      <ContainerButtons createText="Create Item" handleShow={handleShow} />
+      <ContainerButtons
+        createText="Create Item"
+        handleShow={handleShow}
+        userId={String(collection?.userId)}
+      />
       <Container>
         {collection ? (
           <CollectionContainer
@@ -68,21 +72,12 @@ const Collection = () => {
         <>
           {items.map(
             (
-              {
-                createTime,
-                likes,
-                title,
-                additionalInputs,
-                img,
-                collectionId,
-                id
-              },
+              { createTime, title, additionalInputs, img, collectionId, id },
               index
             ) => (
               <ItemContainer
                 key={index}
                 id={id}
-                likes={likes}
                 title={title}
                 additionalInputs={additionalInputs}
                 createTime={createTime}
@@ -97,6 +92,7 @@ const Collection = () => {
         <CreateItemForm
           handleClose={handleClose}
           collectionId={id!}
+          userId={String(collection?.userId)}
           setLoading={setIsLoading}
           additionalInputs={additionalProps}
         />

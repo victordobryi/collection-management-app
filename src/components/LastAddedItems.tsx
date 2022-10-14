@@ -38,22 +38,13 @@ const LastAddedItems = () => {
       ) : (
         items.map(
           (
-            {
-              createTime,
-              likes,
-              title,
-              additionalInputs,
-              img,
-              collectionId,
-              id
-            },
+            { createTime, title, additionalInputs, img, collectionId, id },
             index
           ) =>
             index < 5 ? (
               <ItemContainer
                 key={index}
                 id={id}
-                likes={likes}
                 title={title}
                 additionalInputs={additionalInputs}
                 createTime={createTime}

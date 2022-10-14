@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import ItemService from '../API/ItemsService';
 import { IItem } from '../models/IItem';
 import { getCurrentDate } from '../utils/getCurrentTime';
-import { Data } from '../components/ItemContainer/ItemContainer';
+import { Data, ILikedUsers } from '../components/ItemContainer/ItemContainer';
 import { newInputsData } from '../components/CreateItemForm/CreateItemForm';
 import SocketContext from '../context/SocketContext';
 import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
@@ -17,6 +17,9 @@ import { AiOutlineClose } from 'react-icons/ai';
 import UsePrevPage from '../hooks/UsePrevPage';
 import { DeleteItem } from '../utils/deleteData';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
+import { useAppSelector } from '../redux-hooks';
+import LikeService from '../API/LikeService';
+import { ILike } from '../models/ILike';
 
 const Item = () => {
   const { id } = useParams();
@@ -24,20 +27,39 @@ const Item = () => {
   const [hovered, setHovered] = useState(false);
   const [show, setShow] = useState(false);
   const [currentItem, setCurrentItem] = useState<IItem>();
-  const { socket, items } = useContext(SocketContext).SocketState;
+  const { socket, items, likes } = useContext(SocketContext).SocketState;
   const [newTitle, setNewTitle] = useState('');
   const [text, setText] = useState<string | undefined>('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
   const prev = UsePrevPage();
+  const { isAdmin } = useAppSelector((state) => state.auth);
+  const [like, setLike] = useState<ILike>();
+  const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
+  const [count, setCount] = useState(0);
+  const [isLiked, setIsLike] = useState(false);
+  const localStorageId = localStorage.getItem('id');
+  const isUserId = localStorageId === currentItem?.userId || isAdmin;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         const item = (await ItemService.getItem(id!)).data;
+        const likes = (await LikeService.getItems()).data.data;
+        const currentLike = likes.find(({ postId }) => postId === id);
+        setLike(currentLike);
+        setCount(Number(currentLike?.count || 0));
         if (item) {
           setCurrentItem(item.data);
           setNewInputsData(JSON.parse(item.data.additionalInputs!));
+        }
+        if (currentLike) {
+          setLikedUsers(JSON.parse(String(currentLike?.likedUsers)));
+          const users: ILikedUsers[] = JSON.parse(
+            String(currentLike?.likedUsers)
+          );
+          const isUser = users.find(({ id }) => id === localStorageId);
+          setIsLike(isUser ? true : false);
         }
       } catch (error) {
         console.log(error);
@@ -46,7 +68,7 @@ const Item = () => {
       }
     };
     fetchData();
-  }, [items]);
+  }, [items, likes]);
 
   useEffect(() => {
     setText(currentItem?.title);
@@ -127,16 +149,59 @@ const Item = () => {
     }
   };
 
+  const addLike = async () => {
+    const newUsers = [...likedUsers, { id: String(localStorageId) }];
+    try {
+      setCount(count + 1);
+      await LikeService.updateItem(
+        {
+          likedUsers: JSON.stringify([...newUsers]),
+          count: count + 1
+        },
+        String(like?.id)
+      );
+      if (socket) {
+        socket.emit('add_CurrentLike', JSON.stringify({ ...newUsers }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeLike = async () => {
+    const updatedUsers = [...likedUsers].filter(
+      ({ id }) => id !== localStorageId
+    );
+    try {
+      setCount(count - 1);
+      await LikeService.updateItem(
+        {
+          likedUsers: JSON.stringify([...updatedUsers]),
+          count: count - 1
+        },
+        String(like?.id)
+      );
+      if (socket) {
+        socket.emit('remove_CurrentLike', JSON.stringify({ ...updatedUsers }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return isLoading ? (
     <Spinner animation="border" role="status">
       <span className="visually-hidden">Loading...</span>
     </Spinner>
   ) : (
     <>
-      <ContainerButtons />
+      <ContainerButtons userId={String(currentItem?.userId)} />
       <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
         <Card
-          style={{ width: '50%', cursor: id ? 'default' : 'pointer' }}
+          style={{
+            width: '50%',
+            cursor: id ? 'default' : 'pointer'
+          }}
           className="flex-grow-1 m-2 align-items-center"
           onMouseEnter={() => (id ? setHovered(true) : null)}
           onMouseLeave={() => setHovered(false)}
@@ -146,7 +211,7 @@ const Item = () => {
               position: 'absolute',
               top: 5,
               right: 5,
-              visibility: hovered ? 'visible' : 'hidden',
+              visibility: hovered && isUserId ? 'visible' : 'hidden',
               cursor: 'pointer'
             }}
             onClick={handleShow}
@@ -163,7 +228,8 @@ const Item = () => {
                   style={{
                     cursor: 'pointer',
                     marginTop: '0.5rem',
-                    marginBottom: '0'
+                    marginBottom: '0',
+                    pointerEvents: isUserId ? 'auto' : 'none'
                   }}
                 >
                   <Avatar
@@ -181,13 +247,16 @@ const Item = () => {
               </Form.Group>
             </Form>
           </Card.Header>
-          <Card.Body className="pb-0">
+          <Card.Body
+            className="pb-0"
+            style={{ pointerEvents: isUserId ? 'auto' : 'none' }}
+          >
             <EditText
               name="title"
               defaultValue={text}
               editButtonContent={<BsFillPencilFill />}
               editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-              showEditButton={hovered}
+              showEditButton={hovered && isUserId}
               onChange={(e) => setNewTitle(e.target.value)}
               value={newTitle}
               onBlur={changeTitle}
@@ -225,7 +294,7 @@ const Item = () => {
                     editButtonProps={{
                       style: { marginLeft: '10px', minWidth: 25 }
                     }}
-                    showEditButton={hovered}
+                    showEditButton={hovered && isUserId}
                     onSave={handleSave}
                     type={type}
                   />
@@ -233,8 +302,15 @@ const Item = () => {
               </div>
             ))}
           </Card.Body>
-          <Button variant="primary" className="my-3">
-            <AiOutlineHeart /> {currentItem?.likes}
+          <Button
+            variant="primary"
+            className="my-3"
+            onClick={() => {
+              isLiked ? removeLike() : addLike();
+            }}
+          >
+            {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
+            {count}
           </Button>
           <Card.Footer>{date}</Card.Footer>
         </Card>
