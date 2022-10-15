@@ -20,6 +20,7 @@ import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 import { useAppSelector } from '../redux-hooks';
 import LikeService from '../API/LikeService';
 import { ILike } from '../models/ILike';
+import Comments from '../components/Comments/Comments';
 
 const Item = () => {
   const { id } = useParams();
@@ -315,6 +316,7 @@ const Item = () => {
           <Card.Footer>{date}</Card.Footer>
         </Card>
       </Container>
+      <Comments userId={currentItem?.userId} />
       <ConfirmModal show={show} onHide={handleClose} deleteFunc={deleteItem} />
     </>
   );

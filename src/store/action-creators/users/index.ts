@@ -2,6 +2,7 @@ import { AppDispatch } from '../../store';
 import UserService from '../../../API/UserService';
 import { authSlice } from '../../reducers/auth';
 import { Socket } from 'socket.io-client';
+import { userSlice } from '../../reducers/users';
 
 export const userLogin =
   (username: string, password: string, socket: Socket) =>
@@ -19,6 +20,7 @@ export const userLogin =
         isAdmin ? dispatch(authSlice.actions.setAdmin(true)) : null;
         socket.emit('add_NewUser', JSON.stringify(currentUser));
         localStorage.setItem('isAuth', 'true');
+        dispatch(userSlice.actions.setUser(currentUser));
         localStorage.setItem('id', String(currentUser.id));
       } else if (currentUser?.isBlocked) {
         dispatch(authSlice.actions.setError('Юзер заблокирован!'));
@@ -35,6 +37,7 @@ export const userLogout = () => async (dispatch: AppDispatch) => {
   localStorage.removeItem('isAuth');
   localStorage.removeItem('id');
   dispatch(authSlice.actions.setAuth(false));
+  dispatch(userSlice.actions.setUser({}));
   dispatch(authSlice.actions.setAdmin(false));
   dispatch(authSlice.actions.setError(''));
 };
@@ -55,6 +58,7 @@ export const userSignup =
           await UserService.addUser({ username, password, img: '', isAdmin })
         ).data.data;
         dispatch(authSlice.actions.setAuth(true));
+        dispatch(userSlice.actions.setUser(newUser));
         localStorage.setItem('id', String(newUser.id));
         isAdmin ? dispatch(authSlice.actions.setAdmin(true)) : null;
         socket.emit('add_NewUser', JSON.stringify(newUser));
@@ -73,9 +77,10 @@ export const isUser = () => async (dispatch: AppDispatch) => {
     try {
       const user = (await UserService.getUser(id)).data.data;
       if (user && !user.isBlocked && !user.isAdmin) {
-        null;
+        dispatch(userSlice.actions.setUser(user));
       } else if (user && user.isAdmin && !user.isBlocked) {
         dispatch(authSlice.actions.setAdmin(true));
+        dispatch(userSlice.actions.setUser(user));
       } else {
         dispatch(userLogout());
       }
