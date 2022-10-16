@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, Form } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ICollection } from '../../models/ICollection';
 import { useTranslation, Trans } from 'react-i18next';
 import './collection-container.scss';
@@ -14,6 +14,7 @@ import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import { DeleteCollection } from '../../utils/deleteData';
 import UsePrevPage from '../../hooks/UsePrevPage';
 import { useAppSelector } from '../../redux-hooks';
+import { DropImageZone } from '../DropImageZone/DropImageZone';
 
 interface ICollectionContainer {
   collection: ICollection;
@@ -36,7 +37,10 @@ const CollectionContainer = ({
   const prev = UsePrevPage();
   const { isAdmin } = useAppSelector((state) => state.auth);
   const localStorageId = localStorage.getItem('id');
+  const location = useLocation();
+  const section = location.pathname.split('/')[1];
   const isUserId = localStorageId === collection?.userId || isAdmin;
+  const [files, setFiles] = useState<File[]>([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -47,13 +51,17 @@ const CollectionContainer = ({
     }
   };
 
-  const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (files.length) {
+      addImage();
+    }
+  }, [files]);
+
+  const addImage = async () => {
     if (setIsLoading) {
       try {
         setIsLoading(true);
-        const target = e.target as HTMLInputElement;
-        const files = [...Object.values(target.files!)];
-        const url = await mediaUploader([...files], 'collections');
+        const url = await mediaUploader(files, 'collections');
         await CollectionService.updateCollection({ img: url[0] }, String(id));
         if (socket) {
           socket.emit(
@@ -70,25 +78,33 @@ const CollectionContainer = ({
   };
 
   const changeTitle = async () => {
-    await CollectionService.updateCollection({ title: newTitle }, String(id));
-    if (socket) {
-      socket.emit(
-        'update_CurrentCollection',
-        JSON.stringify({ title: newTitle })
-      );
+    try {
+      await CollectionService.updateCollection({ title: newTitle }, String(id));
+      if (socket) {
+        socket.emit(
+          'update_CurrentCollection',
+          JSON.stringify({ title: newTitle })
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const changeDescription = async () => {
-    await CollectionService.updateCollection(
-      { description: newDescription },
-      String(id)
-    );
-    if (socket) {
-      socket.emit(
-        'update_CurrentCollection',
-        JSON.stringify({ title: newDescription })
+    try {
+      await CollectionService.updateCollection(
+        { description: newDescription },
+        String(id)
       );
+      if (socket) {
+        socket.emit(
+          'update_CurrentCollection',
+          JSON.stringify({ title: newDescription })
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -129,26 +145,15 @@ const CollectionContainer = ({
           onClick={handleShow}
         />
         <Card.Header>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label
-                htmlFor="avatar"
-                style={{
-                  cursor: 'pointer',
-                  marginTop: '0.5rem',
-                  marginBottom: '0',
-                  pointerEvents: isUserId ? 'auto' : 'none'
-                }}
-              >
-                <Avatar name={title} size="100%" src={img} />
-              </Form.Label>
-              <Form.Control
-                type="file"
-                onChange={addImage}
-                style={{ display: 'none' }}
-                id="avatar"
-              />
-            </Form.Group>
+          <Form
+            style={{
+              pointerEvents:
+                isUserId && section === 'collection' ? 'auto' : 'none',
+              position: 'relative'
+            }}
+          >
+            <Avatar name={title} size="130" src={img} />
+            <DropImageZone setFiles={setFiles} isVisible={false} />
           </Form>
         </Card.Header>
         <Card.Body style={{ pointerEvents: isUserId ? 'auto' : 'none' }}>

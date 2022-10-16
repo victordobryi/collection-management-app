@@ -16,7 +16,7 @@ const Comments = ({ userId }: IComments) => {
   const [currentComments, setComments] = useState<IComment[]>([]);
   const [user, setUser] = useState<IUser>();
   const [show, setShow] = useState(false);
-  const { comments, socket } = useContext(SocketContext).SocketState;
+  const { comments } = useContext(SocketContext).SocketState;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,9 +27,6 @@ const Comments = ({ userId }: IComments) => {
             .data;
           if (currentUser) {
             setUser(currentUser);
-          }
-          if (socket) {
-            socket.emit('add_NewComment', JSON.stringify(comments));
           }
         }
         setComments(comments);

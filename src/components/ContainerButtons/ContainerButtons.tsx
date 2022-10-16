@@ -2,9 +2,6 @@ import React from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import UsePrevPage from '../../hooks/UsePrevPage';
-import { ICollection } from '../../models/ICollection';
-import { IItem } from '../../models/IItem';
-import { IUser } from '../../models/IUser';
 import { useAppSelector } from '../../redux-hooks';
 
 interface IContainerButtons {

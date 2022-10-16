@@ -5,7 +5,7 @@ import { IItem } from '../../models/IItem';
 import { mediaUploader } from '../../utils/mediaUploader';
 import { additionalProps } from '../CreateCollectionForm/CreateCollectionForm';
 import SocketContext from '../../context/SocketContext';
-import LikeService from '../../API/LikeService';
+import { DropImageZone } from '../DropImageZone/DropImageZone';
 
 interface ModalProps {
   handleClose: () => void;
@@ -31,13 +31,13 @@ const CreateItemForm = ({
   const [title, setTitle] = useState('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
   const newInputs: additionalProps[] = JSON.parse(additionalInputs);
-  const [media, setMedia] = useState<File[]>([]);
   const { socket } = useContext(SocketContext).SocketState;
+  const [files, setFiles] = useState<File[]>([]);
 
   const createItem = async () => {
     handleClose();
     setLoading(true);
-    const url = await mediaUploader(media, 'items');
+    const url = await mediaUploader(files, 'items');
     const item: IItem = {
       title,
       collectionId,
@@ -57,12 +57,6 @@ const CreateItemForm = ({
       setLoading(false);
       setNewInputsData([]);
     }
-  };
-
-  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    const files = [...Object.values(target.files!)];
-    setMedia([...files]);
   };
 
   return (
@@ -108,10 +102,7 @@ const CreateItemForm = ({
               )}
             </Form.Group>
           ))}
-          <Form.Group className="mb-3">
-            <Form.Label>Add image</Form.Label>
-            <Form.Control type="file" onChange={addImage} />
-          </Form.Group>
+          <DropImageZone setFiles={setFiles} />
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -127,4 +118,3 @@ const CreateItemForm = ({
 };
 
 export default CreateItemForm;
-<div></div>;
