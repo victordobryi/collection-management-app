@@ -9,6 +9,7 @@ import './item-container.scss';
 import LikeService from '../../API/LikeService';
 import { ILike } from '../../models/ILike';
 import SocketContext from '../../context/SocketContext';
+import Avatar from 'react-avatar';
 
 export interface Data {
   [value: string]: string;
@@ -108,15 +109,7 @@ const ItemContainer = ({
 
   return (
     <Card className="card-container">
-      <Card.Header
-        style={{
-          backgroundImage: `url(${img})`,
-          height: '60%',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat'
-        }}
-        onClick={goToItem}
-      ></Card.Header>
+      <Avatar name={title} size="250" src={img} onClick={goToItem} />
       <Card.Body onClick={goToItem}>
         <Card.Title>{title}</Card.Title>
         {newData.map(({ name, value }, index) => (

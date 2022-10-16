@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, Form } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IUser } from '../../models/IUser';
 import Avatar from 'react-avatar';
 import { EditText } from 'react-edit-text';
@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import { DeleteUser } from '../../utils/deleteData';
+import { DropImageZone } from '../DropImageZone/DropImageZone';
 
 interface IUserContainer {
   user: IUser;
@@ -32,17 +33,24 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { isAdmin } = useAppSelector((state) => state.auth);
   const localStorageId = localStorage.getItem('id');
   const isUserId = localStorageId === userId || isAdmin;
+  const location = useLocation();
+  const section = location.pathname.split('/')[1];
+  const [files, setFiles] = useState<File[]>([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (files.length) {
+      addImage();
+    }
+  }, [files]);
+
+  const addImage = async () => {
     if (setIsLoading) {
       try {
         setIsLoading(true);
-        const target = e.target as HTMLInputElement;
-        const files = [...Object.values(target.files!)];
-        const url = await mediaUploader([...files], 'users');
+        const url = await mediaUploader(files, 'users');
         await UserService.updateUser({ img: url[0] }, String(userId));
         if (socket) {
           socket.emit('update_CurrentUser', JSON.stringify({ img: url[0] }));
@@ -62,9 +70,13 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   };
 
   const changeName = async () => {
-    await UserService.updateUser({ username: name }, String(userId));
-    if (socket) {
-      socket.emit('update_CurrentUser', JSON.stringify({ username: name }));
+    try {
+      await UserService.updateUser({ username: name }, String(userId));
+      if (socket) {
+        socket.emit('update_CurrentUser', JSON.stringify({ username: name }));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -107,26 +119,14 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
             backgroundColor: 'transparent'
           }}
         >
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label
-                htmlFor="avatar"
-                style={{
-                  cursor: 'pointer',
-                  marginTop: '0.5rem',
-                  marginBottom: '0',
-                  pointerEvents: isUserId ? 'auto' : 'none'
-                }}
-              >
-                <Avatar name={username} size="120" round="100%" src={img} />
-              </Form.Label>
-              <Form.Control
-                type="file"
-                onChange={addImage}
-                style={{ display: 'none' }}
-                id="avatar"
-              />
-            </Form.Group>
+          <Form
+            style={{
+              pointerEvents: isUserId && section === 'user' ? 'auto' : 'none',
+              position: 'relative'
+            }}
+          >
+            <Avatar name={username} size="120" round="100%" src={img} />
+            <DropImageZone setFiles={setFiles} isVisible={false} />
           </Form>
         </Card.Header>
         <Card.Body

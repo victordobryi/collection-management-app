@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import CommentService from '../../API/CommentService';
+import SocketContext from '../../context/SocketContext';
 import { IComment } from '../../models/IComment';
 import { IUser } from '../../models/IUser';
 import { useAppSelector } from '../../redux-hooks';
@@ -15,6 +16,7 @@ interface ICommentModal {
 const CommentModal = ({ show, handleClose, currentUser }: ICommentModal) => {
   const [comment, setComment] = useState('');
   const { user } = useAppSelector((state) => state.users);
+  const { socket } = useContext(SocketContext).SocketState;
 
   const addComment = async () => {
     try {
@@ -26,6 +28,9 @@ const CommentModal = ({ show, handleClose, currentUser }: ICommentModal) => {
         fromUserName: user?.username
       };
       await CommentService.addComment(newComment);
+      if (socket) {
+        socket.emit('add_NewComment', JSON.stringify(newComment));
+      }
     } catch (error) {
       console.log(error);
     } finally {

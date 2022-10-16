@@ -6,6 +6,7 @@ import { ICollection } from '../../models/ICollection';
 import { mediaUploader } from '../../utils/mediaUploader';
 import AdditionalModal from './AdditionalModal';
 import SocketContext from '../../context/SocketContext';
+import { DropImageZone } from '../DropImageZone/DropImageZone';
 
 interface ModalProps {
   handleClose: () => void;
@@ -28,23 +29,17 @@ const CreateCollectionForm = ({
   const [theme, setTheme] = useState('Comics');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [media, setMedia] = useState<File[]>([]);
   const [additionalProps, setAdditionalProps] = useState<additionalProps[]>([]);
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   const [active, setActive] = useState(false);
   const { socket } = useContext(SocketContext).SocketState;
-
-  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    const files = [...Object.values(target.files!)];
-    setMedia([...files]);
-  };
+  const [files, setFiles] = useState<File[]>([]);
 
   const createCollection = async () => {
     setLoading(true);
     handleClose();
-    const url = await mediaUploader(media, 'collections');
+    const url = await mediaUploader(files, 'collections');
     const collection: ICollection = {
       title,
       description,
@@ -113,10 +108,7 @@ const CreateCollectionForm = ({
               <option value="Figures">{t('Figures')}</option>
             </Form.Select>
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('Add image')}</Form.Label>
-            <Form.Control type="file" onChange={addImage} />
-          </Form.Group>
+          <DropImageZone setFiles={setFiles} />
           <Button
             style={{ marginLeft: 'auto', marginRight: 'auto' }}
             className="d-flex gx-0"

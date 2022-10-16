@@ -19,7 +19,8 @@ const Collection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [additionalProps, setAdditionalProps] = useState('');
-  const { items: contextItems } = useContext(SocketContext).SocketState;
+  const { items: contextItems, collections } =
+    useContext(SocketContext).SocketState;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +45,7 @@ const Collection = () => {
       }
     };
     fetchData();
-  }, [contextItems]);
+  }, [contextItems, collections]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
