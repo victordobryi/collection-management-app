@@ -11,10 +11,12 @@ import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
 import { ICollection } from '../models/ICollection';
 import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
 import PageLayout from '../components/PageLayout/PageLayout';
+import Filter from '../components/Filter/FIlter';
 
 const Collection = () => {
   const { id } = useParams();
   const [items, setItems] = useState<IItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const [collection, setCollection] = useState<ICollection>();
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -33,6 +35,7 @@ const Collection = () => {
             (item) => item.collectionId === id
           );
           setItems(currentItems);
+          setFilteredItems(currentItems);
         }
         if (dBcollection) {
           setAdditionalProps(dBcollection.data.additionalInputs!);
@@ -61,17 +64,18 @@ const Collection = () => {
         handleShow={handleShow}
         userId={String(collection?.userId)}
       />
-      <Container>
+      <Container className="d-flex justify-content-between">
         {collection ? (
           <CollectionContainer
             collection={collection}
             setIsLoading={setIsLoading}
           />
         ) : null}
+        <Filter items={items} setItems={setFilteredItems} />
       </Container>
       <PageLayout>
         <>
-          {items.map(
+          {filteredItems.map(
             (
               { createTime, title, additionalInputs, img, collectionId, id },
               index

@@ -2,6 +2,7 @@ export interface IComment {
   comment: string;
   fromUserId?: string;
   toUserId?: string;
+  toItemId: string;
   currentDate: string;
   fromUserName?: string;
   id?: number;

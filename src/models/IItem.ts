@@ -1,3 +1,5 @@
+import { ILike } from './ILike';
+
 export interface IItem {
   id?: string;
   collectionId?: string;

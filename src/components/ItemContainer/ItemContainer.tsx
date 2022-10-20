@@ -10,6 +10,9 @@ import LikeService from '../../API/LikeService';
 import { ILike } from '../../models/ILike';
 import SocketContext from '../../context/SocketContext';
 import Avatar from 'react-avatar';
+import { useAppSelector } from '../../redux-hooks';
+import CommentService from '../../API/CommentService';
+import { IComment } from '../../models/IComment';
 
 export interface Data {
   [value: string]: string;
@@ -29,15 +32,20 @@ const ItemContainer = ({
   const [like, setLike] = useState<ILike>();
   const [count, setCount] = useState(0);
   const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
+  const [itemComments, setItemComments] = useState<IComment[]>([]);
   const [isLiked, setIsLike] = useState(false);
   const userId = localStorage.getItem('id');
   const { socket, likes } = useContext(SocketContext).SocketState;
+  const { byLikes, byComment } = useAppSelector((state) => state.filter);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const likes = (await LikeService.getItems()).data.data;
         const currentLike = likes.find(({ postId }) => postId === id);
+        const comments = (await CommentService.getComments()).data.data;
+        const itemComments = comments.filter(({ toItemId }) => toItemId === id);
+        setItemComments(itemComments);
         setLike(currentLike);
         setCount(Number(currentLike?.count || 0));
         if (currentLike) {
@@ -107,8 +115,22 @@ const ItemContainer = ({
     }
   };
 
+  const isVisisble = () => {
+    if (
+      ((byLikes && count > 5) || !byLikes) &&
+      ((byComment && itemComments.length > 5) || !byComment)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
-    <Card className="card-container">
+    <Card
+      className="card-container"
+      style={{ display: isVisisble() ? 'flex' : 'none' }}
+    >
       <Avatar name={title} size="250" src={img} onClick={goToItem} />
       <Card.Body onClick={goToItem}>
         <Card.Title>{title}</Card.Title>

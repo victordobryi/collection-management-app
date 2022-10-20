@@ -11,9 +11,15 @@ interface ICommentModal {
   show: boolean;
   handleClose: () => void;
   currentUser: IUser | undefined;
+  itemId: string | undefined;
 }
 
-const CommentModal = ({ show, handleClose, currentUser }: ICommentModal) => {
+const CommentModal = ({
+  show,
+  handleClose,
+  currentUser,
+  itemId
+}: ICommentModal) => {
   const [comment, setComment] = useState('');
   const { user } = useAppSelector((state) => state.users);
   const { socket } = useContext(SocketContext).SocketState;
@@ -24,6 +30,7 @@ const CommentModal = ({ show, handleClose, currentUser }: ICommentModal) => {
         comment,
         fromUserId: user?.id,
         toUserId: currentUser?.id,
+        toItemId: itemId!,
         currentDate: String(Date.now()),
         fromUserName: user?.username
       };

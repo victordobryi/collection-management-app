@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Search from './Search';
 import { useAppDispatch, useAppSelector } from '../redux-hooks';
@@ -24,7 +24,9 @@ const Header = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Search />
+          <Form className="d-flex ms-auto">
+            <Search placeholder="Search" />
+          </Form>
           <Nav className="ms-auto d-flex align-items-center">
             {id ? (
               <LinkContainer to={`/user/${id}`}>
