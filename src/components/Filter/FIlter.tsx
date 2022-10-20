@@ -28,11 +28,11 @@ const Filter = ({ items, setItems }: IFilter) => {
   };
 
   return (
-    <Form>
+    <>
       <Search placeholder="Search" action={filterByName} />
       <FilterCheckbox label="More than 5 likes" action={filterByLikes} />
       <FilterCheckbox label="More than 5 comments" action={filterByComments} />
-    </Form>
+    </>
   );
 };
 

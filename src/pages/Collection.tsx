@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Modal, Spinner } from 'react-bootstrap';
+import { Col, Container, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import CollectionService from '../API/CollectionService';
 import ItemService from '../API/ItemsService';
@@ -12,6 +12,7 @@ import { ICollection } from '../models/ICollection';
 import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
 import PageLayout from '../components/PageLayout/PageLayout';
 import Filter from '../components/Filter/FIlter';
+import SortComponent from '../components/SortComponent/SortComponent';
 
 const Collection = () => {
   const { id } = useParams();
@@ -71,7 +72,10 @@ const Collection = () => {
             setIsLoading={setIsLoading}
           />
         ) : null}
-        <Filter items={items} setItems={setFilteredItems} />
+        <Form>
+          <Filter items={items} setItems={setFilteredItems} />
+          <SortComponent items={items} setItems={setFilteredItems} />
+        </Form>
       </Container>
       <PageLayout>
         <>
