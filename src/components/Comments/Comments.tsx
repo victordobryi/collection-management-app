@@ -10,9 +10,10 @@ import CommentModal from '../CommentModal/CommentModal';
 
 interface IComments {
   userId: string | undefined;
+  itemId: string | undefined;
 }
 
-const Comments = ({ userId }: IComments) => {
+const Comments = ({ userId, itemId }: IComments) => {
   const [currentComments, setComments] = useState<IComment[]>([]);
   const [user, setUser] = useState<IUser>();
   const [show, setShow] = useState(false);
@@ -22,6 +23,10 @@ const Comments = ({ userId }: IComments) => {
     const fetchData = async () => {
       try {
         const comments = (await CommentService.getComments()).data.data;
+        const itemComments = comments.filter(
+          ({ toItemId }) => toItemId === itemId
+        );
+        setComments(itemComments);
         if (userId) {
           const currentUser = (await UserService.getUser(String(userId))).data
             .data;
@@ -29,7 +34,6 @@ const Comments = ({ userId }: IComments) => {
             setUser(currentUser);
           }
         }
-        setComments(comments);
       } catch (error) {
         console.log(error);
       }
@@ -56,7 +60,12 @@ const Comments = ({ userId }: IComments) => {
           ))}
         </Row>
       </Container>
-      <CommentModal show={show} handleClose={handleClose} currentUser={user} />
+      <CommentModal
+        show={show}
+        handleClose={handleClose}
+        currentUser={user}
+        itemId={itemId}
+      />
     </>
   );
 };

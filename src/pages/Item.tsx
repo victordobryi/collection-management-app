@@ -307,7 +307,7 @@ const Item = () => {
           <Card.Footer>{date}</Card.Footer>
         </Card>
       </Container>
-      <Comments userId={currentItem?.userId} />
+      <Comments userId={currentItem?.userId} itemId={id} />
       <ConfirmModal show={show} onHide={handleClose} deleteFunc={deleteItem} />
     </>
   );
