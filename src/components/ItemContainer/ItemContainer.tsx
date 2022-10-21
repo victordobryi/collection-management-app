@@ -9,7 +9,6 @@ import './item-container.scss';
 import LikeService from '../../API/LikeService';
 import SocketContext from '../../context/SocketContext';
 import Avatar from 'react-avatar';
-import { useAppSelector } from '../../redux-hooks';
 
 export interface Data {
   [value: string]: string;
@@ -27,7 +26,6 @@ const ItemContainer = ({ data, likes, comments }: FullData) => {
   const [isLiked, setIsLike] = useState(false);
   const userIdLs = localStorage.getItem('id');
   const { socket } = useContext(SocketContext).SocketState;
-  const { byLikes, byComment } = useAppSelector((state) => state.filter);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,22 +91,8 @@ const ItemContainer = ({ data, likes, comments }: FullData) => {
     }
   };
 
-  const isVisisble = () => {
-    if (
-      ((byLikes && Number(count) > 5) || !byLikes) &&
-      ((byComment && comments.length > 5) || !byComment)
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   return (
-    <Card
-      className="card-container"
-      style={{ display: isVisisble() ? 'flex' : 'none' }}
-    >
+    <Card className="card-container">
       <Avatar name={title} size="250" src={img} onClick={goToItem} />
       <Card.Body onClick={goToItem}>
         <Card.Title>{title}</Card.Title>

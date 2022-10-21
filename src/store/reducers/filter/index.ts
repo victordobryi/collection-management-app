@@ -3,11 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface FilterModes {
   byLikes: boolean;
   byComment: boolean;
+  likesCount: string;
+  commentsCount: string;
 }
 
 const initialState: FilterModes = {
   byLikes: false,
-  byComment: false
+  byComment: false,
+  likesCount: '5',
+  commentsCount: '5'
 };
 
 export const filterSlice = createSlice({
@@ -19,6 +23,12 @@ export const filterSlice = createSlice({
     },
     setCommentMode(state, action: PayloadAction<boolean>) {
       state.byComment = action.payload;
+    },
+    setLike(state, action: PayloadAction<string>) {
+      state.likesCount = action.payload;
+    },
+    setComment(state, action: PayloadAction<string>) {
+      state.commentsCount = action.payload;
     }
   }
 });

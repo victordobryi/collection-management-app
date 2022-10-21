@@ -13,6 +13,8 @@ import CollectionContainer from '../components/CollectionContainer/CollectionCon
 import PageLayout from '../components/PageLayout/PageLayout';
 import Filter from '../components/Filter/FIlter';
 import SortComponent from '../components/SortComponent/SortComponent';
+import { useAppSelector } from '../redux-hooks';
+import { IComment } from '../models/IComment';
 
 const Collection = () => {
   const { id } = useParams();
@@ -28,6 +30,9 @@ const Collection = () => {
     likes,
     comments
   } = useContext(SocketContext).SocketState;
+  const { byLikes, byComment, likesCount, commentsCount } = useAppSelector(
+    (state) => state.filter
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +63,10 @@ const Collection = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const isVisisble = (count: number, comments: IComment[]) =>
+    ((byLikes && count > Number(likesCount)) || !byLikes) &&
+    ((byComment && comments.length > Number(commentsCount)) || !byComment);
+
   return isLoading ? (
     <Spinner animation="border" role="status">
       <span className="visually-hidden">Loading...</span>
@@ -84,13 +93,16 @@ const Collection = () => {
       <PageLayout>
         <>
           {filteredItems.map(({ data, likes, comments }, index) => {
-            return (
+            const [{ count }] = likes;
+            return isVisisble(Number(count), comments) ? (
               <ItemContainer
                 key={index}
                 data={data}
                 likes={likes}
                 comments={comments}
               />
+            ) : (
+              <></>
             );
           })}
         </>
