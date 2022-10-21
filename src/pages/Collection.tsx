@@ -1,38 +1,43 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Modal, Spinner } from 'react-bootstrap';
+import { Container, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import CollectionService from '../API/CollectionService';
 import ItemService from '../API/ItemsService';
 import CreateItemForm from '../components/CreateItemForm/CreateItemForm';
 import ItemContainer from '../components/ItemContainer/ItemContainer';
-import { IItem } from '../models/IItem';
+import { FullData } from '../models/IItem';
 import SocketContext from '../context/SocketContext';
 import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
 import { ICollection } from '../models/ICollection';
 import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
 import PageLayout from '../components/PageLayout/PageLayout';
 import Filter from '../components/Filter/FIlter';
+import SortComponent from '../components/SortComponent/SortComponent';
 
 const Collection = () => {
   const { id } = useParams();
-  const [items, setItems] = useState<IItem[]>([]);
-  const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
+  const [items, setItems] = useState<FullData[]>([]);
+  const [filteredItems, setFilteredItems] = useState<FullData[]>([]);
   const [collection, setCollection] = useState<ICollection>();
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [additionalProps, setAdditionalProps] = useState('');
-  const { items: contextItems, collections } =
-    useContext(SocketContext).SocketState;
+  const {
+    items: contextItems,
+    collections,
+    likes,
+    comments
+  } = useContext(SocketContext).SocketState;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const itemsData = (await ItemService.getItems()).data;
+        const itemsData = (await ItemService.getItems()).data.data;
         const dBcollection = (await CollectionService.getCollection(id!)).data;
         if (id) {
-          const currentItems = itemsData.data.filter(
-            (item) => item.collectionId === id
+          const currentItems = itemsData.filter(
+            ({ data }) => data.collectionId === id
           );
           setItems(currentItems);
           setFilteredItems(currentItems);
@@ -48,7 +53,7 @@ const Collection = () => {
       }
     };
     fetchData();
-  }, [contextItems, collections]);
+  }, [contextItems, collections, likes, comments]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -71,26 +76,23 @@ const Collection = () => {
             setIsLoading={setIsLoading}
           />
         ) : null}
-        <Filter items={items} setItems={setFilteredItems} />
+        <Form>
+          <Filter items={items} setItems={setFilteredItems} />
+          <SortComponent items={items} setItems={setFilteredItems} />
+        </Form>
       </Container>
       <PageLayout>
         <>
-          {filteredItems.map(
-            (
-              { createTime, title, additionalInputs, img, collectionId, id },
-              index
-            ) => (
+          {filteredItems.map(({ data, likes, comments }, index) => {
+            return (
               <ItemContainer
                 key={index}
-                id={id}
-                title={title}
-                additionalInputs={additionalInputs}
-                createTime={createTime}
-                collectionId={collectionId}
-                img={img}
+                data={data}
+                likes={likes}
+                comments={comments}
               />
-            )
-          )}
+            );
+          })}
         </>
       </PageLayout>
       <Modal show={show} onHide={handleClose}>

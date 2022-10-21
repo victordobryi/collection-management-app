@@ -22,13 +22,11 @@ const LargestCollections = () => {
         setIsLoading(true);
         const dbCollections = (await CollectionService.getCollections()).data;
         const itemsData = (await ItemService.getItems()).data;
-        const sortedObj = itemsData.data.reduce<SortedData>(
-          (acc, { collectionId }) => {
-            acc[String(collectionId)] = (acc[String(collectionId)] || 0) + 1;
-            return acc;
-          },
-          {}
-        );
+        const sortedObj = itemsData.data.reduce<SortedData>((acc, { data }) => {
+          acc[String(data.collectionId)] =
+            (acc[String(data.collectionId)] || 0) + 1;
+          return acc;
+        }, {});
         const arr = [];
         for (const key in sortedObj) {
           const collection = dbCollections.data.filter(({ id }) => id === key);
