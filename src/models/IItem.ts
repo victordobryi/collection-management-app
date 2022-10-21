@@ -1,5 +1,6 @@
 import { IComment } from './IComment';
 import { ILike } from './ILike';
+import { Itag } from './ITag';
 
 export interface IItem {
   id?: string;
@@ -21,10 +22,12 @@ export interface ItemResponse {
   data: IItem;
   likes: ILike[];
   comments: IComment[];
+  tags: Itag[];
 }
 
 export interface FullData {
   data: IItem;
   likes: ILike[];
   comments: IComment[];
+  tags: Itag[];
 }
