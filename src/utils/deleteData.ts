@@ -1,5 +1,7 @@
 import CollectionService from '../API/CollectionService';
+import CommentService from '../API/CommentService';
 import ItemService from '../API/ItemsService';
+import LikeService from '../API/LikeService';
 import UserService from '../API/UserService';
 
 interface IDeletedItem {
@@ -40,11 +42,27 @@ export const DeleteItem = async ({ collectionId, itemId }: IDeletedItem) => {
   if (collectionId) {
     const items = (await ItemService.getItems()).data.data;
     const deletedItems = items.filter(
-      (item) => item.collectionId === collectionId
+      ({ data }) => data.collectionId === collectionId
     );
-    deletedItems.forEach(({ id }) => ItemService.deleteItem(String(id)));
+    deletedItems.forEach(({ data }) => ItemService.deleteItem(String(data.id)));
   }
   if (itemId) {
     await ItemService.deleteItem(itemId);
   }
+  DeleteLikes(String(itemId));
+  DeleteComments(String(itemId));
+};
+
+export const DeleteLikes = async (itemId: string) => {
+  const likes = (await LikeService.getItems()).data.data;
+  const deletedLikes = likes.filter(({ postId }) => postId === itemId);
+  deletedLikes.forEach(({ id }) => LikeService.deleteItem(String(id)));
+};
+
+export const DeleteComments = async (itemId: string) => {
+  const comments = (await CommentService.getComments()).data.data;
+  const deletedComments = comments.filter(
+    ({ toItemId }) => toItemId === itemId
+  );
+  deletedComments.forEach(({ id }) => CommentService.deleteComment(String(id)));
 };

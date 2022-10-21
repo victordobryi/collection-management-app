@@ -18,9 +18,9 @@ import { DeleteItem } from '../utils/deleteData';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 import { useAppSelector } from '../redux-hooks';
 import LikeService from '../API/LikeService';
-import { ILike } from '../models/ILike';
 import Comments from '../components/Comments/Comments';
 import { DropImageZone } from '../components/DropImageZone/DropImageZone';
+import { IComment } from '../models/IComment';
 
 const Item = () => {
   const { id } = useParams();
@@ -28,12 +28,17 @@ const Item = () => {
   const [hovered, setHovered] = useState(false);
   const [show, setShow] = useState(false);
   const [currentItem, setCurrentItem] = useState<IItem>();
-  const { socket, items, likes } = useContext(SocketContext).SocketState;
+  const {
+    socket,
+    items,
+    likes,
+    comments: commentsContextData
+  } = useContext(SocketContext).SocketState;
   const [newTitle, setNewTitle] = useState('');
   const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
   const prev = UsePrevPage();
   const { isAdmin } = useAppSelector((state) => state.auth);
-  const [like, setLike] = useState<ILike>();
+  const [likeId, setLikeId] = useState<string>('');
   const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
   const [count, setCount] = useState(0);
   const [isLiked, setIsLike] = useState(false);
@@ -42,29 +47,24 @@ const Item = () => {
   const location = useLocation();
   const section = location.pathname.split('/')[1];
   const [files, setFiles] = useState<File[]>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         const item = (await ItemService.getItem(id!)).data;
-        const likes = (await LikeService.getItems()).data.data;
-        const currentLike = likes.find(({ postId }) => postId === id);
-        setLike(currentLike);
-        setCount(Number(currentLike?.count || 0));
-        if (item) {
-          setCurrentItem(item.data);
-          setNewInputsData(JSON.parse(item.data.additionalInputs!));
-          setNewTitle(String(item.data.title));
-        }
-        if (currentLike) {
-          setLikedUsers(JSON.parse(String(currentLike?.likedUsers)));
-          const users: ILikedUsers[] = JSON.parse(
-            String(currentLike?.likedUsers)
-          );
-          const isUser = users.find(({ id }) => id === localStorageId);
-          setIsLike(isUser ? true : false);
-        }
+        const [{ count, likedUsers, postId, id: likesId }] = item.likes;
+        setComments(item.comments);
+        setLikeId(String(likesId));
+        setCount(Number(count));
+        setCurrentItem(item.data);
+        setNewInputsData(JSON.parse(item.data.additionalInputs!));
+        setNewTitle(String(item.data.title));
+        const users: ILikedUsers[] = JSON.parse(String(likedUsers));
+        setLikedUsers(users);
+        const isUser = users.find(({ id }) => id === localStorageId);
+        setIsLike(isUser ? true : false);
       } catch (error) {
         console.log(error);
       } finally {
@@ -72,7 +72,7 @@ const Item = () => {
       }
     };
     fetchData();
-  }, [likes, items]);
+  }, [likes, items, commentsContextData]);
 
   useEffect(() => {
     if (files.length) {
@@ -156,13 +156,12 @@ const Item = () => {
   const addLike = async () => {
     const newUsers = [...likedUsers, { id: String(localStorageId) }];
     try {
-      setCount(count + 1);
       await LikeService.updateItem(
         {
           likedUsers: JSON.stringify([...newUsers]),
           count: count + 1
         },
-        String(like?.id)
+        likeId
       );
       if (socket) {
         socket.emit('add_CurrentLike', JSON.stringify({ ...newUsers }));
@@ -183,7 +182,7 @@ const Item = () => {
           likedUsers: JSON.stringify([...updatedUsers]),
           count: count - 1
         },
-        String(like?.id)
+        likeId
       );
       if (socket) {
         socket.emit('remove_CurrentLike', JSON.stringify({ ...updatedUsers }));
@@ -310,7 +309,11 @@ const Item = () => {
           <Card.Footer>{date}</Card.Footer>
         </Card>
       </Container>
-      <Comments userId={currentItem?.userId} itemId={id} />
+      <Comments
+        userId={currentItem?.userId}
+        itemId={id}
+        commentsData={comments}
+      />
       <ConfirmModal show={show} onHide={handleClose} deleteFunc={deleteItem} />
     </>
   );

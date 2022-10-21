@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
-import CommentService from '../../API/CommentService';
 import UserService from '../../API/UserService';
 import SocketContext from '../../context/SocketContext';
 import { IComment } from '../../models/IComment';
@@ -11,10 +10,10 @@ import CommentModal from '../CommentModal/CommentModal';
 interface IComments {
   userId: string | undefined;
   itemId: string | undefined;
+  commentsData: IComment[];
 }
 
-const Comments = ({ userId, itemId }: IComments) => {
-  const [currentComments, setComments] = useState<IComment[]>([]);
+const Comments = ({ userId, itemId, commentsData }: IComments) => {
   const [user, setUser] = useState<IUser>();
   const [show, setShow] = useState(false);
   const { comments } = useContext(SocketContext).SocketState;
@@ -22,11 +21,6 @@ const Comments = ({ userId, itemId }: IComments) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const comments = (await CommentService.getComments()).data.data;
-        const itemComments = comments.filter(
-          ({ toItemId }) => toItemId === itemId
-        );
-        setComments(itemComments);
         if (userId) {
           const currentUser = (await UserService.getUser(String(userId))).data
             .data;
@@ -50,7 +44,7 @@ const Comments = ({ userId, itemId }: IComments) => {
         <Button onClick={handleShow}>Write a comment</Button>
         <h2>Comments:</h2>
         <Row>
-          {currentComments.map(({ comment, currentDate, fromUserName }, id) => (
+          {commentsData.map(({ comment, currentDate, fromUserName }, id) => (
             <Comment
               key={id}
               username={fromUserName}
