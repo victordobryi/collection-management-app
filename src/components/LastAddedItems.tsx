@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
 import ItemService from '../API/ItemsService';
 import SocketContext from '../context/SocketContext';
-import { IItem } from '../models/IItem';
+import { FullData } from '../models/IItem';
 import ItemContainer from './ItemContainer/ItemContainer';
 
 const LastAddedItems = () => {
-  const [items, setItems] = useState<IItem[]>([]);
+  const [items, setItems] = useState<FullData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { items: contextItems } = useContext(SocketContext).SocketState;
 
@@ -16,7 +16,7 @@ const LastAddedItems = () => {
         setIsLoading(true);
         const itemsData = (await ItemService.getItems()).data;
         const currentItems = itemsData.data.sort(
-          (a, b) => Number(b.createTime) - Number(a.createTime)
+          (a, b) => Number(b.data.createTime) - Number(a.data.createTime)
         );
         setItems(currentItems);
       } catch (error) {
@@ -36,22 +36,15 @@ const LastAddedItems = () => {
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
-        items.map(
-          (
-            { createTime, title, additionalInputs, img, collectionId, id },
-            index
-          ) =>
-            index < 5 ? (
-              <ItemContainer
-                key={index}
-                id={id}
-                title={title}
-                additionalInputs={additionalInputs}
-                createTime={createTime}
-                collectionId={collectionId}
-                img={img}
-              />
-            ) : null
+        items.map(({ data, likes, comments }, index) =>
+          index < 5 ? (
+            <ItemContainer
+              key={index}
+              data={data}
+              likes={likes}
+              comments={comments}
+            />
+          ) : null
         )
       )}
     </Row>

@@ -300,6 +300,9 @@ const Item = () => {
             onClick={() => {
               isLiked ? removeLike() : addLike();
             }}
+            style={{
+              pointerEvents: isUserId ? 'auto' : 'none'
+            }}
           >
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
             {count}

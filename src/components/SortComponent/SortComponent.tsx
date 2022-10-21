@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Form } from 'react-bootstrap';
-import { IItem } from '../../models/IItem';
+import { FullData, IItem } from '../../models/IItem';
 
 interface IFilter {
-  items: IItem[];
-  setItems: React.Dispatch<React.SetStateAction<IItem[]>>;
+  items: FullData[];
+  setItems: React.Dispatch<React.SetStateAction<FullData[]>>;
 }
 
 const SortComponent = ({ items, setItems }: IFilter) => {
@@ -22,6 +22,18 @@ const SortComponent = ({ items, setItems }: IFilter) => {
       case 'Name ↓':
         sortByNameDown();
         break;
+      case 'Likes ↑':
+        sortByLikesUp();
+        break;
+      case 'Likes ↓':
+        sortByLikesDown();
+        break;
+      case 'Comments ↑':
+        sortByCommentsUp();
+        break;
+      case 'Comments ↓':
+        sortByCommentsDown();
+        break;
       default:
         sortByDefault();
     }
@@ -31,7 +43,7 @@ const SortComponent = ({ items, setItems }: IFilter) => {
 
   const sortByDateUp = () => {
     const newItems = [...items].sort(
-      (a, b) => Number(a.createTime) - Number(b.createTime)
+      (a, b) => Number(a.data.createTime) - Number(b.data.createTime)
     );
     setItems(newItems);
     return newItems;
@@ -47,12 +59,35 @@ const SortComponent = ({ items, setItems }: IFilter) => {
 
   const sortByNameDown = () => setItems(sortByNameUp().reverse());
 
+  const sortByLikesUp = () => {
+    const newItems = [...items].sort((a, b) => {
+      const [{ count }] = a.likes;
+      const [{ count: bLikes }] = b.likes;
+      return Number(count) - Number(bLikes);
+    });
+    setItems(newItems);
+    return newItems;
+  };
+
+  const sortByLikesDown = () => setItems(sortByLikesUp().reverse());
+
+  const sortByCommentsUp = () => {
+    const newItems = [...items].sort((a, b) => {
+      return a.comments.length - b.comments.length;
+    });
+    setItems(newItems);
+    return newItems;
+  };
+
+  const sortByCommentsDown = () => setItems(sortByCommentsUp().reverse());
+
   return (
     <Form.Select
       aria-label="Sorting by"
       onChange={(e) => changeSortMode(e.target.value)}
+      defaultValue="Default"
     >
-      <option selected disabled value="Default">
+      <option disabled value="Default">
         Sorting by
       </option>
       <option value="Name ↑">Name ↑</option>

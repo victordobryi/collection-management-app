@@ -1,18 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { IItem } from '../../models/IItem';
+import { FullData } from '../../models/IItem';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { getCurrentDate } from '../../utils/getCurrentTime';
 import { newInputsData } from '../CreateItemForm/CreateItemForm';
 import { useNavigate } from 'react-router-dom';
 import './item-container.scss';
 import LikeService from '../../API/LikeService';
-import { ILike } from '../../models/ILike';
 import SocketContext from '../../context/SocketContext';
 import Avatar from 'react-avatar';
 import { useAppSelector } from '../../redux-hooks';
-import CommentService from '../../API/CommentService';
-import { IComment } from '../../models/IComment';
 
 export interface Data {
   [value: string]: string;
@@ -22,55 +19,38 @@ export interface ILikedUsers {
   id: string;
 }
 
-const ItemContainer = ({
-  id,
-  createTime,
-  title,
-  additionalInputs,
-  img
-}: IItem) => {
-  const [like, setLike] = useState<ILike>();
-  const [count, setCount] = useState(0);
+const ItemContainer = ({ data, likes, comments }: FullData) => {
+  const [{ count, id: likesId, likedUsers: likedUsersData }] = likes;
+  const { additionalInputs, createTime, id, img, title } = data;
+
   const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
-  const [itemComments, setItemComments] = useState<IComment[]>([]);
   const [isLiked, setIsLike] = useState(false);
-  const userId = localStorage.getItem('id');
-  const { socket, likes } = useContext(SocketContext).SocketState;
+  const userIdLs = localStorage.getItem('id');
+  const { socket } = useContext(SocketContext).SocketState;
   const { byLikes, byComment } = useAppSelector((state) => state.filter);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const likes = (await LikeService.getItems()).data.data;
-        const currentLike = likes.find(({ postId }) => postId === id);
-        const comments = (await CommentService.getComments()).data.data;
-        const itemComments = comments.filter(({ toItemId }) => toItemId === id);
-        setItemComments(itemComments);
-        setLike(currentLike);
-        setCount(Number(currentLike?.count || 0));
-        if (currentLike) {
-          setLikedUsers(JSON.parse(String(currentLike?.likedUsers)));
-          const users: ILikedUsers[] = JSON.parse(
-            String(currentLike?.likedUsers)
-          );
-          const isUser = users.find(({ id }) => id === userId);
-          setIsLike(isUser ? true : false);
-        }
+        const users: ILikedUsers[] = JSON.parse(String(likedUsersData));
+        setLikedUsers(users);
+        const isUser = users.find(({ id }) => id === userIdLs);
+        setIsLike(isUser ? true : false);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [likes]);
+  }, []);
 
-  const data: Data = JSON.parse(additionalInputs!);
+  const inputsData: Data = JSON.parse(additionalInputs!);
 
   const newData: newInputsData[] = [];
 
-  for (const k in data) {
+  for (const k in inputsData) {
     const type = k.split('+')[1];
     const name = k.split('+')[0];
-    newData.push({ name: name, value: data[k], type: type });
+    newData.push({ name: name, value: inputsData[k], type: type });
   }
 
   const navigate = useNavigate();
@@ -78,15 +58,14 @@ const ItemContainer = ({
   const goToItem = () => navigate(`/item/${id}`);
 
   const addLike = async () => {
-    const newUsers = [...likedUsers, { id: String(userId) }];
+    const newUsers = [...likedUsers, { id: String(userIdLs) }];
     try {
-      setCount(count + 1);
       await LikeService.updateItem(
         {
           likedUsers: JSON.stringify([...newUsers]),
-          count: count + 1
+          count: Number(count) + 1
         },
-        String(like?.id)
+        String(likesId)
       );
       if (socket) {
         socket.emit('add_CurrentLike', JSON.stringify({ ...newUsers }));
@@ -97,15 +76,14 @@ const ItemContainer = ({
   };
 
   const removeLike = async () => {
-    const updatedUsers = [...likedUsers].filter(({ id }) => id !== userId);
+    const updatedUsers = [...likedUsers].filter(({ id }) => id !== userIdLs);
     try {
-      setCount(count - 1);
       await LikeService.updateItem(
         {
           likedUsers: JSON.stringify([...updatedUsers]),
-          count: count - 1
+          count: Number(count) - 1
         },
-        String(like?.id)
+        String(likesId)
       );
       if (socket) {
         socket.emit('remove_CurrentLike', JSON.stringify({ ...updatedUsers }));
@@ -117,8 +95,8 @@ const ItemContainer = ({
 
   const isVisisble = () => {
     if (
-      ((byLikes && count > 5) || !byLikes) &&
-      ((byComment && itemComments.length > 5) || !byComment)
+      ((byLikes && Number(count) > 5) || !byLikes) &&
+      ((byComment && comments.length > 5) || !byComment)
     ) {
       return true;
     } else {
@@ -144,7 +122,7 @@ const ItemContainer = ({
           isLiked ? removeLike() : addLike();
         }}
         style={{
-          pointerEvents: userId ? 'auto' : 'none'
+          pointerEvents: userIdLs ? 'auto' : 'none'
         }}
       >
         {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
