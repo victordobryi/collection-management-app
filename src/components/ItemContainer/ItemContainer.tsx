@@ -27,7 +27,9 @@ const ItemContainer = ({ data, likes, comments }: FullData) => {
   const [isLiked, setIsLike] = useState(false);
   const userIdLs = localStorage.getItem('id');
   const { socket } = useContext(SocketContext).SocketState;
-  const { byLikes, byComment } = useAppSelector((state) => state.filter);
+  const { byLikes, byComment, likesCount, commentsCount } = useAppSelector(
+    (state) => state.filter
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,8 +97,8 @@ const ItemContainer = ({ data, likes, comments }: FullData) => {
 
   const isVisisble = () => {
     if (
-      ((byLikes && Number(count) > 5) || !byLikes) &&
-      ((byComment && comments.length > 5) || !byComment)
+      ((byLikes && Number(count) > Number(likesCount)) || !byLikes) &&
+      ((byComment && comments.length > Number(commentsCount)) || !byComment)
     ) {
       return true;
     } else {
