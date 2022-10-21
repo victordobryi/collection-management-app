@@ -21,4 +21,9 @@ export default class CommentService {
   ): Promise<AxiosResponse<ICommentsResponse>> {
     return axios.get<ICommentsResponse>(URL + id);
   }
+  static async deleteComment(
+    id: string
+  ): Promise<AxiosResponse<ICommentsResponse>> {
+    return axios.delete(URL + id);
+  }
 }
