@@ -18,7 +18,7 @@ export interface ILikedUsers {
   id: string;
 }
 
-const ItemContainer = ({ data, likes, comments }: FullData) => {
+const ItemContainer = ({ data, likes }: FullData) => {
   const [{ count, id: likesId, likedUsers: likedUsersData }] = likes;
   const { additionalInputs, createTime, id, img, title } = data;
 
