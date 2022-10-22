@@ -1,15 +1,14 @@
-export interface Itag {
+export interface ITag {
   id?: string;
   name: string;
-  itemId: string;
 }
 
 export interface ITagsResponse {
   message: string;
-  data: Itag[];
+  data: ITag[];
 }
 
 export interface ITagResponse {
   message: string;
-  data: Itag;
+  data: ITag;
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { Itag, ITagResponse, ITagsResponse } from '../models/ITag';
+import { ITag, ITagResponse, ITagsResponse } from '../models/ITag';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/tags/';
 
@@ -17,7 +17,7 @@ export default class TagService {
     return axios.delete(URL + id);
   }
 
-  static async addTag(newItem: Itag): Promise<AxiosResponse<ITagResponse>> {
-    return axios.post(URL, newItem);
+  static async addTag(newTag: ITag): Promise<AxiosResponse<ITagResponse>> {
+    return axios.post(URL, newTag);
   }
 }
