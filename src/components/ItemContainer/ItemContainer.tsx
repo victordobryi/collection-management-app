@@ -9,6 +9,8 @@ import './item-container.scss';
 import LikeService from '../../API/LikeService';
 import SocketContext from '../../context/SocketContext';
 import Avatar from 'react-avatar';
+import Tag from '../Tag/Tag';
+import { ITag } from '../../models/ITag';
 
 export interface Data {
   [value: string]: string;
@@ -20,9 +22,10 @@ export interface ILikedUsers {
 
 const ItemContainer = ({ data, likes }: FullData) => {
   const [{ count, id: likesId, likedUsers: likedUsersData }] = likes;
-  const { additionalInputs, createTime, id, img, title } = data;
+  const { additionalInputs, createTime, id, img, title, tags } = data;
 
   const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
+  const [itemTags, setItemTags] = useState<ITag[]>([]);
   const [isLiked, setIsLike] = useState(false);
   const userIdLs = localStorage.getItem('id');
   const { socket } = useContext(SocketContext).SocketState;
@@ -34,6 +37,8 @@ const ItemContainer = ({ data, likes }: FullData) => {
         setLikedUsers(users);
         const isUser = users.find(({ id }) => id === userIdLs);
         setIsLike(isUser ? true : false);
+        const itemTags = JSON.parse(String(tags));
+        setItemTags(itemTags);
       } catch (error) {
         console.log(error);
       }
@@ -112,6 +117,9 @@ const ItemContainer = ({ data, likes }: FullData) => {
         {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
         {count}
       </Button>
+      {itemTags.map(({ name }, index) => (
+        <Tag key={index} text={name} />
+      ))}
       <Card.Footer onClick={goToItem}>{getCurrentDate(createTime)}</Card.Footer>
     </Card>
   );

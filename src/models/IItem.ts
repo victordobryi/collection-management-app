@@ -9,6 +9,7 @@ export interface IItem {
   createTime?: string;
   additionalInputs?: string;
   img?: string;
+  tags?: string;
 }
 
 export interface ItemsResponse {

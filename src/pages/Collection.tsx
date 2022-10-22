@@ -92,7 +92,7 @@ const Collection = () => {
       </Container>
       <PageLayout>
         <>
-          {filteredItems.map(({ data, likes, comments }, index) => {
+          {filteredItems.map(({ data, likes, comments, tags }, index) => {
             const [{ count }] = likes;
             return isVisisble(Number(count), comments) ? (
               <ItemContainer
@@ -100,6 +100,7 @@ const Collection = () => {
                 data={data}
                 likes={likes}
                 comments={comments}
+                tags={tags}
               />
             ) : (
               <></>

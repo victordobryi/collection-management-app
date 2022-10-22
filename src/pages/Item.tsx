@@ -21,6 +21,8 @@ import LikeService from '../API/LikeService';
 import Comments from '../components/Comments/Comments';
 import { DropImageZone } from '../components/DropImageZone/DropImageZone';
 import { IComment } from '../models/IComment';
+import { ITag } from '../models/ITag';
+import Tag from '../components/Tag/Tag';
 
 const Item = () => {
   const { id } = useParams();
@@ -48,6 +50,7 @@ const Item = () => {
   const section = location.pathname.split('/')[1];
   const [files, setFiles] = useState<File[]>([]);
   const [comments, setComments] = useState<IComment[]>([]);
+  const [itemTags, setItemTags] = useState<ITag[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +68,8 @@ const Item = () => {
         setLikedUsers(users);
         const isUser = users.find(({ id }) => id === localStorageId);
         setIsLike(isUser ? true : false);
+        const tags = JSON.parse(String(item.data.tags));
+        setItemTags(tags);
       } catch (error) {
         console.log(error);
       } finally {
@@ -306,6 +311,9 @@ const Item = () => {
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
             {count}
           </Button>
+          {itemTags.map(({ name }, index) => (
+            <Tag key={index} text={name} />
+          ))}
           <Card.Footer>{date}</Card.Footer>
         </Card>
       </Container>

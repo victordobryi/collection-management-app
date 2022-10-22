@@ -76,6 +76,10 @@ const SocketContextComponent: React.FunctionComponent<PropsWithChildren> = (
       SocketDispatch({ type: 'remove_like', payload: like });
     });
 
+    socket.on('add_tag', (like: string) => {
+      SocketDispatch({ type: 'add_tag', payload: like });
+    });
+
     socket.on('user_connected', (users: string[]) => {
       console.info('User connected message received');
       SocketDispatch({ type: 'update_users', payload: users });

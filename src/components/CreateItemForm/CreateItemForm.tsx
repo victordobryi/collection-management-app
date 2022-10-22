@@ -6,6 +6,9 @@ import { mediaUploader } from '../../utils/mediaUploader';
 import { additionalProps } from '../CreateCollectionForm/CreateCollectionForm';
 import SocketContext from '../../context/SocketContext';
 import { DropImageZone } from '../DropImageZone/DropImageZone';
+import TagCreator from '../TagCreator/TagCreator';
+import TagService from '../../API/TagService';
+import { ITag } from '../../models/ITag';
 
 interface ModalProps {
   handleClose: () => void;
@@ -33,6 +36,7 @@ const CreateItemForm = ({
   const newInputs: additionalProps[] = JSON.parse(additionalInputs);
   const { socket } = useContext(SocketContext).SocketState;
   const [files, setFiles] = useState<File[]>([]);
+  const [tags, setTags] = useState<ITag[]>([]);
 
   const createItem = async () => {
     handleClose();
@@ -44,10 +48,18 @@ const CreateItemForm = ({
       userId,
       img: url[0] || '',
       createTime: String(Date.now()),
-      additionalInputs: JSON.stringify(newInputsData)
+      additionalInputs: JSON.stringify(newInputsData),
+      tags: JSON.stringify(tags)
     };
+
     try {
       await ItemService.addItem(item);
+      Promise.all(
+        tags.map(async (tag) => {
+          await TagService.addTag(tag);
+        })
+      );
+
       if (socket) {
         socket.emit('add_NewItem', JSON.stringify(item));
       }
@@ -74,6 +86,7 @@ const CreateItemForm = ({
               onChange={(e) => setTitle(e.target.value)}
             />
           </Form.Group>
+          <TagCreator tags={tags} setTags={setTags} />
           {newInputs.map(({ name, type }, index) => (
             <Form.Group className="mb-3" key={index}>
               <Form.Label>{name}</Form.Label>
