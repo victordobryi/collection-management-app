@@ -6,6 +6,7 @@ import { IComment } from '../../models/IComment';
 import { IUser } from '../../models/IUser';
 import Comment from '../Comment/Comment';
 import CommentModal from '../CommentModal/CommentModal';
+import { useTranslation } from 'react-i18next';
 
 interface IComments {
   userId: string | undefined;
@@ -17,6 +18,7 @@ const Comments = ({ userId, itemId, commentsData }: IComments) => {
   const [user, setUser] = useState<IUser>();
   const [show, setShow] = useState(false);
   const { comments } = useContext(SocketContext).SocketState;
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,8 +43,8 @@ const Comments = ({ userId, itemId, commentsData }: IComments) => {
   return (
     <>
       <Container>
-        <Button onClick={handleShow}>Write a comment</Button>
-        <h2>Comments:</h2>
+        <Button onClick={handleShow}>{t('Write a comment')}</Button>
+        <h2>{t('Comments')}:</h2>
         <Row>
           {commentsData.map(({ comment, currentDate, fromUserName }, id) => (
             <Comment

@@ -5,6 +5,7 @@ import Tag from '../Tag/Tag';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
 import TagService from '../../API/TagService';
+import { useTranslation } from 'react-i18next';
 
 interface ITagCreator {
   tags: ITag[];
@@ -16,11 +17,11 @@ const TagCreator = ({ tags, setTags }: ITagCreator) => {
   const [selected, setSelected] = useState<Option[]>([]);
   const [options, setOptions] = useState<Option[]>([]);
   const ref = useRef<Typeahead | null>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
       const tags = (await TagService.getTags()).data.data;
-      console.log(tags);
       tags.map(({ name }) => setOptions((option) => [...option, name]));
     };
     fetchData();
@@ -51,18 +52,18 @@ const TagCreator = ({ tags, setTags }: ITagCreator) => {
             setValue(value[0]);
           }}
           options={options}
-          placeholder="Enter tag name"
+          placeholder={t('Enter tag name')}
           selected={selected}
           clearButton={true}
           onInputChange={(value) => setValue(value)}
           ref={ref}
         />
         <Button variant="outline-secondary" onClick={addTag}>
-          Add tag
+          {t('Add tag')}
         </Button>
       </InputGroup>
       <ul className="mb-3 d-flex flex-wrap align-items-center">
-        tags:{' '}
+        {t('tags')}:{' '}
         {tags.map(({ name }, index) => (
           <Tag action={() => removeTag(name)} key={index} text={name} />
         ))}

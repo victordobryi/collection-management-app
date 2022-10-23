@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { FullData } from '../../models/IItem';
 import { useAppDispatch } from '../../redux-hooks';
 import { filterSlice } from '../../store/reducers/filter';
-import Search from '../Search';
+import Search from '../Search/Search';
 import FilterCheckbox from './FilterCheckbox';
+import { useTranslation } from 'react-i18next';
 
 interface IFilter {
   items: FullData[];
@@ -16,6 +17,7 @@ const Filter = ({ items, setItems }: IFilter) => {
     filterSlice.actions;
   const [likesValue, setLikesValue] = useState('5');
   const [commentsValue, setCommentsValue] = useState('5');
+  const { t } = useTranslation();
 
   const filterByLikes = (isChecked: boolean) => {
     dispatch(setLikeMode(isChecked));
@@ -40,13 +42,13 @@ const Filter = ({ items, setItems }: IFilter) => {
       <FilterCheckbox
         setCount={setLikesValue}
         count={likesValue}
-        label={`More than ${likesValue} likes`}
+        label={`${t('More than')} ${likesValue} ${t('likes')}`}
         action={filterByLikes}
       />
       <FilterCheckbox
         count={commentsValue}
         setCount={setCommentsValue}
-        label={`More than ${commentsValue} comments`}
+        label={`${t('More than')} ${commentsValue} ${t('comments')}`}
         action={filterByComments}
       />
     </>

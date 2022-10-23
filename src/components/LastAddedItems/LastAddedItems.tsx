@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
-import ItemService from '../API/ItemsService';
-import SocketContext from '../context/SocketContext';
-import { FullData } from '../models/IItem';
-import ItemContainer from './ItemContainer/ItemContainer';
+import ItemService from '../../API/ItemsService';
+import SocketContext from '../../context/SocketContext';
+import { FullData } from '../../models/IItem';
+import ItemContainer from '../ItemContainer/ItemContainer';
+import { useTranslation } from 'react-i18next';
 
 const LastAddedItems = () => {
   const [items, setItems] = useState<FullData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { items: contextItems } = useContext(SocketContext).SocketState;
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,11 +32,9 @@ const LastAddedItems = () => {
 
   return (
     <Row className="d-flex flex-wrap gap-3 mt-5 last-added">
-      <h2>Last Added Items:</h2>
+      <h2>{t('Last Added Items')}:</h2>
       {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner animation="border" role="status" />
       ) : (
         items.map(({ data, likes, comments }, index) =>
           index < 5 ? (

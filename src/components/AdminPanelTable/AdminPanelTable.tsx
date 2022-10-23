@@ -3,12 +3,14 @@ import { Form, Table } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { isUser } from '../../store/action-creators/users';
 import Toolbar from './Toolbar';
+import { useTranslation } from 'react-i18next';
 
 const AdminPanelTable = () => {
   const [all, setAll] = useState(false);
   const [checkboxes, setCheckboxes] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state) => state.users);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setCheckboxes([]);
@@ -42,9 +44,9 @@ const AdminPanelTable = () => {
         <thead>
           <tr>
             <th style={{ fontSize: 14 }}>
-              select all
+              {t('select all')}
               <br />
-              /deselect
+              {t('/deselect')}
               <Form.Check
                 type="checkbox"
                 id="all"
@@ -53,12 +55,12 @@ const AdminPanelTable = () => {
               />
             </th>
             <th>#</th>
-            <th>name</th>
-            <th>id</th>
-            <th>password</th>
-            <th>isAdmin</th>
-            <th>isBlocked</th>
-            <th>avatar</th>
+            <th>{t('name')}</th>
+            <th>{t('id')}</th>
+            <th>{t('password')}</th>
+            <th>{t('isAdmin')}</th>
+            <th>{t('isBlocked')}</th>
+            <th>{t('avatar')}</th>
           </tr>
         </thead>
         {users?.map(

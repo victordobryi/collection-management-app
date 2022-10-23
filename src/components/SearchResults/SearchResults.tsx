@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { IComment } from '../../models/IComment';
 import { IItem } from '../../models/IItem';
 import { ITag } from '../../models/ITag';
+import { Trans, useTranslation } from 'react-i18next';
 
 export interface ISearchResults {
   results: (IItem & IComment)[];
@@ -14,6 +15,7 @@ export interface ISearchResults {
 const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
   const [more, setMore] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const goToItem = (id: string) => {
     navigate(`/item/${id}`);
@@ -34,26 +36,26 @@ const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
             >
               {title && (
                 <>
-                  <b>title: </b>
+                  <b>{t('Title')}: </b>
                   {title}
                   <br />
                 </>
               )}
               {comment && (
                 <>
-                  <b>comment: </b> {comment}
+                  <b>{t('Comment')}: </b> {comment}
                   <br />
                 </>
               )}
               {fromUserName && (
                 <>
-                  <b>fromUserName: </b> {fromUserName}
+                  <b>{t('From User name')}: </b> {fromUserName}
                   <br />
                 </>
               )}
               {itemTags.length ? (
                 <>
-                  <b>tags: </b>
+                  <b>{t('Tags')}: </b>
                   {itemTags.map(({ name }, tagId) => (
                     <span key={tagId}>{(tagId ? ', ' : '') + name}</span>
                   ))}
@@ -69,14 +71,14 @@ const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
       )}
       {value && !results.length ? (
         <>
-          <ListGroup.Item>No data found</ListGroup.Item>
+          <ListGroup.Item>{t('No data found')}</ListGroup.Item>
         </>
       ) : (
         <></>
       )}
       {results.length > 5 ? (
         <Button onClick={() => setMore(!more)}>
-          Show {more ? 'Less' : 'More'}
+          <Trans i18nKey={`Show ${more}`}>Show {more ? 'Less' : 'More'}</Trans>
         </Button>
       ) : (
         <></>

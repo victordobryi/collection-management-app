@@ -9,6 +9,7 @@ import { DropImageZone } from '../DropImageZone/DropImageZone';
 import TagCreator from '../TagCreator/TagCreator';
 import TagService from '../../API/TagService';
 import { ITag } from '../../models/ITag';
+import { useTranslation } from 'react-i18next';
 
 interface ModalProps {
   handleClose: () => void;
@@ -37,6 +38,7 @@ const CreateItemForm = ({
   const { socket } = useContext(SocketContext).SocketState;
   const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState<ITag[]>([]);
+  const { t } = useTranslation();
 
   const createItem = async () => {
     handleClose();
@@ -74,15 +76,15 @@ const CreateItemForm = ({
   return (
     <>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>{t('Create Item')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
+            <Form.Label>{t('Title')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Title"
+              placeholder={`${t('Title')}`}
               onChange={(e) => setTitle(e.target.value)}
             />
           </Form.Group>
@@ -120,10 +122,10 @@ const CreateItemForm = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+          {t('Close')}
         </Button>
         <Button variant="primary" onClick={createItem}>
-          Create Item
+          {t(' Create Item')}
         </Button>
       </Modal.Footer>
     </>

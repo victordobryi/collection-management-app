@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import './drop-image-zone.scss';
+import { useTranslation } from 'react-i18next';
 
 interface IDropImageZone {
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
@@ -16,6 +17,7 @@ export const DropImageZone = ({
     setFiles(acceptedFiles);
     setFileNames(acceptedFiles.map((file) => file.name));
   };
+  const { t } = useTranslation();
 
   return (
     <Dropzone onDrop={handleDrop} accept={{ 'image/*': [] }}>
@@ -48,7 +50,7 @@ export const DropImageZone = ({
             <span>{isDragActive ? '📂' : '📁'}</span>
             {fileNames.length > 0 ? (
               <>
-                <strong>Files:</strong>
+                <strong>{t('Files')}:</strong>
                 <ul>
                   {fileNames.map((fileName) => (
                     <li key={fileName}>{fileName}</li>
@@ -56,7 +58,7 @@ export const DropImageZone = ({
                 </ul>
               </>
             ) : (
-              'Dragndrop images, or click to select files'
+              t('Dragndrop images, or click to select files')
             )}
           </div>
         );
