@@ -12,11 +12,11 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <SocketContextComponent>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </SocketContextComponent>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <SocketContextComponent>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </SocketContextComponent>
+  // </React.StrictMode>
 );

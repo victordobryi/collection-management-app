@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Search from './Search';
@@ -7,12 +7,45 @@ import { userLogout } from '../store/action-creators/users';
 import SelectLang from './SelectLang/SelectLang';
 import SelectMode from './SelectMode/SelectMode';
 import { useTranslation } from 'react-i18next';
+import useSearch from '../search-hooks/useSearch';
+import ItemService from '../API/ItemsService';
+import { IItem } from '../models/IItem';
+import { IComment } from '../models/IComment';
+import SearchResults from './SearchResults/SearchResults';
 
 const Header = () => {
   const { isAuth, isAdmin } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const id = localStorage.getItem('id');
+  const [items, setItems] = useState<IItem[]>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const items = (await ItemService.getItems()).data.data;
+        items.map(({ data }) => setItems((items) => [...items, data]));
+        items.map(({ comments }) => {
+          if (comments.length) {
+            setComments((commentsArr) => [...commentsArr, ...comments]);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  const { results, searchValue, setSearchValue } = useSearch<IItem & IComment>({
+    dataSet: [...items, ...comments],
+    keys: ['title', 'tags', 'comment', 'fromUserName']
+  });
+
+  const searchData = (value: string) => {
+    setSearchValue(value);
+  };
 
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
@@ -24,8 +57,17 @@ const Header = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Form className="d-flex ms-auto">
-            <Search placeholder="Search" />
+          <Form className="d-flex ms-auto" style={{ position: 'relative' }}>
+            <Search
+              placeholder="Search"
+              action={searchData}
+              value={searchValue}
+            />
+            <SearchResults
+              results={searchValue ? results : []}
+              value={searchValue}
+              setSearchValue={setSearchValue}
+            />
           </Form>
           <Nav className="ms-auto d-flex align-items-center">
             {id ? (

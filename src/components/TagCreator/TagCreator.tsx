@@ -12,7 +12,7 @@ interface ITagCreator {
 }
 
 const TagCreator = ({ tags, setTags }: ITagCreator) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<string | Option>('');
   const [selected, setSelected] = useState<Option[]>([]);
   const [options, setOptions] = useState<Option[]>([]);
   const ref = useRef<Typeahead | null>();
@@ -46,7 +46,10 @@ const TagCreator = ({ tags, setTags }: ITagCreator) => {
       <InputGroup className="mb-3">
         <Typeahead
           id="basic-example"
-          onChange={setSelected}
+          onChange={(value) => {
+            setSelected(value);
+            setValue(value[0]);
+          }}
           options={options}
           placeholder="Enter tag name"
           selected={selected}
