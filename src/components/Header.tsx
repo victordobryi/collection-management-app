@@ -11,8 +11,7 @@ import useSearch from '../search-hooks/useSearch';
 import ItemService from '../API/ItemsService';
 import { IItem } from '../models/IItem';
 import { IComment } from '../models/IComment';
-import { ITag } from '../models/ITag';
-import TagService from '../API/TagService';
+import SearchResults from './SearchResults/SearchResults';
 
 const Header = () => {
   const { isAuth, isAdmin } = useAppSelector((state) => state.auth);
@@ -21,14 +20,11 @@ const Header = () => {
   const id = localStorage.getItem('id');
   const [items, setItems] = useState<IItem[]>([]);
   const [comments, setComments] = useState<IComment[]>([]);
-  const [tags, setTags] = useState<ITag[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const items = (await ItemService.getItems()).data.data;
-        const tags = (await TagService.getTags()).data.data;
-        setTags(tags);
         items.map(({ data }) => setItems((items) => [...items, data]));
         items.map(({ comments }) => {
           if (comments.length) {
@@ -42,24 +38,10 @@ const Header = () => {
     fetchUsers();
   }, []);
 
-  const { results, searchValue, setSearchValue } = useSearch<
-    IItem | IComment | ITag
-  >({
-    dataSet: [...items, ...comments, ...tags],
-    keys: [
-      'title',
-      'tags',
-      'comment',
-      'createTime',
-      'fromUserName',
-      'currentDate',
-      'name'
-    ]
+  const { results, searchValue, setSearchValue } = useSearch<IItem & IComment>({
+    dataSet: [...items, ...comments],
+    keys: ['title', 'tags', 'comment', 'fromUserName']
   });
-
-  useEffect(() => {
-    console.log(results);
-  }, [searchValue]);
 
   const searchData = (value: string) => {
     setSearchValue(value);
@@ -75,8 +57,17 @@ const Header = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Form className="d-flex ms-auto">
-            <Search placeholder="Search" action={searchData} />
+          <Form className="d-flex ms-auto" style={{ position: 'relative' }}>
+            <Search
+              placeholder="Search"
+              action={searchData}
+              value={searchValue}
+            />
+            <SearchResults
+              results={searchValue ? results : []}
+              value={searchValue}
+              setSearchValue={setSearchValue}
+            />
           </Form>
           <Nav className="ms-auto d-flex align-items-center">
             {id ? (

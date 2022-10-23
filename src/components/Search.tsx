@@ -8,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 interface ISearch {
   placeholder: string;
   action: (value: string) => void;
+  value: string;
 }
 
-const Search = ({ placeholder, action }: ISearch) => {
+const Search = ({ placeholder, action, value }: ISearch) => {
   const { t } = useTranslation();
 
   return (
@@ -20,6 +21,7 @@ const Search = ({ placeholder, action }: ISearch) => {
         type="search"
         placeholder={t(`${placeholder}`)}
         onChange={(e) => action(e.target.value)}
+        value={value}
       />
       <span>
         <Button

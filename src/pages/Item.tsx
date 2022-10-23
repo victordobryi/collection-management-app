@@ -77,7 +77,7 @@ const Item = () => {
       }
     };
     fetchData();
-  }, [likes, items, commentsContextData]);
+  }, [likes, items, commentsContextData, id]);
 
   useEffect(() => {
     if (files.length) {
