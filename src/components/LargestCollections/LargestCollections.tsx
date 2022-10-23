@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ICollection } from '../models/ICollection';
-import SocketContext from '../context/SocketContext';
-import CollectionService from '../API/CollectionService';
-import ItemService from '../API/ItemsService';
+import { ICollection } from '../../models/ICollection';
+import SocketContext from '../../context/SocketContext';
+import CollectionService from '../../API/CollectionService';
+import ItemService from '../../API/ItemsService';
 import { Row, Spinner } from 'react-bootstrap';
-import CollectionContainer from './CollectionContainer/CollectionContainer';
+import CollectionContainer from '../CollectionContainer/CollectionContainer';
+import { useTranslation } from 'react-i18next';
 
 interface SortedData {
   [key: string]: number;
@@ -15,6 +16,7 @@ const LargestCollections = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { collections: contextCollections } =
     useContext(SocketContext).SocketState;
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -44,7 +46,7 @@ const LargestCollections = () => {
 
   return (
     <>
-      <h2>Largest Collections:</h2>
+      <h2>{t('Largest Collections')}:</h2>
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>

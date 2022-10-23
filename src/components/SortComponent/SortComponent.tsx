@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { FullData, IItem } from '../../models/IItem';
+import { useTranslation } from 'react-i18next';
 
 interface IFilter {
   items: FullData[];
@@ -8,6 +9,8 @@ interface IFilter {
 }
 
 const SortComponent = ({ items, setItems }: IFilter) => {
+  const { t } = useTranslation();
+
   const changeSortMode = (mode: string) => {
     switch (mode) {
       case 'Date ↑':
@@ -88,17 +91,17 @@ const SortComponent = ({ items, setItems }: IFilter) => {
       defaultValue="Default"
     >
       <option disabled value="Default">
-        Sorting by
+        {t('Sorting by')}
       </option>
-      <option value="Name ↑">Name ↑</option>
-      <option value="Name ↓">Name ↓</option>
-      <option value="Date ↑">Date ↑</option>
-      <option value="Date ↓">Date ↓</option>
-      <option value="Likes ↑">Likes ↑</option>
-      <option value="Likes ↓">Likes ↓</option>
-      <option value="Comments ↑">Comments ↑</option>
-      <option value="Comments ↓">Comments ↓</option>
-      <option value="Default">Default</option>
+      <option value="Name ↑">{t('Name')} ↑</option>
+      <option value="Name ↓">{t('Name')} ↓</option>
+      <option value="Date ↑">{t('Date')} ↑</option>
+      <option value="Date ↓">{t('Date')} ↓</option>
+      <option value="Likes ↑">{t('Likes')} ↑</option>
+      <option value="Likes ↓">{t('Likes')} ↓</option>
+      <option value="Comments ↑">{t('Comments')} ↑</option>
+      <option value="Comments ↓">{t('Comments')} ↓</option>
+      <option value="Default">{t('Default')}</option>
     </Form.Select>
   );
 };

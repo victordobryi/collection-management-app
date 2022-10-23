@@ -1,6 +1,6 @@
 import React from 'react';
-import LargestCollections from '../components/LargestCollections';
-import LastAddedItems from '../components/LastAddedItems';
+import LargestCollections from '../components/LargestCollections/LargestCollections';
+import LastAddedItems from '../components/LastAddedItems/LastAddedItems';
 
 const Main = () => {
   return (

@@ -2,11 +2,11 @@ import React, { useEffect, useContext } from 'react';
 import * as Yup from 'yup';
 import { Alert, Button, FormGroup, Spinner } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { useAppDispatch, useAppSelector } from '../redux-hooks';
-import { userLogin, userSignup } from '../store/action-creators/users';
-import { authSlice } from '../store/reducers/auth';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
+import { userLogin, userSignup } from '../../store/action-creators/users';
+import { authSlice } from '../../store/reducers/auth';
 import { useTranslation, Trans } from 'react-i18next';
-import SocketContext from '../context/SocketContext';
+import SocketContext from '../../context/SocketContext';
 
 interface ILogin {
   type: 'login' | 'signup';
