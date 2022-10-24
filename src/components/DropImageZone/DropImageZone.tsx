@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import './drop-image-zone.scss';
 import { useTranslation } from 'react-i18next';
-
-interface IDropImageZone {
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  isVisible?: boolean;
-}
+import { IDropImageZone } from '../../models';
 
 export const DropImageZone = ({
   setFiles,

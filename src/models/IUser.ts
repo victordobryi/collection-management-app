@@ -1,10 +1,3 @@
-export interface FormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
 export interface IUser {
   isAdmin?: boolean;
   isBlocked?: boolean;
@@ -14,12 +7,21 @@ export interface IUser {
   img?: string;
 }
 
-export interface UsersResponse {
+export interface IUsersResponse {
   message: string;
   data: IUser[];
 }
 
-export interface UserResponse {
+export interface IUserResponse {
   message: string;
   data: IUser;
+}
+
+export interface ILikedUsers {
+  id: string;
+}
+
+export interface IUserContainer {
+  user: IUser;
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }

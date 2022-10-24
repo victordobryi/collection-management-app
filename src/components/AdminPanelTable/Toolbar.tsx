@@ -4,16 +4,13 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { AiFillDelete, AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { GrUserAdmin } from 'react-icons/gr';
 import { RiAdminLine } from 'react-icons/ri';
-import UserService from '../../API/UserService';
+import { UserService } from '../../API';
+import { IToolbar } from '../../models';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { isUser } from '../../store/action-creators/users';
 import { userSlice } from '../../store/reducers/users';
-import { DeleteUser } from '../../utils/deleteData';
+import { DeleteUser } from '../../utils';
 import './toolbar.scss';
-
-interface IToolbar {
-  checkboxes: string[];
-}
 
 const Toolbar = ({ checkboxes }: IToolbar) => {
   const dispatch = useAppDispatch();

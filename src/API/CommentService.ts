@@ -1,9 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import {
-  IComment,
-  ICommentResponse,
-  ICommentsResponse
-} from '../models/IComment';
+import { IComment, ICommentResponse, ICommentsResponse } from '../models';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/comments/';
 

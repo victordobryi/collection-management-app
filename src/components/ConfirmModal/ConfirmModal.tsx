@@ -1,12 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-
-interface IConfirmModal {
-  show: boolean;
-  onHide: () => void;
-  deleteFunc: () => void;
-}
+import { IConfirmModal } from '../../models';
 
 const ConfirmModal = ({ show, onHide, deleteFunc }: IConfirmModal) => {
   const { t } = useTranslation();

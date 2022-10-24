@@ -2,27 +2,29 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Card, Container, Form, Spinner } from 'react-bootstrap';
 import { AiOutlineHeart, AiFillHeart, AiOutlineClose } from 'react-icons/ai';
 import { useLocation, useParams } from 'react-router-dom';
-import ItemService from '../API/ItemsService';
-import { IItem } from '../models/IItem';
-import { getCurrentDate } from '../utils/getCurrentTime';
-import { Data, ILikedUsers } from '../components/ItemContainer/ItemContainer';
-import { newInputsData } from '../components/CreateItemForm/CreateItemForm';
-import SocketContext from '../context/SocketContext';
-import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
 import Avatar from 'react-avatar';
-import { mediaUploader } from '../utils/mediaUploader';
 import { EditText, EditTextarea, onSaveProps } from 'react-edit-text';
 import { BsFillPencilFill } from 'react-icons/bs';
+import { ItemService, LikeService } from '../API';
+import {
+  IItem,
+  INewInputsData,
+  ITag,
+  IComment,
+  INewInputsKeys,
+  ILikedUsers
+} from '../models';
+import { getCurrentDate, mediaUploader, DeleteItem } from '../utils';
+import SocketContext from '../context/SocketContext';
+import {
+  ContainerButtons,
+  ConfirmModal,
+  Comments,
+  DropImageZone,
+  Tag
+} from '../components';
 import UsePrevPage from '../hooks/UsePrevPage';
-import { DeleteItem } from '../utils/deleteData';
-import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 import { useAppSelector } from '../redux-hooks';
-import LikeService from '../API/LikeService';
-import Comments from '../components/Comments/Comments';
-import { DropImageZone } from '../components/DropImageZone/DropImageZone';
-import { IComment } from '../models/IComment';
-import { ITag } from '../models/ITag';
-import Tag from '../components/Tag/Tag';
 
 const Item = () => {
   const { id } = useParams();
@@ -37,7 +39,7 @@ const Item = () => {
     comments: commentsContextData
   } = useContext(SocketContext).SocketState;
   const [newTitle, setNewTitle] = useState('');
-  const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
+  const [newInputsData, setNewInputsData] = useState<INewInputsData[]>([]);
   const prev = UsePrevPage();
   const { isAdmin } = useAppSelector((state) => state.auth);
   const [likeId, setLikeId] = useState<string>('');
@@ -85,11 +87,11 @@ const Item = () => {
     }
   }, [files]);
 
-  const newData: newInputsData[] = [];
+  const newData: INewInputsData[] = [];
   const date = getCurrentDate(currentItem?.createTime);
 
   if (currentItem) {
-    const data: Data = JSON.parse(currentItem.additionalInputs!);
+    const data: INewInputsKeys = JSON.parse(currentItem.additionalInputs!);
     for (const k in data) {
       const type = k.split('+')[1];
       const name = k.split('+')[0];

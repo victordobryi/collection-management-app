@@ -1,12 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { FullData, IItem } from '../../models/IItem';
 import { useTranslation } from 'react-i18next';
-
-interface IFilter {
-  items: FullData[];
-  setItems: React.Dispatch<React.SetStateAction<FullData[]>>;
-}
+import { IFilter } from '../../models';
 
 const SortComponent = ({ items, setItems }: IFilter) => {
   const { t } = useTranslation();

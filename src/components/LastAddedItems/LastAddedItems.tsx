@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Row, Spinner } from 'react-bootstrap';
-import ItemService from '../../API/ItemsService';
-import SocketContext from '../../context/SocketContext';
-import { FullData } from '../../models/IItem';
-import ItemContainer from '../ItemContainer/ItemContainer';
 import { useTranslation } from 'react-i18next';
+import { Row, Spinner } from 'react-bootstrap';
+import { ItemService } from '../../API';
+import SocketContext from '../../context/SocketContext';
+import { IFullData } from '../../models';
+import { ItemContainer } from '../../components';
 
 const LastAddedItems = () => {
-  const [items, setItems] = useState<FullData[]>([]);
+  const [items, setItems] = useState<IFullData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { items: contextItems } = useContext(SocketContext).SocketState;
   const { t } = useTranslation();

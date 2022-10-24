@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { Row, Spinner } from 'react-bootstrap';
+import { AdminPanelTable } from '../components';
 import SocketContext from '../context/SocketContext';
 import { useAppDispatch } from '../redux-hooks';
-import UserService from '../API/UserService';
-import { Row, Spinner } from 'react-bootstrap';
+import { UserService } from '../API';
 import { userSlice } from '../store/reducers/users';
 import { isUser } from '../store/action-creators/users';
-import AdminPanelTable from '../components/AdminPanelTable/AdminPanelTable';
 
 const AdminPanel = () => {
   const [isLoading, setIsLoading] = useState(false);

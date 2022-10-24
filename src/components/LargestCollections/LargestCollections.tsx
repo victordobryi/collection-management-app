@@ -1,15 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ICollection } from '../../models/ICollection';
-import SocketContext from '../../context/SocketContext';
-import CollectionService from '../../API/CollectionService';
-import ItemService from '../../API/ItemsService';
-import { Row, Spinner } from 'react-bootstrap';
-import CollectionContainer from '../CollectionContainer/CollectionContainer';
 import { useTranslation } from 'react-i18next';
-
-interface SortedData {
-  [key: string]: number;
-}
+import { ICollection, ISortedCollectionsKeys } from '../../models';
+import SocketContext from '../../context/SocketContext';
+import { CollectionService, ItemService } from '../../API';
+import { Row, Spinner } from 'react-bootstrap';
+import { CollectionContainer } from '../../components';
 
 const LargestCollections = () => {
   const [collections, setCollections] = useState<ICollection[]>([]);
@@ -24,11 +19,14 @@ const LargestCollections = () => {
         setIsLoading(true);
         const dbCollections = (await CollectionService.getCollections()).data;
         const itemsData = (await ItemService.getItems()).data;
-        const sortedObj = itemsData.data.reduce<SortedData>((acc, { data }) => {
-          acc[String(data.collectionId)] =
-            (acc[String(data.collectionId)] || 0) + 1;
-          return acc;
-        }, {});
+        const sortedObj = itemsData.data.reduce<ISortedCollectionsKeys>(
+          (acc, { data }) => {
+            acc[String(data.collectionId)] =
+              (acc[String(data.collectionId)] || 0) + 1;
+            return acc;
+          },
+          {}
+        );
         const arr = [];
         for (const key in sortedObj) {
           const collection = dbCollections.data.filter(({ id }) => id === key);

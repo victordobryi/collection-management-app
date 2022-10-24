@@ -1,24 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { IUser } from '../../models/IUser';
 import Avatar from 'react-avatar';
-import { EditText } from 'react-edit-text';
-import UserService from '../../API/UserService';
-import { mediaUploader } from '../../utils/mediaUploader';
-import SocketContext from '../../context/SocketContext';
 import { AiOutlineClose } from 'react-icons/ai';
+import { EditText } from 'react-edit-text';
+import { IUserContainer } from '../../models';
+import { UserService } from '../../API';
+import SocketContext from '../../context/SocketContext';
 import UsePrevPage from '../../hooks/UsePrevPage';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
-import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import { DeleteUser } from '../../utils/deleteData';
-import { DropImageZone } from '../DropImageZone/DropImageZone';
-
-interface IUserContainer {
-  user: IUser;
-  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { ConfirmModal, DropImageZone } from '../../components';
+import { DeleteUser, mediaUploader } from '../../utils';
 
 const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { username, img, id } = user;

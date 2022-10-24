@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import { FullData } from '../../models/IItem';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux-hooks';
 import { filterSlice } from '../../store/reducers/filter';
-import Search from '../Search/Search';
-import FilterCheckbox from './FilterCheckbox';
-import { useTranslation } from 'react-i18next';
-
-interface IFilter {
-  items: FullData[];
-  setItems: React.Dispatch<React.SetStateAction<FullData[]>>;
-}
+import { Search, FilterCheckbox } from '../../components';
+import { IFilter } from '../../models';
 
 const Filter = ({ items, setItems }: IFilter) => {
   const dispatch = useAppDispatch();

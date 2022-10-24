@@ -8,12 +8,21 @@ export interface ICollection {
   additionalInputs?: string;
 }
 
-export interface CollectionsResponse {
+export interface ICollectionsResponse {
   message: string;
   data: ICollection[];
 }
 
-export interface CollectionResponse {
+export interface ICollectionResponse {
   message: string;
   data: ICollection;
+}
+
+export interface ICollectionContainer {
+  collection: ICollection;
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface ISortedCollectionsKeys {
+  [key: string]: number;
 }

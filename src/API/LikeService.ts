@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { ILike, ILikesResponse, ILikeResponse } from '../models/ILike';
+import { ILike, ILikesResponse, ILikeResponse } from '../models';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/likes/';
 

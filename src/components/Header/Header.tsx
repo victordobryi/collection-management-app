@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import Search from '../Search/Search';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
-import SelectLang from '../SelectLang/SelectLang';
-import SelectMode from '../SelectMode/SelectMode';
-import { useTranslation } from 'react-i18next';
+import {
+  SelectLang,
+  SelectMode,
+  SearchResults,
+  Search
+} from '../../components';
 import useSearch from '../../search-hooks/useSearch';
-import ItemService from '../../API/ItemsService';
-import { IItem } from '../../models/IItem';
-import { IComment } from '../../models/IComment';
-import SearchResults from '../SearchResults/SearchResults';
+import { ItemService } from '../../API';
+import { IItem, IComment } from '../../models';
 
 const Header = () => {
   const { isAuth, isAdmin } = useAppSelector((state) => state.auth);

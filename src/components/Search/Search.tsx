@@ -1,15 +1,8 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { InputGroup } from 'react-bootstrap';
+import { InputGroup, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-
-interface ISearch {
-  placeholder: string;
-  action: (value: string) => void;
-  value?: string;
-}
+import { ISearch } from '../../models';
 
 const Search = ({ placeholder, action, value }: ISearch) => {
   const { t } = useTranslation();

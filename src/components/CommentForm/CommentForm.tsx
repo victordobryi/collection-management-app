@@ -1,9 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-
-interface ICommentForm {
-  setComment: React.Dispatch<React.SetStateAction<string>>;
-}
+import { ICommentForm } from '../../models';
 
 const CommentForm = ({ setComment }: ICommentForm) => {
   return (

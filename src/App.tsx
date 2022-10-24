@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import './styles/main.scss';
-import Header from './components/Header/Header';
+import { Header } from './components';
 import AppRouter from './router/AppRouter';
 import { BrowserRouter } from 'react-router-dom';
 import { useAppDispatch } from './redux-hooks';

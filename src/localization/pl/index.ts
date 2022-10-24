@@ -71,5 +71,9 @@ export const translationsPL = {
   'From User name': 'Od nazwy użytkownika',
   'No data found': 'Nie znaleziono danych',
   'Show More': 'Pokaż Więcej',
-  'Show Less': 'Pokaż Mniej'
+  'Show Less': 'Pokaż Mniej',
+  'Go to Home': 'Przejdź do strony głównej',
+  'The page you are looking for not avaible!':
+    'Strona, której szukasz nie jest dostępna!',
+  "Look like you're lost": 'Wygląda na to, że się zgubiłeś'
 };

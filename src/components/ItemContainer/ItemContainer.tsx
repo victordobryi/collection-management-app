@@ -1,26 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { FullData } from '../../models/IItem';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { getCurrentDate } from '../../utils/getCurrentTime';
-import { newInputsData } from '../CreateItemForm/CreateItemForm';
-import { useNavigate } from 'react-router-dom';
-import './item-container.scss';
-import LikeService from '../../API/LikeService';
-import SocketContext from '../../context/SocketContext';
 import Avatar from 'react-avatar';
-import Tag from '../Tag/Tag';
-import { ITag } from '../../models/ITag';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import {
+  IFullData,
+  ITag,
+  INewInputsKeys,
+  INewInputsData,
+  ILikedUsers
+} from '../../models';
+import { getCurrentDate } from '../../utils';
+import { useNavigate } from 'react-router-dom';
+import { LikeService } from '../../API';
+import SocketContext from '../../context/SocketContext';
+import { Tag } from '../../components';
+import './item-container.scss';
 
-export interface Data {
-  [value: string]: string;
-}
-
-export interface ILikedUsers {
-  id: string;
-}
-
-const ItemContainer = ({ data, likes }: FullData) => {
+const ItemContainer = ({ data, likes }: IFullData) => {
   const [{ count, id: likesId, likedUsers: likedUsersData }] = likes;
   const { additionalInputs, createTime, id, img, title, tags } = data;
 
@@ -46,9 +42,9 @@ const ItemContainer = ({ data, likes }: FullData) => {
     fetchData();
   }, []);
 
-  const inputsData: Data = JSON.parse(additionalInputs!);
+  const inputsData: INewInputsKeys = JSON.parse(additionalInputs!);
 
-  const newData: newInputsData[] = [];
+  const newData: INewInputsData[] = [];
 
   for (const k in inputsData) {
     const type = k.split('+')[1];

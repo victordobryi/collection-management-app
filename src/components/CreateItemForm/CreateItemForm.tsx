@@ -1,29 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import ItemService from '../../API/ItemsService';
-import { IItem } from '../../models/IItem';
-import { mediaUploader } from '../../utils/mediaUploader';
-import { additionalProps } from '../CreateCollectionForm/CreateCollectionForm';
+import { ItemService, TagService } from '../../API';
+import { IItem, ITag, IModalItemProps, INewInputsProps } from '../../models';
+import { mediaUploader } from '../../utils';
 import SocketContext from '../../context/SocketContext';
-import { DropImageZone } from '../DropImageZone/DropImageZone';
-import TagCreator from '../TagCreator/TagCreator';
-import TagService from '../../API/TagService';
-import { ITag } from '../../models/ITag';
+import { DropImageZone, TagCreator } from '../../components';
 import { useTranslation } from 'react-i18next';
-
-interface ModalProps {
-  handleClose: () => void;
-  collectionId: string;
-  userId: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  additionalInputs: string;
-}
-
-export interface newInputsData {
-  name: string;
-  value: string;
-  type: string;
-}
 
 const CreateItemForm = ({
   collectionId,
@@ -31,10 +13,10 @@ const CreateItemForm = ({
   handleClose,
   setLoading,
   additionalInputs
-}: ModalProps) => {
+}: IModalItemProps) => {
   const [title, setTitle] = useState('');
-  const [newInputsData, setNewInputsData] = useState<newInputsData[]>([]);
-  const newInputs: additionalProps[] = JSON.parse(additionalInputs);
+  const [newInputsData, setNewInputsData] = useState<INewInputsProps[]>([]);
+  const newInputs: INewInputsProps[] = JSON.parse(additionalInputs);
   const { socket } = useContext(SocketContext).SocketState;
   const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState<ITag[]>([]);

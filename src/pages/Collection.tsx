@@ -1,25 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Container, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import CollectionService from '../API/CollectionService';
-import ItemService from '../API/ItemsService';
-import CreateItemForm from '../components/CreateItemForm/CreateItemForm';
-import ItemContainer from '../components/ItemContainer/ItemContainer';
-import { FullData } from '../models/IItem';
+import { CollectionService, ItemService } from '../API';
+import {
+  ItemContainer,
+  CreateItemForm,
+  ContainerButtons,
+  CollectionContainer,
+  PageLayout,
+  Filter,
+  SortComponent
+} from '../components';
+import { IFullData, IComment, ICollection } from '../models';
 import SocketContext from '../context/SocketContext';
-import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
-import { ICollection } from '../models/ICollection';
-import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
-import PageLayout from '../components/PageLayout/PageLayout';
-import Filter from '../components/Filter/FIlter';
-import SortComponent from '../components/SortComponent/SortComponent';
 import { useAppSelector } from '../redux-hooks';
-import { IComment } from '../models/IComment';
 
 const Collection = () => {
   const { id } = useParams();
-  const [items, setItems] = useState<FullData[]>([]);
-  const [filteredItems, setFilteredItems] = useState<FullData[]>([]);
+  const [items, setItems] = useState<IFullData[]>([]);
+  const [filteredItems, setFilteredItems] = useState<IFullData[]>([]);
   const [collection, setCollection] = useState<ICollection>();
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);

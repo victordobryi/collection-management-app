@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
 import { Button, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { IComment } from '../../models/IComment';
-import { IItem } from '../../models/IItem';
-import { ITag } from '../../models/ITag';
-import { Trans, useTranslation } from 'react-i18next';
-
-export interface ISearchResults {
-  results: (IItem & IComment)[];
-  value: string;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-}
+import { useTranslation } from 'react-i18next';
+import { ISearchResults, ITag } from '../../models';
 
 const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
   const [more, setMore] = useState(false);
@@ -78,7 +70,7 @@ const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
       )}
       {results.length > 5 ? (
         <Button onClick={() => setMore(!more)}>
-          <Trans i18nKey={`Show ${more}`}>Show {more ? 'Less' : 'More'}</Trans>
+          {more ? t('Show Less') : t('Show More')}
         </Button>
       ) : (
         <></>

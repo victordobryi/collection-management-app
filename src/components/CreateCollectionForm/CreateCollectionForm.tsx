@@ -1,35 +1,26 @@
 import React, { useState, useContext } from 'react';
 import { Button, Form, Modal, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import CollectionService from '../../API/CollectionService';
-import { ICollection } from '../../models/ICollection';
-import { mediaUploader } from '../../utils/mediaUploader';
-import AdditionalModal from './AdditionalModal';
+import { CollectionService } from '../../API';
+import {
+  ICollection,
+  IModalCollectionProps,
+  INewInputsProps
+} from '../../models';
+import { mediaUploader } from '../../utils';
+import { AdditionalModal, DropImageZone } from '../../components';
 import SocketContext from '../../context/SocketContext';
-import { DropImageZone } from '../DropImageZone/DropImageZone';
-
-interface ModalProps {
-  handleClose: () => void;
-  userId: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface additionalProps {
-  name: string;
-  type: string;
-}
 
 const CreateCollectionForm = ({
   handleClose,
   userId,
   setLoading,
   setIsVisible
-}: ModalProps) => {
+}: IModalCollectionProps) => {
   const [theme, setTheme] = useState('Comics');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [additionalProps, setAdditionalProps] = useState<additionalProps[]>([]);
+  const [additionalProps, setAdditionalProps] = useState<INewInputsProps[]>([]);
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   const [active, setActive] = useState(false);

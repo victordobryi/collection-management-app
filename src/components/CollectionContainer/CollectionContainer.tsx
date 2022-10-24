@@ -1,25 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ICollection } from '../../models/ICollection';
 import { useTranslation, Trans } from 'react-i18next';
-import './collection-container.scss';
-import { mediaUploader } from '../../utils/mediaUploader';
-import CollectionService from '../../API/CollectionService';
-import SocketContext from '../../context/SocketContext';
 import { EditText, EditTextarea } from 'react-edit-text';
-import Avatar from 'react-avatar';
 import { AiOutlineClose } from 'react-icons/ai';
-import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import { DeleteCollection } from '../../utils/deleteData';
+import Avatar from 'react-avatar';
+import { ICollectionContainer } from '../../models';
+import { mediaUploader, DeleteCollection } from '../../utils';
+import { CollectionService } from '../../API';
+import SocketContext from '../../context/SocketContext';
 import UsePrevPage from '../../hooks/UsePrevPage';
 import { useAppSelector } from '../../redux-hooks';
-import { DropImageZone } from '../DropImageZone/DropImageZone';
-
-interface ICollectionContainer {
-  collection: ICollection;
-  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { DropImageZone, ConfirmModal } from '../../components';
+import './collection-container.scss';
 
 const CollectionContainer = ({
   collection,

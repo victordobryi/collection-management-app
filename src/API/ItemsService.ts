@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IItem, ItemResponse, ItemsResponse } from '../models/IItem';
+import { IItem, ItemResponse, ItemsResponse } from '../models';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/items/';
 

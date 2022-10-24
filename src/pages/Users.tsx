@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import UserService from '../API/UserService';
-import UserContainer from '../components/UserContainer/UserContainer';
-import { IUser } from '../models/IUser';
+import { UserService } from '../API';
+import { UserContainer } from '../components';
+import { IUser } from '../models';
 import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { authSlice } from '../store/reducers/auth';
 import { Row, Spinner } from 'react-bootstrap';

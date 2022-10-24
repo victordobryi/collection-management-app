@@ -2,17 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import UserService from '../../API/UserService';
 import SocketContext from '../../context/SocketContext';
-import { IComment } from '../../models/IComment';
-import { IUser } from '../../models/IUser';
-import Comment from '../Comment/Comment';
-import CommentModal from '../CommentModal/CommentModal';
+import { IComments, IUser } from '../../models';
+import { Comment, CommentModal } from '../../components';
 import { useTranslation } from 'react-i18next';
-
-interface IComments {
-  userId: string | undefined;
-  itemId: string | undefined;
-  commentsData: IComment[];
-}
 
 const Comments = ({ userId, itemId, commentsData }: IComments) => {
   const [user, setUser] = useState<IUser>();

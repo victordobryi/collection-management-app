@@ -1,9 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Container, Row } from 'react-bootstrap';
-
-interface IPageLayout {
-  children: ReactElement;
-}
+import { IPageLayout } from '../../models';
 
 const PageLayout = ({ children }: IPageLayout) => {
   return (

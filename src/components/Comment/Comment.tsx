@@ -1,13 +1,8 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
+import { ICommentContainer } from '../../models';
 
-interface IComment {
-  username?: string;
-  date: string;
-  comment: string;
-}
-
-const Comment = ({ username, date, comment }: IComment) => {
+const Comment = ({ username, date, comment }: ICommentContainer) => {
   return (
     <Card style={{ width: '75%' }}>
       <Card.Body>

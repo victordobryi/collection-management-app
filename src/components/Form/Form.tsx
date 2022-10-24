@@ -7,10 +7,7 @@ import { userLogin, userSignup } from '../../store/action-creators/users';
 import { authSlice } from '../../store/reducers/auth';
 import { useTranslation, Trans } from 'react-i18next';
 import SocketContext from '../../context/SocketContext';
-
-interface ILogin {
-  type: 'login' | 'signup';
-}
+import { ILogin } from '../../models';
 
 const FormComponent = ({ type }: ILogin) => {
   const { error, isLoading } = useAppSelector((state) => state.auth);

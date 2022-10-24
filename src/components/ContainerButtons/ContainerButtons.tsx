@@ -2,19 +2,14 @@ import React from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import UsePrevPage from '../../hooks/UsePrevPage';
+import { IPageLayoutButtons } from '../../models';
 import { useAppSelector } from '../../redux-hooks';
-
-interface IContainerButtons {
-  createText?: string;
-  handleShow?: () => void;
-  userId: string;
-}
 
 const ContainerButtons = ({
   createText,
   handleShow,
   userId
-}: IContainerButtons) => {
+}: IPageLayoutButtons) => {
   const { t } = useTranslation();
   const prev = UsePrevPage();
   const { isAdmin } = useAppSelector((state) => state.auth);

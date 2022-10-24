@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { additionalProps } from './CreateCollectionForm';
 import { useTranslation } from 'react-i18next';
-
-interface additionalModalProps {
-  handleCloseAdditional: () => void;
-  setProp: React.Dispatch<React.SetStateAction<additionalProps[]>>;
-  additionalProps: additionalProps[];
-}
+import { INewInputsModal } from '../../models';
 
 const AdditionalModal = ({
   handleCloseAdditional,
   setProp,
   additionalProps
-}: additionalModalProps) => {
+}: INewInputsModal) => {
   const [name, setName] = useState('');
   const [type, setType] = useState('input');
   const { t } = useTranslation();
