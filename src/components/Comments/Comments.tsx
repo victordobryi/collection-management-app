@@ -18,9 +18,7 @@ const Comments = ({ userId, itemId, commentsData }: IComments) => {
         if (userId) {
           const currentUser = (await UserService.getUser(String(userId))).data
             .data;
-          if (currentUser) {
-            setUser(currentUser);
-          }
+          setUser(currentUser);
         }
       } catch (error) {
         console.log(error);

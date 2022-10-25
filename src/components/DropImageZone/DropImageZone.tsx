@@ -37,9 +37,7 @@ export const DropImageZone = ({
             })}
             style={{
               opacity: isVisible ? '1' : '0',
-              position: isVisible ? 'relative' : 'absolute',
-              top: 0,
-              height: '100%'
+              position: isVisible ? 'relative' : 'absolute'
             }}
           >
             <input {...getInputProps()} />

@@ -10,7 +10,7 @@ import CreateCollectionForm from './CreateCollectionForm/CreateCollectionForm';
 import CreateItemForm from './CreateItemForm/CreateItemForm';
 import { DropImageZone } from './DropImageZone/DropImageZone';
 import Filter from './Filter/FIlter';
-import FormComponent from './Form/Form';
+import FormComponent from './RegistrationForm/RegistrationForm';
 import Header from './Header/Header';
 import ItemContainer from './ItemContainer/ItemContainer';
 import LargestCollections from './LargestCollections/LargestCollections';
@@ -26,6 +26,13 @@ import TagCreator from './TagCreator/TagCreator';
 import UserContainer from './UserContainer/UserContainer';
 import AdditionalModal from './CreateCollectionForm/AdditionalModal';
 import FilterCheckbox from './Filter/FilterCheckbox';
+import FormItem from './FormItem/FormItem';
+import ModalContainer from './ModalContainer/ModalContainer';
+import FormSelect from './FormSelect/FormSelect';
+import RegistrationFormItem from './RegistrationForm/RegistrationFormItem';
+import SearchResult from './SearchResults/SearchResult';
+import CardContainer from './CardContainer/CardContainer';
+import EditTextComponent from './EditTextComponent/EditTextComponent';
 
 export {
   UserContainer,
@@ -55,5 +62,12 @@ export {
   PageLayout,
   DropImageZone,
   AdditionalModal,
-  FilterCheckbox
+  FilterCheckbox,
+  FormItem,
+  FormSelect,
+  ModalContainer,
+  RegistrationFormItem,
+  SearchResult,
+  CardContainer,
+  EditTextComponent
 };

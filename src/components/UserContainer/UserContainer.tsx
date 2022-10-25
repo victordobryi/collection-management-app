@@ -1,23 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Card, Form } from 'react-bootstrap';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Avatar from 'react-avatar';
-import { AiOutlineClose } from 'react-icons/ai';
-import { EditText } from 'react-edit-text';
 import { IUserContainer } from '../../models';
 import { UserService } from '../../API';
 import SocketContext from '../../context/SocketContext';
 import UsePrevPage from '../../hooks/UsePrevPage';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
-import { ConfirmModal, DropImageZone } from '../../components';
+import { CardContainer, EditTextComponent } from '../../components';
 import { DeleteUser, mediaUploader } from '../../utils';
 
 const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { username, img, id } = user;
   const [hovered, setHovered] = useState(false);
   const [name, setName] = useState(username);
-  const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const { id: userId } = useParams();
   const { socket } = useContext(SocketContext).SocketState;
@@ -25,13 +20,10 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const dispatch = useAppDispatch();
   const { isAdmin } = useAppSelector((state) => state.auth);
   const localStorageId = localStorage.getItem('id');
-  const isUserId = localStorageId === userId || isAdmin;
+  const isUser = localStorageId === userId || isAdmin;
   const location = useLocation();
   const section = location.pathname.split('/')[1];
   const [files, setFiles] = useState<File[]>([]);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => {
     if (files.length) {
@@ -90,57 +82,28 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
 
   return (
     <>
-      <Card
-        style={{ width: '10rem', cursor: userId ? 'default' : 'pointer' }}
-        className="d-flex align-items-center"
+      <CardContainer
         onClick={goToUser}
-        onMouseEnter={() => (userId ? setHovered(true) : null)}
-        onMouseLeave={() => setHovered(false)}
+        isOnPage={Boolean(userId)}
+        containerName="user"
+        sectionName={section}
+        isUser={isUser}
+        deleteElem={deleteUser}
+        setFiles={setFiles}
+        title={username}
+        img={img}
+        hovered={hovered}
+        setHovered={setHovered}
       >
-        <AiOutlineClose
-          style={{
-            position: 'absolute',
-            top: 5,
-            right: 5,
-            visibility: hovered && isUserId ? 'visible' : 'hidden',
-            cursor: 'pointer'
-          }}
-          onClick={handleShow}
+        <EditTextComponent
+          hovered={hovered}
+          setValue={setName}
+          defaultValue={String(username)}
+          value={name}
+          isUser={isUser}
+          onBlur={changeName}
         />
-        <Card.Header
-          style={{
-            backgroundColor: 'transparent'
-          }}
-        >
-          <Form
-            style={{
-              pointerEvents: isUserId && section === 'user' ? 'auto' : 'none',
-              position: 'relative'
-            }}
-          >
-            <Avatar name={username} size="120" round="100%" src={img} />
-            <DropImageZone setFiles={setFiles} isVisible={false} />
-          </Form>
-        </Card.Header>
-        <Card.Body
-          style={{
-            fontSize: '1.3rem',
-            textAlign: 'center',
-            pointerEvents: isUserId ? 'auto' : 'none'
-          }}
-        >
-          <EditText
-            name="username"
-            defaultValue={username}
-            editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-            showEditButton={hovered && isUserId}
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            onBlur={changeName}
-          />
-        </Card.Body>
-      </Card>
-      <ConfirmModal show={show} onHide={handleClose} deleteFunc={deleteUser} />
+      </CardContainer>
     </>
   );
 };

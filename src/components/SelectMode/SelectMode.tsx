@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { BsSunFill, BsFillMoonStarsFill } from 'react-icons/bs';
+import './select-mode.scss';
 
 const SelectMode = () => {
   const [isDark, setIsDark] = useState(false);
@@ -28,10 +29,7 @@ const SelectMode = () => {
   }, []);
 
   return (
-    <Button
-      style={{ background: 'transparent', border: 'none' }}
-      onClick={toggleChangeMode}
-    >
+    <Button className="select-mode" onClick={toggleChangeMode}>
       {isDark ? (
         <BsSunFill color="yellow" className="ml-3" />
       ) : (

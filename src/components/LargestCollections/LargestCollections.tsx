@@ -46,12 +46,10 @@ const LargestCollections = () => {
     <>
       <h2>{t('Largest Collections')}:</h2>
       {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner animation="border" role="status" />
       ) : (
         <Row
-          className="d-flex flex-wrap gap-3 mt-5 largest"
+          className="d-flex flex-wrap gap-3 mt-5"
           xl={4}
           lg={4}
           md={3}

@@ -1,11 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { ItemService, TagService } from '../../API';
 import { IItem, ITag, IModalItemProps, INewInputsProps } from '../../models';
 import { mediaUploader } from '../../utils';
 import SocketContext from '../../context/SocketContext';
-import { DropImageZone, TagCreator } from '../../components';
-import { useTranslation } from 'react-i18next';
+import {
+  DropImageZone,
+  TagCreator,
+  ModalContainer,
+  FormItem
+} from '../../components';
 
 const CreateItemForm = ({
   collectionId,
@@ -20,7 +24,6 @@ const CreateItemForm = ({
   const { socket } = useContext(SocketContext).SocketState;
   const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState<ITag[]>([]);
-  const { t } = useTranslation();
 
   const createItem = async () => {
     handleClose();
@@ -55,45 +58,40 @@ const CreateItemForm = ({
     }
   };
 
+  const addNewInputs = (
+    name: string,
+    type: string,
+    value: boolean | string
+  ) => {
+    setNewInputsData((values) => ({
+      ...values,
+      [name + '+' + type]: value
+    }));
+  };
+
   return (
     <>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('Create Item')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+      <ModalContainer
+        title="Create Item"
+        onClose={handleClose}
+        onCreate={createItem}
+      >
         <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('Title')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={`${t('Title')}`}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </Form.Group>
+          <FormItem label="Title" onChange={setTitle} />
           <TagCreator tags={tags} setTags={setTags} />
           {newInputs.map(({ name, type }, index) => (
             <Form.Group className="mb-3" key={index}>
               <Form.Label>{name}</Form.Label>
               {type === 'checkbox' ? (
                 <Form.Check
-                  onChange={(e) => {
-                    setNewInputsData((values) => ({
-                      ...values,
-                      [name + '+' + type]: e.target.checked
-                    }));
-                  }}
+                  onChange={(e) => addNewInputs(name, type, e.target.checked)}
                 />
               ) : (
                 <>
                   <Form.Control
                     type={type}
                     as={type === 'textarea' ? 'textarea' : undefined}
-                    onChange={(e) =>
-                      setNewInputsData((values) => ({
-                        ...values,
-                        [name + '+' + type]: e.target.value
-                      }))
-                    }
+                    onChange={(e) => addNewInputs(name, type, e.target.value)}
                   />
                 </>
               )}
@@ -101,15 +99,7 @@ const CreateItemForm = ({
           ))}
           <DropImageZone setFiles={setFiles} />
         </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          {t('Close')}
-        </Button>
-        <Button variant="primary" onClick={createItem}>
-          {t(' Create Item')}
-        </Button>
-      </Modal.Footer>
+      </ModalContainer>
     </>
   );
 };

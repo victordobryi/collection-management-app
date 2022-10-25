@@ -11,3 +11,8 @@ export interface ISearchResults {
   value: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }
+
+export interface ISearchResult {
+  onClick: () => void;
+  result: IItem & IComment;
+}

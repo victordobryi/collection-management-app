@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { AiFillDelete, AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { GrUserAdmin } from 'react-icons/gr';
 import { RiAdminLine } from 'react-icons/ri';
@@ -37,14 +36,9 @@ const Toolbar = ({ checkboxes }: IToolbar) => {
   const toggleIsAdmin = async (state: boolean) => {
     try {
       await dispatch(isUser());
-      changedUsers.forEach(({ id, password, username, isBlocked, img }) => {
+      changedUsers.forEach(({ id }) => {
         const newUser = {
-          id,
-          password,
-          username,
-          isAdmin: state,
-          isBlocked,
-          img
+          isAdmin: state
         };
         UserService.updateUser(newUser, String(id));
         state ? dispatch(admin(String(id))) : dispatch(notAdmin(String(id)));
@@ -57,14 +51,9 @@ const Toolbar = ({ checkboxes }: IToolbar) => {
   const toggleBlockUsers = async (state: boolean) => {
     try {
       await dispatch(isUser());
-      changedUsers.forEach(({ id, password, username, isAdmin, img }) => {
+      changedUsers.forEach(({ id }) => {
         const newUser = {
-          id,
-          password,
-          username,
-          isAdmin,
-          isBlocked: state,
-          img
+          isBlocked: state
         };
         UserService.updateUser(newUser, String(id));
         state

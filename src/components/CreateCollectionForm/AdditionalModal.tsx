@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
+import { Form } from 'react-bootstrap';
 import { INewInputsModal } from '../../models';
+import { FormItem, FormSelect, ModalContainer } from '../../components';
 
 const AdditionalModal = ({
   handleCloseAdditional,
@@ -10,54 +10,41 @@ const AdditionalModal = ({
 }: INewInputsModal) => {
   const [name, setName] = useState('');
   const [type, setType] = useState('input');
-  const { t } = useTranslation();
 
   const addNewField = () => {
-    const newProps = {
-      name,
-      type
-    };
-    if (additionalProps.length < 3) {
-      setProp([...additionalProps, newProps]);
-    }
+    const newProps = { name, type };
+    setProp([...additionalProps, newProps]);
     handleCloseAdditional();
   };
 
   return (
     <>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('Add a new item property')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>{t('Сhoose the name of the new property')}</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => setName(e.target.value)}
+      <ModalContainer
+        title="Add a new item property"
+        onClose={handleCloseAdditional}
+        onCreate={addNewField}
+        createButtonText="Add new field"
+      >
+        <>
+          <Form>
+            <FormItem
+              label="Сhoose the name of the new property"
+              onChange={setName}
+              placeholder=" "
             />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Select onChange={(e) => setType(e.target.value)}>
-              <option disabled>
-                {t('Сhoose the type of the new property')}
-              </option>
-              <option value="text">Text</option>
-              <option value="textarea">Textarea</option>
-              <option value="checkbox">Checkbox</option>
-              <option value="number">Number</option>
-            </Form.Select>
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseAdditional}>
-          {t('Close')}
-        </Button>
-        <Button variant="primary" onClick={addNewField}>
-          {t('Add new field')}
-        </Button>
-      </Modal.Footer>
+            <FormSelect
+              defaultValue="Сhoose the type of the new property"
+              onChange={setType}
+              options={[
+                { value: 'text' },
+                { value: 'textarea' },
+                { value: 'checkbox' },
+                { value: 'number' }
+              ]}
+            />
+          </Form>
+        </>
+      </ModalContainer>
     </>
   );
 };

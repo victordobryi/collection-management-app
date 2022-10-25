@@ -1,16 +1,9 @@
-@media screen and (max-width: 992px) {
-  .card {
-    width: 45%;
+.card {
+  width: 45%;
+  &__close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
   }
-}
-
-@media screen and (max-width: 576px) {
-  .card {
-    width: 90%;
-  }
-}
-
-.largest .card {
-  width: 9rem;
-  height: 400px;
 }

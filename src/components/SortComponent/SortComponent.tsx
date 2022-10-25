@@ -1,13 +1,14 @@
-import React from 'react';
-import { Form } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IFilter } from '../../models';
+import { FormSelect } from '../../components';
 
 const SortComponent = ({ items, setItems }: IFilter) => {
   const { t } = useTranslation();
+  const [sortMode, setSortMode] = useState('Default');
 
-  const changeSortMode = (mode: string) => {
-    switch (mode) {
+  useEffect(() => {
+    switch (sortMode) {
       case 'Date ↑':
         sortByDateUp();
         break;
@@ -35,7 +36,7 @@ const SortComponent = ({ items, setItems }: IFilter) => {
       default:
         sortByDefault();
     }
-  };
+  }, [sortMode]);
 
   const sortByDefault = () => setItems(items);
 
@@ -80,24 +81,21 @@ const SortComponent = ({ items, setItems }: IFilter) => {
   const sortByCommentsDown = () => setItems(sortByCommentsUp().reverse());
 
   return (
-    <Form.Select
-      aria-label="Sorting by"
-      onChange={(e) => changeSortMode(e.target.value)}
+    <FormSelect
       defaultValue="Default"
-    >
-      <option disabled value="Default">
-        {t('Sorting by')}
-      </option>
-      <option value="Name ↑">{t('Name')} ↑</option>
-      <option value="Name ↓">{t('Name')} ↓</option>
-      <option value="Date ↑">{t('Date')} ↑</option>
-      <option value="Date ↓">{t('Date')} ↓</option>
-      <option value="Likes ↑">{t('Likes')} ↑</option>
-      <option value="Likes ↓">{t('Likes')} ↓</option>
-      <option value="Comments ↑">{t('Comments')} ↑</option>
-      <option value="Comments ↓">{t('Comments')} ↓</option>
-      <option value="Default">{t('Default')}</option>
-    </Form.Select>
+      onChange={setSortMode}
+      options={[
+        { value: 'Name ↑', text: t('Name') + ' ↑' },
+        { value: 'Name ↓', text: t('Name') + ' ↓' },
+        { value: 'Date ↑', text: t('Date') + ' ↑' },
+        { value: 'Date ↓', text: t('Date') + ' ↓' },
+        { value: 'Likes ↑', text: t('Likes') + ' ↑' },
+        { value: 'Likes ↓', text: t('Likes') + ' ↓' },
+        { value: 'Comments ↑', text: t('Comments') + ' ↑' },
+        { value: 'Comments ↓', text: t('Comments') + ' ↓' },
+        { value: 'Default' }
+      ]}
+    />
   );
 };
 

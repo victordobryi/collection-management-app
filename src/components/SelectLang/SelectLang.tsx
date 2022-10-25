@@ -42,7 +42,7 @@ const SelectLang = () => {
         <Dropdown.Toggle variant="secondary" className="d-flex">
           <Flag code={selectedCountry} width={40} height={30} />
         </Dropdown.Toggle>
-        <Dropdown.Menu style={{ minWidth: '75px' }}>
+        <Dropdown.Menu className="dropdown__menu">
           {countries.map(({ code }) => (
             <Dropdown.Item
               key={code}

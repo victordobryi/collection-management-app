@@ -7,7 +7,6 @@ const CommentForm = ({ setComment }: ICommentForm) => {
     <Form>
       <Form.Group className="mb-3">
         <Form.Control
-          style={{ resize: 'none' }}
           as="textarea"
           placeholder="Text message"
           onChange={(e) => setComment(e.target.value)}

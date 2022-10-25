@@ -19,11 +19,10 @@ import './item-container.scss';
 const ItemContainer = ({ data, likes }: IFullData) => {
   const [{ count, id: likesId, likedUsers: likedUsersData }] = likes;
   const { additionalInputs, createTime, id, img, title, tags } = data;
-
   const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
   const [itemTags, setItemTags] = useState<ITag[]>([]);
   const [isLiked, setIsLike] = useState(false);
-  const userIdLs = localStorage.getItem('id');
+  const userId = localStorage.getItem('id');
   const { socket } = useContext(SocketContext).SocketState;
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const ItemContainer = ({ data, likes }: IFullData) => {
       try {
         const users: ILikedUsers[] = JSON.parse(String(likedUsersData));
         setLikedUsers(users);
-        const isUser = users.find(({ id }) => id === userIdLs);
+        const isUser = users.find(({ id }) => id === userId);
         setIsLike(isUser ? true : false);
         const itemTags = JSON.parse(String(tags));
         setItemTags(itemTags);
@@ -46,10 +45,10 @@ const ItemContainer = ({ data, likes }: IFullData) => {
 
   const newData: INewInputsData[] = [];
 
-  for (const k in inputsData) {
-    const type = k.split('+')[1];
-    const name = k.split('+')[0];
-    newData.push({ name: name, value: inputsData[k], type: type });
+  for (const key in inputsData) {
+    const type = key.split('+')[1];
+    const name = key.split('+')[0];
+    newData.push({ name: name, value: inputsData[key], type: type });
   }
 
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ const ItemContainer = ({ data, likes }: IFullData) => {
   const goToItem = () => navigate(`/item/${id}`);
 
   const addLike = async () => {
-    const newUsers = [...likedUsers, { id: String(userIdLs) }];
+    const newUsers = [...likedUsers, { id: String(userId) }];
     try {
       await LikeService.updateItem(
         {
@@ -75,7 +74,7 @@ const ItemContainer = ({ data, likes }: IFullData) => {
   };
 
   const removeLike = async () => {
-    const updatedUsers = [...likedUsers].filter(({ id }) => id !== userIdLs);
+    const updatedUsers = [...likedUsers].filter(({ id }) => id !== userId);
     try {
       await LikeService.updateItem(
         {
@@ -107,7 +106,7 @@ const ItemContainer = ({ data, likes }: IFullData) => {
           isLiked ? removeLike() : addLike();
         }}
         style={{
-          pointerEvents: userIdLs ? 'auto' : 'none'
+          pointerEvents: userId ? 'auto' : 'none'
         }}
       >
         {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}

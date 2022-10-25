@@ -31,7 +31,14 @@ import type {
   ILikedUsers,
   IUserContainer
 } from './IUser';
-import type { IFormData, ILogin } from './IForm';
+import type {
+  IFormData,
+  ILogin,
+  IFormItem,
+  IFormSelect,
+  IOption,
+  IRegistrationFormItem
+} from './IForm';
 import type {
   IModalProps,
   IModalCollectionProps,
@@ -48,7 +55,11 @@ import type { IToolbar } from './IToolbar';
 import type { IPageLayoutButtons, IPageLayout } from './IPageLayout';
 import type { IDropImageZone } from './IDropImageZone';
 import type { IFilter, IFilterCheckbox } from './IFilter';
-import type { ISearch, ISearchResults } from './ISearch';
+import type { ISearch, ISearchResults, ISearchResult } from './ISearch';
+import type { ITableHead } from './ITable';
+import type { IErrorAlert } from './IAlert';
+import type { ICardContainer } from './ICardContainer';
+import type { IEditTextComponent } from './IEditText';
 
 export type {
   IFullData,
@@ -97,5 +108,14 @@ export type {
   ISearchResults,
   ITagContainer,
   IUserContainer,
-  ITagCreator
+  ITagCreator,
+  ITableHead,
+  IErrorAlert,
+  IFormItem,
+  IFormSelect,
+  IOption,
+  IRegistrationFormItem,
+  ISearchResult,
+  ICardContainer,
+  IEditTextComponent
 };

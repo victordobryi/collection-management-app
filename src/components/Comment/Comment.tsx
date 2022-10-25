@@ -1,10 +1,11 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { ICommentContainer } from '../../models';
+import './comment.scss';
 
 const Comment = ({ username, date, comment }: ICommentContainer) => {
   return (
-    <Card style={{ width: '75%' }}>
+    <Card className="comment">
       <Card.Body>
         <Card.Title>{username}:</Card.Title>
         <Card.Text>{comment}</Card.Text>
