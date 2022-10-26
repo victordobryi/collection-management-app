@@ -12,7 +12,8 @@ const EditTextComponent = ({
   onBlur,
   hovered,
   isUser,
-  defaultValue
+  defaultValue,
+  onSave
 }: IEditTextComponent) => {
   const { t } = useTranslation();
 
@@ -27,9 +28,10 @@ const EditTextComponent = ({
         <EditTextarea
           name={title}
           defaultValue={defaultValue}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => setValue && setValue(e.target.value)}
           value={value}
           onBlur={onBlur}
+          onSave={onSave}
         />
       ) : (
         <EditText
@@ -37,9 +39,10 @@ const EditTextComponent = ({
           defaultValue={defaultValue}
           editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
           showEditButton={hovered && isUser}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => setValue && setValue(e.target.value)}
           value={value}
           onBlur={onBlur}
+          onSave={onSave}
         />
       )}
     </div>

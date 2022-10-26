@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import CommentService from '../../API/CommentService';
 import SocketContext from '../../context/SocketContext';
 import { IComment, ICommentModal } from '../../models';
 import { useAppSelector } from '../../redux-hooks';
-import { CommentForm } from '../../components';
+import { CommentForm, ModalContainer } from '../../components';
 
 const CommentModal = ({
   show,
@@ -39,20 +39,13 @@ const CommentModal = ({
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Write a comment</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+      <ModalContainer
+        title="Write a comment"
+        onClose={handleClose}
+        onCreate={addComment}
+      >
         <CommentForm setComment={setComment} />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={addComment}>
-          Write a comment
-        </Button>
-      </Modal.Footer>
+      </ModalContainer>
     </Modal>
   );
 };

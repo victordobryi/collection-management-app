@@ -59,22 +59,19 @@ const Collection = () => {
     fetchData();
   }, [contextItems, collections, likes, comments]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const toggleModal = () => setShow(!show);
 
   const isVisisble = (count: number, comments: IComment[]) =>
     ((byLikes && count > Number(likesCount)) || !byLikes) &&
     ((byComment && comments.length > Number(commentsCount)) || !byComment);
 
   return isLoading ? (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : (
     <>
       <ContainerButtons
         createText="Create Item"
-        handleShow={handleShow}
+        handleShow={toggleModal}
         userId={String(collection?.userId)}
       />
       <Container className="d-flex justify-content-between">
@@ -92,23 +89,23 @@ const Collection = () => {
       <PageLayout>
         <>
           {filteredItems.map(({ data, likes, comments }, index) => {
-            const [{ count }] = likes;
-            return isVisisble(Number(count), comments) ? (
-              <ItemContainer
-                key={index}
-                data={data}
-                likes={likes}
-                comments={comments}
-              />
-            ) : (
-              <></>
+            const { count } = likes;
+            return (
+              isVisisble(Number(count), comments) && (
+                <ItemContainer
+                  key={index}
+                  data={data}
+                  likes={likes}
+                  comments={comments}
+                />
+              )
             );
           })}
         </>
       </PageLayout>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={toggleModal}>
         <CreateItemForm
-          handleClose={handleClose}
+          handleClose={toggleModal}
           collectionId={id!}
           userId={String(collection?.userId)}
           setLoading={setIsLoading}

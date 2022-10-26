@@ -1,5 +1,5 @@
 export interface ICardContainer {
-  onClick: () => void;
+  onClick?: () => void;
   isOnPage: boolean;
   isUser: boolean;
   sectionName: string;

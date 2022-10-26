@@ -8,6 +8,7 @@ import {
   DeleteComments,
   DeleteCollection
 } from './deleteData';
+import { getNewInputsData } from './getNewInputsData';
 
 export {
   addZero,
@@ -17,5 +18,6 @@ export {
   DeleteLikes,
   DeleteItem,
   DeleteComments,
-  DeleteCollection
+  DeleteCollection,
+  getNewInputsData
 };

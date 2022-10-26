@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { ICommentContainer } from '../../models';
+import { getCurrentDate } from '../../utils';
 import './comment.scss';
 
 const Comment = ({ username, date, comment }: ICommentContainer) => {
@@ -10,7 +11,7 @@ const Comment = ({ username, date, comment }: ICommentContainer) => {
         <Card.Title>{username}:</Card.Title>
         <Card.Text>{comment}</Card.Text>
       </Card.Body>
-      <Card.Footer>{date}</Card.Footer>
+      <Card.Footer>{getCurrentDate(date)}</Card.Footer>
     </Card>
   );
 };

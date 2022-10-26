@@ -3,14 +3,20 @@ import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { IFormSelect } from '../../models';
 
-const FormSelect = ({ onChange, defaultValue, options }: IFormSelect) => {
+const FormSelect = ({
+  onChange,
+  defaultValue,
+  options,
+  onBlur
+}: IFormSelect) => {
   const { t } = useTranslation();
 
   return (
     <Form.Group className="mb-3">
       <Form.Select
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange && onChange(e.target.value)}
         defaultValue={t(defaultValue)}
+        onBlur={onBlur}
       >
         <option disabled>{t(defaultValue)}</option>
         {options.map(({ value, text }, index) => (

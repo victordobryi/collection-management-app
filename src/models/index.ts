@@ -16,13 +16,19 @@ import type {
   ICommentContainer
 } from './IComment';
 import type { IItem, ItemsResponse, ItemResponse } from './IItem';
-import type { ILike, ILikesResponse, ILikeResponse } from './ILike';
+import type {
+  ILike,
+  ILikesResponse,
+  ILikeResponse,
+  ILikeButton
+} from './ILike';
 import type {
   ITag,
   ITagsResponse,
   ITagResponse,
   ITagContainer,
-  ITagCreator
+  ITagCreator,
+  ITags
 } from './ITag';
 import type {
   IUser,
@@ -60,6 +66,7 @@ import type { ITableHead } from './ITable';
 import type { IErrorAlert } from './IAlert';
 import type { ICardContainer } from './ICardContainer';
 import type { IEditTextComponent } from './IEditText';
+import type { IItemProps } from './IItemProps';
 
 export type {
   IFullData,
@@ -117,5 +124,8 @@ export type {
   IRegistrationFormItem,
   ISearchResult,
   ICardContainer,
-  IEditTextComponent
+  IEditTextComponent,
+  IItemProps,
+  ITags,
+  ILikeButton
 };

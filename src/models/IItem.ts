@@ -19,6 +19,6 @@ export interface ItemsResponse {
 export interface ItemResponse {
   message: string;
   data: IItem;
-  likes: ILike[];
+  likes: ILike;
   comments: IComment[];
 }

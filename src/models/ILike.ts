@@ -1,3 +1,5 @@
+import { ILikedUsers } from './IUser';
+
 export interface ILike {
   id?: string;
   postId?: string;
@@ -13,4 +15,11 @@ export interface ILikesResponse {
 export interface ILikeResponse {
   message: string;
   data: ILike;
+}
+
+export interface ILikeButton {
+  isLiked: boolean;
+  likedUsers: ILikedUsers[];
+  count: number;
+  likeId: string;
 }

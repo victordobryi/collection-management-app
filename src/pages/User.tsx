@@ -56,9 +56,7 @@ const User = () => {
   }, [contextCollections, users]);
 
   return isLoading ? (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : (
     <>
       <ContainerButtons

@@ -3,9 +3,12 @@ export interface ITag {
   name: string;
 }
 
-export interface ITagsResponse {
-  message: string;
+export interface ITags {
   data: ITag[];
+}
+
+export interface ITagsResponse extends ITags {
+  message: string;
 }
 
 export interface ITagResponse {

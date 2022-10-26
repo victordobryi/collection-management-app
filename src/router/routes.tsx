@@ -1,13 +1,15 @@
 import { Navigate } from 'react-router-dom';
-import AdminPanel from '../pages/AdminPanel';
-import Collection from '../pages/Collection';
-import Item from '../pages/Item';
-import Login from '../pages/Login';
-import Main from '../pages/Main';
-import Error from '../pages/NotFound';
-import Signup from '../pages/Signup';
-import User from '../pages/User';
-import Users from '../pages/Users';
+import {
+  AdminPanel,
+  Collection,
+  Item,
+  Login,
+  Main,
+  Error,
+  Signup,
+  User,
+  Users
+} from '../pages';
 
 interface IRoutes {
   path: string;

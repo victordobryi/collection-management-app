@@ -17,7 +17,8 @@ export interface IFormItem {
 }
 
 export interface IFormSelect {
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  onChange?: React.Dispatch<React.SetStateAction<string>>;
+  onBlur?: React.FocusEventHandler<HTMLSelectElement> | undefined;
   defaultValue: string;
   options: IOption[];
 }

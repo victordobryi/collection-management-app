@@ -33,6 +33,10 @@ import RegistrationFormItem from './RegistrationForm/RegistrationFormItem';
 import SearchResult from './SearchResults/SearchResult';
 import CardContainer from './CardContainer/CardContainer';
 import EditTextComponent from './EditTextComponent/EditTextComponent';
+import ItemProps from './ItemProps/ItemProps';
+import NavbarContainer from './Navbar/Navbar';
+import Tags from './Tags/Tags';
+import Like from './Like/Like';
 
 export {
   UserContainer,
@@ -69,5 +73,9 @@ export {
   RegistrationFormItem,
   SearchResult,
   CardContainer,
-  EditTextComponent
+  EditTextComponent,
+  ItemProps,
+  NavbarContainer,
+  Tags,
+  Like
 };
