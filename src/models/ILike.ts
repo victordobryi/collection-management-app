@@ -14,3 +14,8 @@ export interface ILikeResponse {
   message: string;
   data: ILike;
 }
+
+export interface ILikeButton {
+  likeId: string | undefined;
+  itemId: string;
+}

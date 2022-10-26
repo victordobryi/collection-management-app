@@ -1,27 +1,27 @@
 import axios, { AxiosResponse } from 'axios';
-import { IUser, UserResponse, UsersResponse } from '../models/IUser';
+import { IUser, IUserResponse, IUsersResponse } from '../models';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/users/';
 
 export default class UserService {
-  static async getUsers(): Promise<AxiosResponse<UsersResponse>> {
-    return axios.get<UsersResponse>(URL);
+  static async getUsers(): Promise<AxiosResponse<IUsersResponse>> {
+    return axios.get<IUsersResponse>(URL);
   }
   static async getUser(
     id: number | string
-  ): Promise<AxiosResponse<UserResponse>> {
-    return axios.get<UserResponse>(URL + id);
+  ): Promise<AxiosResponse<IUserResponse>> {
+    return axios.get<IUserResponse>(URL + id);
   }
   static async updateUser(
     newUser: IUser,
     id: string
-  ): Promise<AxiosResponse<UserResponse>> {
+  ): Promise<AxiosResponse<IUserResponse>> {
     return axios.put(URL + id, newUser);
   }
-  static async deleteUser(id: string): Promise<AxiosResponse<UserResponse>> {
+  static async deleteUser(id: string): Promise<AxiosResponse<IUserResponse>> {
     return axios.delete(URL + id);
   }
-  static async addUser(newUser: IUser): Promise<AxiosResponse<UserResponse>> {
+  static async addUser(newUser: IUser): Promise<AxiosResponse<IUserResponse>> {
     return axios.post(URL, newUser);
   }
 }

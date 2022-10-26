@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import Flag from 'react-world-flags';
-import './select-lang.scss';
 import { useTranslation } from 'react-i18next';
+import './select-lang.scss';
 
 const SelectLang = () => {
   const [countries] = useState([
@@ -42,7 +42,7 @@ const SelectLang = () => {
         <Dropdown.Toggle variant="secondary" className="d-flex">
           <Flag code={selectedCountry} width={40} height={30} />
         </Dropdown.Toggle>
-        <Dropdown.Menu style={{ minWidth: '75px' }}>
+        <Dropdown.Menu className="dropdown__menu">
           {countries.map(({ code }) => (
             <Dropdown.Item
               key={code}

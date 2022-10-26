@@ -1,14 +1,11 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
+import { ITagContainer } from '../../models';
+import './tag.scss';
 
-interface ITag {
-  text: string;
-  action?: () => void;
-}
-
-const Tag = ({ text, action }: ITag) => {
+const Tag = ({ text, action }: ITagContainer) => {
   return (
-    <Card onClick={action} style={{ display: 'inline-block', padding: '5px' }}>
+    <Card className="tag" onClick={action}>
       {text}
     </Card>
   );

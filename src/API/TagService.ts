@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { ITag, ITagResponse, ITagsResponse } from '../models/ITag';
+import { ITag, ITagResponse, ITagsResponse } from '../models';
 
 const URL = 'https://collection-managemenet-server.herokuapp.com/tags/';
 

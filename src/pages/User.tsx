@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
-import CollectionService from '../API/CollectionService';
-import { ICollection } from '../models/ICollection';
+import { CollectionService, UserService } from '../API';
+import { ICollection, IUser } from '../models';
 import { Container, Spinner, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
-import CreateCollectionForm from '../components/CreateCollectionForm/CreateCollectionForm';
+import {
+  CollectionContainer,
+  CreateCollectionForm,
+  UserContainer,
+  ContainerButtons,
+  PageLayout
+} from '../components';
 import SocketContext from '../context/SocketContext';
-import UserService from '../API/UserService';
-import { IUser } from '../models/IUser';
-import UserContainer from '../components/UserContainer/UserContainer';
-import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
-import PageLayout from '../components/PageLayout/PageLayout';
 
 const User = () => {
   const [collections, setCollections] = useState<ICollection[]>([]);
@@ -56,9 +56,7 @@ const User = () => {
   }, [contextCollections, users]);
 
   return isLoading ? (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : (
     <>
       <ContainerButtons

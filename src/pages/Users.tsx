@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import UserService from '../API/UserService';
-import UserContainer from '../components/UserContainer/UserContainer';
-import { IUser } from '../models/IUser';
+import { Row, Spinner } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../redux-hooks';
 import { authSlice } from '../store/reducers/auth';
-import { Row, Spinner } from 'react-bootstrap';
 import SocketContext from '../context/SocketContext';
+import { UserService } from '../API';
+import { UserContainer } from '../components';
+import { IUser } from '../models';
 
 const Users = () => {
   const [usersFromDb, setUsersFromDb] = useState<IUser[]>([]);
@@ -32,9 +32,7 @@ const Users = () => {
   return (
     <Row className="d-flex flex-wrap gap-3">
       {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner animation="border" role="status" />
       ) : (
         usersFromDb.map((user) =>
           user.username !== 'admin' ? (

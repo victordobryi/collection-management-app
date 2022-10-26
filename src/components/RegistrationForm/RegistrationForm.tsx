@@ -1,18 +1,17 @@
 import React, { useEffect, useContext } from 'react';
 import * as Yup from 'yup';
-import { Alert, Button, FormGroup, Spinner } from 'react-bootstrap';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Button, FormGroup, Spinner } from 'react-bootstrap';
+import { Formik, Form } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogin, userSignup } from '../../store/action-creators/users';
 import { authSlice } from '../../store/reducers/auth';
 import { useTranslation, Trans } from 'react-i18next';
 import SocketContext from '../../context/SocketContext';
+import { ILogin } from '../../models';
+import ErrorAlert from '../ErrorAlert/ErrorAlert';
+import { RegistrationFormItem } from '../../components';
 
-interface ILogin {
-  type: 'login' | 'signup';
-}
-
-const FormComponent = ({ type }: ILogin) => {
+const RegistrationForm = ({ type }: ILogin) => {
   const { error, isLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { setError } = authSlice.actions;
@@ -63,57 +62,25 @@ const FormComponent = ({ type }: ILogin) => {
     >
       {() =>
         isLoading ? (
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+          <Spinner animation="border" role="status" />
         ) : (
           <>
             <Trans i18nKey={type.toUpperCase()}>
               <h2>{type.toUpperCase()}</h2>
             </Trans>
             <Form>
-              <FormGroup className="mt-3">
-                <Field
-                  name="username"
-                  type="text"
-                  className="form-control"
-                  placeholder={t('Username')}
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  className="text-danger"
-                />
-              </FormGroup>
-              <FormGroup className="mt-3">
-                <Field
-                  name="password"
+              <RegistrationFormItem name="username" placeholder="Username" />
+              <RegistrationFormItem
+                name="password"
+                placeholder="Password"
+                type="password"
+              />
+              {type === 'signup' && (
+                <RegistrationFormItem
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
                   type="password"
-                  className="form-control"
-                  placeholder={t('Password')}
                 />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-danger"
-                />
-              </FormGroup>
-              {type === 'signup' ? (
-                <FormGroup className="mt-3">
-                  <Field
-                    name="confirmPassword"
-                    type="password"
-                    className="form-control"
-                    placeholder={t('Confirm Password')}
-                  />
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component="div"
-                    className="text-danger"
-                  />
-                </FormGroup>
-              ) : (
-                <></>
               )}
               <FormGroup className="mt-3 d-flex justify-content-between">
                 <Button type="submit" variant="dark">
@@ -126,18 +93,11 @@ const FormComponent = ({ type }: ILogin) => {
                 </Button>
               </FormGroup>
             </Form>
-            {error ? (
-              <Alert
-                variant="danger"
-                onClose={() => dispatch(authSlice.actions.setError(''))}
-                dismissible
-                className="overlay"
-              >
-                <Alert.Heading>{t('Oh snap! You got an error!')}</Alert.Heading>
-                <p>{error}</p>
-              </Alert>
-            ) : (
-              <></>
+            {error && (
+              <ErrorAlert
+                errorMessage={error}
+                setError={() => dispatch(authSlice.actions.setError(''))}
+              />
             )}
           </>
         )
@@ -146,4 +106,4 @@ const FormComponent = ({ type }: ILogin) => {
   );
 };
 
-export default FormComponent;
+export default RegistrationForm;

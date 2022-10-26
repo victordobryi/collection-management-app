@@ -1,12 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-
-interface IFilterCheckbox {
-  label: string;
-  action: (isChecked: boolean) => void;
-  setCount: React.Dispatch<React.SetStateAction<string>>;
-  count: string;
-}
+import { IFilterCheckbox } from '../../models';
 
 const FilterCheckbox = ({
   label,

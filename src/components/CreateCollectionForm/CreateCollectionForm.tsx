@@ -1,40 +1,36 @@
 import React, { useState, useContext } from 'react';
-import { Button, Form, Modal, Alert } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import CollectionService from '../../API/CollectionService';
-import { ICollection } from '../../models/ICollection';
-import { mediaUploader } from '../../utils/mediaUploader';
-import AdditionalModal from './AdditionalModal';
+import { CollectionService } from '../../API';
+import {
+  ICollection,
+  IModalCollectionProps,
+  INewInputsProps
+} from '../../models';
+import { mediaUploader } from '../../utils';
+import {
+  AdditionalModal,
+  DropImageZone,
+  FormItem,
+  FormSelect,
+  ModalContainer
+} from '../../components';
 import SocketContext from '../../context/SocketContext';
-import { DropImageZone } from '../DropImageZone/DropImageZone';
-
-interface ModalProps {
-  handleClose: () => void;
-  userId: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface additionalProps {
-  name: string;
-  type: string;
-}
 
 const CreateCollectionForm = ({
   handleClose,
   userId,
   setLoading,
   setIsVisible
-}: ModalProps) => {
+}: IModalCollectionProps) => {
   const [theme, setTheme] = useState('Comics');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [additionalProps, setAdditionalProps] = useState<additionalProps[]>([]);
-  const [error, setError] = useState(false);
-  const { t } = useTranslation();
-  const [active, setActive] = useState(false);
-  const { socket } = useContext(SocketContext).SocketState;
   const [files, setFiles] = useState<File[]>([]);
+  const [active, setActive] = useState(false);
+  const [additionalProps, setAdditionalProps] = useState<INewInputsProps[]>([]);
+  const { t } = useTranslation();
+  const { socket } = useContext(SocketContext).SocketState;
 
   const createCollection = async () => {
     setLoading(true);
@@ -64,6 +60,7 @@ const CreateCollectionForm = ({
     setActive(false);
     setIsVisible(true);
   };
+
   const handleShowAdditional = () => {
     setActive(true);
     setIsVisible(false);
@@ -78,75 +75,45 @@ const CreateCollectionForm = ({
           additionalProps={additionalProps}
         />
       </Modal>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('Create Collection')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('Title')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('Title')}
-              onChange={(e) => setTitle(e.target.value)}
+      <ModalContainer
+        onClose={handleClose}
+        onCreate={createCollection}
+        title="Create Collection"
+      >
+        <>
+          <Form>
+            <FormItem type="text" label="Title" onChange={setTitle} />
+            <FormItem
+              type="textarea"
+              label="Description"
+              onChange={setDescription}
             />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('Description')}</Form.Label>
-            <Form.Control
-              as="textarea"
-              placeholder={t('Description')}
-              style={{ resize: 'none' }}
-              onChange={(e) => setDescription(e.target.value)}
+            <FormSelect
+              onChange={setTheme}
+              defaultValue="Select a category"
+              options={[
+                { value: 'Comics' },
+                { value: 'Card' },
+                { value: 'Figures' }
+              ]}
             />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Select onChange={(e) => setTheme(e.target.value)}>
-              <option disabled>{t('Select a category')}</option>
-              <option value="Comics">{t('Comics')}</option>
-              <option value="Card">{t('Cards')}</option>
-              <option value="Figures">{t('Figures')}</option>
-            </Form.Select>
-          </Form.Group>
-          <DropImageZone setFiles={setFiles} />
-          <Button
-            style={{ marginLeft: 'auto', marginRight: 'auto' }}
-            className="d-flex gx-0"
-            variant="dark"
-            onClick={handleShowAdditional}
-            disabled={additionalProps.length < 3 ? false : true}
-          >
-            +
-          </Button>
-          <Form.Text>
-            {`${t('Additional Props')} (${t('max')} 3): ${additionalProps.map(
-              ({ name, type }) =>
-                ` ${t('Name')}: ${name} - ${t('Type')}: ${type}`
-            )}`}
-          </Form.Text>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-center">
-        <Button variant="secondary" onClick={handleClose}>
-          {t('Close')}
-        </Button>
-        <Button variant="primary" onClick={createCollection}>
-          {t('Create Collection')}
-        </Button>
-      </Modal.Footer>
-      {error ? (
-        <Alert
-          variant="danger"
-          onClose={() => setError(false)}
-          dismissible
-          className="overlay"
-        >
-          <Alert.Heading>{t('Oh snap! You got an error!')}</Alert.Heading>
-          <p>{t('You can add only an image')}</p>
-        </Alert>
-      ) : (
-        <></>
-      )}
+            <DropImageZone setFiles={setFiles} />
+            <Button
+              className="d-flex gx-0 mx-auto "
+              variant="dark"
+              onClick={handleShowAdditional}
+            >
+              +
+            </Button>
+            <Form.Text>
+              {`${t('Additional Props')} : ${additionalProps.map(
+                ({ name, type }) =>
+                  ` ${t('Name')}: ${name} - ${t('Type')}: ${type}`
+              )}`}
+            </Form.Text>
+          </Form>
+        </>
+      </ModalContainer>
     </>
   );
 };

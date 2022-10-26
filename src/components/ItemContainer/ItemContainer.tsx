@@ -1,42 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
-import { FullData } from '../../models/IItem';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { getCurrentDate } from '../../utils/getCurrentTime';
-import { newInputsData } from '../CreateItemForm/CreateItemForm';
-import { useNavigate } from 'react-router-dom';
-import './item-container.scss';
-import LikeService from '../../API/LikeService';
-import SocketContext from '../../context/SocketContext';
+import React, { useEffect, useState } from 'react';
+import { Card } from 'react-bootstrap';
 import Avatar from 'react-avatar';
-import Tag from '../Tag/Tag';
-import { ITag } from '../../models/ITag';
+import { IFullData, ITag, INewInputsData } from '../../models';
+import { getCurrentDate, getNewInputsData } from '../../utils';
+import { useNavigate } from 'react-router-dom';
+import { Tags, Like } from '../../components';
+import './item-container.scss';
 
-export interface Data {
-  [value: string]: string;
-}
-
-export interface ILikedUsers {
-  id: string;
-}
-
-const ItemContainer = ({ data, likes }: FullData) => {
-  const [{ count, id: likesId, likedUsers: likedUsersData }] = likes;
+const ItemContainer = ({ data, likes }: IFullData) => {
+  const { id: likesId } = likes;
   const { additionalInputs, createTime, id, img, title, tags } = data;
-
-  const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
   const [itemTags, setItemTags] = useState<ITag[]>([]);
-  const [isLiked, setIsLike] = useState(false);
-  const userIdLs = localStorage.getItem('id');
-  const { socket } = useContext(SocketContext).SocketState;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const users: ILikedUsers[] = JSON.parse(String(likedUsersData));
-        setLikedUsers(users);
-        const isUser = users.find(({ id }) => id === userIdLs);
-        setIsLike(isUser ? true : false);
         const itemTags = JSON.parse(String(tags));
         setItemTags(itemTags);
       } catch (error) {
@@ -46,55 +25,11 @@ const ItemContainer = ({ data, likes }: FullData) => {
     fetchData();
   }, []);
 
-  const inputsData: Data = JSON.parse(additionalInputs!);
-
-  const newData: newInputsData[] = [];
-
-  for (const k in inputsData) {
-    const type = k.split('+')[1];
-    const name = k.split('+')[0];
-    newData.push({ name: name, value: inputsData[k], type: type });
-  }
-
-  const navigate = useNavigate();
+  const newData: INewInputsData[] = getNewInputsData(
+    JSON.parse(additionalInputs!)
+  );
 
   const goToItem = () => navigate(`/item/${id}`);
-
-  const addLike = async () => {
-    const newUsers = [...likedUsers, { id: String(userIdLs) }];
-    try {
-      await LikeService.updateItem(
-        {
-          likedUsers: JSON.stringify([...newUsers]),
-          count: Number(count) + 1
-        },
-        String(likesId)
-      );
-      if (socket) {
-        socket.emit('add_CurrentLike', JSON.stringify({ ...newUsers }));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const removeLike = async () => {
-    const updatedUsers = [...likedUsers].filter(({ id }) => id !== userIdLs);
-    try {
-      await LikeService.updateItem(
-        {
-          likedUsers: JSON.stringify([...updatedUsers]),
-          count: Number(count) - 1
-        },
-        String(likesId)
-      );
-      if (socket) {
-        socket.emit('remove_CurrentLike', JSON.stringify({ ...updatedUsers }));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <Card className="card-container">
@@ -105,21 +40,8 @@ const ItemContainer = ({ data, likes }: FullData) => {
           <Card.Text key={index}>{`${name}: ${value}`}</Card.Text>
         ))}
       </Card.Body>
-      <Button
-        variant="primary"
-        onClick={() => {
-          isLiked ? removeLike() : addLike();
-        }}
-        style={{
-          pointerEvents: userIdLs ? 'auto' : 'none'
-        }}
-      >
-        {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
-        {count}
-      </Button>
-      {itemTags.map(({ name }, index) => (
-        <Tag key={index} text={name} />
-      ))}
+      <Like likeId={String(likesId)} itemId={String(data.id)} />
+      <Tags data={itemTags} />
       <Card.Footer onClick={goToItem}>{getCurrentDate(createTime)}</Card.Footer>
     </Card>
   );

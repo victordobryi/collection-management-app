@@ -121,9 +121,7 @@ const SocketContextComponent: React.FunctionComponent<PropsWithChildren> = (
   };
 
   return loading ? (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : (
     <SocketContextProvider value={{ SocketState, SocketDispatch }}>
       {children}

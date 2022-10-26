@@ -69,5 +69,9 @@ export const translationsGB = {
   'From User name': 'From User name',
   'No data found': 'No data found',
   'Show More': 'Show More',
-  'Show Less': 'Show Less'
+  'Show Less': 'Show Less',
+  'Go to Home': 'Go to Home',
+  'The page you are looking for not avaible!':
+    'The page you are looking for not avaible!',
+  "Look like you're lost": "Look like you're lost"
 };

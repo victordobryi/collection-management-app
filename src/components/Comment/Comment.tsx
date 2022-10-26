@@ -1,20 +1,17 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
+import { ICommentContainer } from '../../models';
+import { getCurrentDate } from '../../utils';
+import './comment.scss';
 
-interface IComment {
-  username?: string;
-  date: string;
-  comment: string;
-}
-
-const Comment = ({ username, date, comment }: IComment) => {
+const Comment = ({ username, date, comment }: ICommentContainer) => {
   return (
-    <Card style={{ width: '75%' }}>
+    <Card className="comment">
       <Card.Body>
         <Card.Title>{username}:</Card.Title>
         <Card.Text>{comment}</Card.Text>
       </Card.Body>
-      <Card.Footer>{date}</Card.Footer>
+      <Card.Footer>{getCurrentDate(date)}</Card.Footer>
     </Card>
   );
 };

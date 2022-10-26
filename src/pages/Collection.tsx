@@ -1,35 +1,30 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Container, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import CollectionService from '../API/CollectionService';
-import ItemService from '../API/ItemsService';
-import CreateItemForm from '../components/CreateItemForm/CreateItemForm';
-import ItemContainer from '../components/ItemContainer/ItemContainer';
-import { FullData } from '../models/IItem';
+import { CollectionService } from '../API';
+import {
+  ItemContainer,
+  CreateItemForm,
+  ContainerButtons,
+  CollectionContainer,
+  PageLayout,
+  Filter,
+  SortComponent,
+  CollectionWrapper
+} from '../components';
+import { IFullData, IComment, ICollection } from '../models';
 import SocketContext from '../context/SocketContext';
-import ContainerButtons from '../components/ContainerButtons/ContainerButtons';
-import { ICollection } from '../models/ICollection';
-import CollectionContainer from '../components/CollectionContainer/CollectionContainer';
-import PageLayout from '../components/PageLayout/PageLayout';
-import Filter from '../components/Filter/FIlter';
-import SortComponent from '../components/SortComponent/SortComponent';
 import { useAppSelector } from '../redux-hooks';
-import { IComment } from '../models/IComment';
 
 const Collection = () => {
   const { id } = useParams();
-  const [items, setItems] = useState<FullData[]>([]);
-  const [filteredItems, setFilteredItems] = useState<FullData[]>([]);
+  const [items, setItems] = useState<IFullData[]>([]);
+  const [filteredItems, setFilteredItems] = useState<IFullData[]>([]);
   const [collection, setCollection] = useState<ICollection>();
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [additionalProps, setAdditionalProps] = useState('');
-  const {
-    items: contextItems,
-    collections,
-    likes,
-    comments
-  } = useContext(SocketContext).SocketState;
+  const { collections } = useContext(SocketContext).SocketState;
   const { byLikes, byComment, likesCount, commentsCount } = useAppSelector(
     (state) => state.filter
   );
@@ -38,15 +33,7 @@ const Collection = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const itemsData = (await ItemService.getItems()).data.data;
         const dBcollection = (await CollectionService.getCollection(id!)).data;
-        if (id) {
-          const currentItems = itemsData.filter(
-            ({ data }) => data.collectionId === id
-          );
-          setItems(currentItems);
-          setFilteredItems(currentItems);
-        }
         if (dBcollection) {
           setAdditionalProps(dBcollection.data.additionalInputs!);
           setCollection(dBcollection.data);
@@ -58,24 +45,21 @@ const Collection = () => {
       }
     };
     fetchData();
-  }, [contextItems, collections, likes, comments]);
+  }, [collections]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const toggleModal = () => setShow(!show);
 
   const isVisisble = (count: number, comments: IComment[]) =>
     ((byLikes && count > Number(likesCount)) || !byLikes) &&
     ((byComment && comments.length > Number(commentsCount)) || !byComment);
 
   return isLoading ? (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : (
     <>
       <ContainerButtons
         createText="Create Item"
-        handleShow={handleShow}
+        handleShow={toggleModal}
         userId={String(collection?.userId)}
       />
       <Container className="d-flex justify-content-between">
@@ -91,25 +75,30 @@ const Collection = () => {
         </Form>
       </Container>
       <PageLayout>
-        <>
-          {filteredItems.map(({ data, likes, comments }, index) => {
-            const [{ count }] = likes;
-            return isVisisble(Number(count), comments) ? (
-              <ItemContainer
-                key={index}
-                data={data}
-                likes={likes}
-                comments={comments}
-              />
-            ) : (
-              <></>
-            );
-          })}
-        </>
+        <CollectionWrapper
+          setItems={setItems}
+          setFilteredItems={setFilteredItems}
+        >
+          <>
+            {filteredItems.map(({ data, likes, comments }, index) => {
+              const { count } = likes;
+              return (
+                isVisisble(Number(count), comments) && (
+                  <ItemContainer
+                    key={index}
+                    data={data}
+                    likes={likes}
+                    comments={comments}
+                  />
+                )
+              );
+            })}
+          </>
+        </CollectionWrapper>
       </PageLayout>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={toggleModal}>
         <CreateItemForm
-          handleClose={handleClose}
+          handleClose={toggleModal}
           collectionId={id!}
           userId={String(collection?.userId)}
           setLoading={setIsLoading}

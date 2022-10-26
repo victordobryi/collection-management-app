@@ -1,25 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Card, Form } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ICollection } from '../../models/ICollection';
-import { useTranslation, Trans } from 'react-i18next';
-import './collection-container.scss';
-import { mediaUploader } from '../../utils/mediaUploader';
-import CollectionService from '../../API/CollectionService';
+import { useTranslation } from 'react-i18next';
+import { ICollectionContainer } from '../../models';
+import { mediaUploader, DeleteCollection } from '../../utils';
+import { CollectionService } from '../../API';
 import SocketContext from '../../context/SocketContext';
-import { EditText, EditTextarea } from 'react-edit-text';
-import Avatar from 'react-avatar';
-import { AiOutlineClose } from 'react-icons/ai';
-import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import { DeleteCollection } from '../../utils/deleteData';
 import UsePrevPage from '../../hooks/UsePrevPage';
 import { useAppSelector } from '../../redux-hooks';
-import { DropImageZone } from '../DropImageZone/DropImageZone';
-
-interface ICollectionContainer {
-  collection: ICollection;
-  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { CardContainer, EditTextComponent } from '../../components';
+import './collection-container.scss';
 
 const CollectionContainer = ({
   collection,
@@ -29,21 +19,17 @@ const CollectionContainer = ({
   const [hovered, setHovered] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
+  const [files, setFiles] = useState<File[]>([]);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { id: collectionId } = useParams();
   const { socket } = useContext(SocketContext).SocketState;
-  const [show, setShow] = useState(false);
   const prev = UsePrevPage();
   const { isAdmin } = useAppSelector((state) => state.auth);
   const localStorageId = localStorage.getItem('id');
   const location = useLocation();
   const section = location.pathname.split('/')[1];
-  const isUserId = localStorageId === collection?.userId || isAdmin;
-  const [files, setFiles] = useState<File[]>([]);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const isUser = localStorageId === collection?.userId || isAdmin;
 
   const goToCollection = () => {
     if (collectionId !== id) {
@@ -124,71 +110,44 @@ const CollectionContainer = ({
 
   return (
     <>
-      <Card
+      <CardContainer
         onClick={goToCollection}
-        style={{
-          width: '10rem',
-          cursor: collectionId === id ? 'default' : 'pointer'
-        }}
-        className="p-3"
-        onMouseEnter={() => (collectionId === id ? setHovered(true) : null)}
-        onMouseLeave={() => setHovered(false)}
+        isOnPage={collectionId === id}
+        containerName="collection"
+        sectionName={section}
+        isUser={isUser}
+        deleteElem={deleteCollection}
+        setFiles={setFiles}
+        title={title}
+        img={img}
+        hovered={hovered}
+        setHovered={setHovered}
       >
-        <AiOutlineClose
-          style={{
-            position: 'absolute',
-            top: 5,
-            right: 5,
-            visibility: hovered && isUserId ? 'visible' : 'hidden',
-            cursor: 'pointer'
-          }}
-          onClick={handleShow}
-        />
-        <Card.Header>
-          <Form
-            style={{
-              pointerEvents:
-                isUserId && section === 'collection' ? 'auto' : 'none',
-              position: 'relative'
-            }}
-          >
-            <Avatar name={title} size="130" src={img} />
-            <DropImageZone setFiles={setFiles} isVisible={false} />
-          </Form>
-        </Card.Header>
-        <Card.Body style={{ pointerEvents: isUserId ? 'auto' : 'none' }}>
-          <div className="d-flex align-items-baseline">
-            <Card.Text>{`${t('Title')}: `}</Card.Text>
-            <EditText
-              name="title"
-              defaultValue={title}
-              editButtonProps={{ style: { marginLeft: '10px', minWidth: 25 } }}
-              showEditButton={hovered && isUserId}
-              onChange={(e) => setNewTitle(e.target.value)}
-              value={newTitle}
-              onBlur={changeTitle}
-            />
-          </div>
+        <>
+          <EditTextComponent
+            hovered={hovered}
+            setValue={setNewTitle}
+            defaultValue={String(title)}
+            value={newTitle}
+            title="Title"
+            isUser={isUser}
+            onBlur={changeTitle}
+          />
           <Card.Text>
-            {t('Theme')}: {<Trans i18nKey={theme}>{theme}</Trans>}
+            {t('Theme')}: {t(String(theme))}
           </Card.Text>
-          <div className="d-flex align-items-baseline">
-            <Card.Text>{`${t('Description')}:`}</Card.Text>
-            <EditTextarea
-              name="description"
-              defaultValue={description}
-              onChange={(e) => setNewDescription(e.target.value)}
-              value={newDescription}
-              onBlur={changeDescription}
-            />
-          </div>
-        </Card.Body>
-      </Card>
-      <ConfirmModal
-        show={show}
-        onHide={handleClose}
-        deleteFunc={deleteCollection}
-      />
+          <EditTextComponent
+            hovered={hovered}
+            setValue={setNewDescription}
+            defaultValue={String(description)}
+            value={newDescription}
+            title="Description"
+            isUser={isUser}
+            onBlur={changeDescription}
+            isTextArea={true}
+          />
+        </>
+      </CardContainer>
     </>
   );
 };

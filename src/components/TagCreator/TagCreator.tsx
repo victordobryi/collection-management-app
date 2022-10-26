@@ -1,22 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, InputGroup } from 'react-bootstrap';
-import { ITag } from '../../models/ITag';
-import Tag from '../Tag/Tag';
+import { useTranslation } from 'react-i18next';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
-import TagService from '../../API/TagService';
-import { useTranslation } from 'react-i18next';
-
-interface ITagCreator {
-  tags: ITag[];
-  setTags: React.Dispatch<React.SetStateAction<ITag[]>>;
-}
+import * as TypeaheadType from 'react-bootstrap-typeahead/types/core/Typeahead';
+import { Tag } from '../../components';
+import { TagService } from '../../API';
+import { ITagCreator } from '../../models';
 
 const TagCreator = ({ tags, setTags }: ITagCreator) => {
   const [value, setValue] = useState<string | Option>('');
   const [selected, setSelected] = useState<Option[]>([]);
   const [options, setOptions] = useState<Option[]>([]);
-  const ref = useRef<Typeahead | null>();
+  const ref = useRef<TypeaheadType.default | null>(null);
   const { t } = useTranslation();
 
   useEffect(() => {

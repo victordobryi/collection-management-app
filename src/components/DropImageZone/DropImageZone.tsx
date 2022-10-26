@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import './drop-image-zone.scss';
 import { useTranslation } from 'react-i18next';
-
-interface IDropImageZone {
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  isVisible?: boolean;
-}
+import { IDropImageZone } from '../../models';
 
 export const DropImageZone = ({
   setFiles,
@@ -41,9 +37,7 @@ export const DropImageZone = ({
             })}
             style={{
               opacity: isVisible ? '1' : '0',
-              position: isVisible ? 'relative' : 'absolute',
-              top: 0,
-              height: '100%'
+              position: isVisible ? 'relative' : 'absolute'
             }}
           >
             <input {...getInputProps()} />

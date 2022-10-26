@@ -1,5 +1,4 @@
-import { IComment } from './IComment';
-import { ILike } from './ILike';
+import { IComment, IFullData, ILike } from '../models';
 
 export interface IItem {
   id?: string;
@@ -12,20 +11,19 @@ export interface IItem {
   tags?: string;
 }
 
+export interface FullDataResponse {
+  message: string;
+  data: IFullData[];
+}
+
 export interface ItemsResponse {
   message: string;
-  data: FullData[];
+  data: IItem[];
 }
 
 export interface ItemResponse {
   message: string;
   data: IItem;
-  likes: ILike[];
-  comments: IComment[];
-}
-
-export interface FullData {
-  data: IItem;
-  likes: ILike[];
+  likes: ILike;
   comments: IComment[];
 }
