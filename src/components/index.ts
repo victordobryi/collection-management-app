@@ -37,6 +37,8 @@ import ItemProps from './ItemProps/ItemProps';
 import NavbarContainer from './Navbar/Navbar';
 import Tags from './Tags/Tags';
 import Like from './Like/Like';
+import Statistics from './Statistics/Statistics';
+import CollectionWrapper from './CollectionContainer/CollectionWrapper';
 
 export {
   UserContainer,
@@ -77,5 +79,7 @@ export {
   ItemProps,
   NavbarContainer,
   Tags,
-  Like
+  Like,
+  Statistics,
+  CollectionWrapper
 };

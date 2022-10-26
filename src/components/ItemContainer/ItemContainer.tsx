@@ -1,28 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import Avatar from 'react-avatar';
-import { IFullData, ITag, INewInputsData, ILikedUsers } from '../../models';
+import { IFullData, ITag, INewInputsData } from '../../models';
 import { getCurrentDate, getNewInputsData } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { Tags, Like } from '../../components';
 import './item-container.scss';
 
 const ItemContainer = ({ data, likes }: IFullData) => {
-  const { count, id: likesId, likedUsers: likedUsersData } = likes;
+  const { id: likesId } = likes;
   const { additionalInputs, createTime, id, img, title, tags } = data;
-  const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
   const [itemTags, setItemTags] = useState<ITag[]>([]);
-  const [isLiked, setIsLike] = useState(false);
-  const userId = localStorage.getItem('id');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const users: ILikedUsers[] = JSON.parse(String(likedUsersData));
-        setLikedUsers(users);
-        const isUser = users.find(({ id }) => id === userId);
-        setIsLike(isUser ? true : false);
         const itemTags = JSON.parse(String(tags));
         setItemTags(itemTags);
       } catch (error) {
@@ -47,12 +40,7 @@ const ItemContainer = ({ data, likes }: IFullData) => {
           <Card.Text key={index}>{`${name}: ${value}`}</Card.Text>
         ))}
       </Card.Body>
-      <Like
-        count={Number(count)}
-        isLiked={isLiked}
-        likeId={String(likesId)}
-        likedUsers={likedUsers}
-      />
+      <Like likeId={String(likesId)} itemId={String(data.id)} />
       <Tags data={itemTags} />
       <Card.Footer onClick={goToItem}>{getCurrentDate(createTime)}</Card.Footer>
     </Card>

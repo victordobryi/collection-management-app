@@ -1,15 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { LikeService } from '../../API';
-import { ILikeButton } from '../../models';
+import { ItemService, LikeService } from '../../API';
+import { ILikeButton, ILikedUsers } from '../../models';
 import SocketContext from '../../context/SocketContext';
 import { useAppSelector } from '../../redux-hooks';
 
-const Like = ({ isLiked, likedUsers, count, likeId }: ILikeButton) => {
+const Like = ({ likeId, itemId }: ILikeButton) => {
+  const [count, setCount] = useState(0);
+  const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
+  const [isLiked, setIsLike] = useState(false);
   const localStorageId = localStorage.getItem('id');
-  const { socket } = useContext(SocketContext).SocketState;
+  const { socket, likes } = useContext(SocketContext).SocketState;
   const { user } = useAppSelector((state) => state.users);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const item = (await ItemService.getItem(itemId)).data;
+        const users: ILikedUsers[] = JSON.parse(String(item.likes.likedUsers));
+        setLikedUsers(users);
+        const isUser = users.find(({ id }) => id === localStorageId);
+        setIsLike(isUser ? true : false);
+        if (likeId) {
+          const likes = (await LikeService.getItem(likeId)).data.data;
+          setCount(Number(likes.count ?? 0));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [likes]);
 
   const addLike = async () => {
     const newUsers = [...likedUsers, { id: String(localStorageId) }];
@@ -19,7 +41,7 @@ const Like = ({ isLiked, likedUsers, count, likeId }: ILikeButton) => {
           likedUsers: JSON.stringify([...newUsers]),
           count: count + 1
         },
-        likeId
+        likeId!
       );
       if (socket) {
         socket.emit('add_CurrentLike', JSON.stringify({ ...newUsers }));
@@ -39,7 +61,7 @@ const Like = ({ isLiked, likedUsers, count, likeId }: ILikeButton) => {
           likedUsers: JSON.stringify([...updatedUsers]),
           count: count - 1
         },
-        likeId
+        likeId!
       );
       if (socket) {
         socket.emit('remove_CurrentLike', JSON.stringify({ ...updatedUsers }));

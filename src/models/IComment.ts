@@ -40,5 +40,4 @@ export interface ICommentModal {
 export interface IComments {
   userId: string | undefined;
   itemId: string | undefined;
-  commentsData: IComment[];
 }

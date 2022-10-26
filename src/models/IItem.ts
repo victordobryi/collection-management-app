@@ -11,9 +11,14 @@ export interface IItem {
   tags?: string;
 }
 
-export interface ItemsResponse {
+export interface FullDataResponse {
   message: string;
   data: IFullData[];
+}
+
+export interface ItemsResponse {
+  message: string;
+  data: IItem[];
 }
 
 export interface ItemResponse {

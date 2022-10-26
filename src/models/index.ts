@@ -4,7 +4,8 @@ import type {
   ICollectionsResponse,
   ICollectionResponse,
   ICollectionContainer,
-  ISortedCollectionsKeys
+  ISortedCollectionsKeys,
+  ICollectionWrapper
 } from './ICollection';
 import type {
   IComment,
@@ -15,7 +16,12 @@ import type {
   IComments,
   ICommentContainer
 } from './IComment';
-import type { IItem, ItemsResponse, ItemResponse } from './IItem';
+import type {
+  IItem,
+  ItemsResponse,
+  ItemResponse,
+  FullDataResponse
+} from './IItem';
 import type {
   ILike,
   ILikesResponse,
@@ -67,6 +73,11 @@ import type { IErrorAlert } from './IAlert';
 import type { ICardContainer } from './ICardContainer';
 import type { IEditTextComponent } from './IEditText';
 import type { IItemProps } from './IItemProps';
+import type {
+  ILargestCollections,
+  ILastAddedItems,
+  IStatisticsContainer
+} from './IStatistics';
 
 export type {
   IFullData,
@@ -127,5 +138,10 @@ export type {
   IEditTextComponent,
   IItemProps,
   ITags,
-  ILikeButton
+  ILikeButton,
+  ILargestCollections,
+  ILastAddedItems,
+  IStatisticsContainer,
+  FullDataResponse,
+  ICollectionWrapper
 };

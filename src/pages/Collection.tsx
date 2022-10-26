@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Container, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { CollectionService, ItemService } from '../API';
+import { CollectionService } from '../API';
 import {
   ItemContainer,
   CreateItemForm,
@@ -9,7 +9,8 @@ import {
   CollectionContainer,
   PageLayout,
   Filter,
-  SortComponent
+  SortComponent,
+  CollectionWrapper
 } from '../components';
 import { IFullData, IComment, ICollection } from '../models';
 import SocketContext from '../context/SocketContext';
@@ -23,12 +24,7 @@ const Collection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [additionalProps, setAdditionalProps] = useState('');
-  const {
-    items: contextItems,
-    collections,
-    likes,
-    comments
-  } = useContext(SocketContext).SocketState;
+  const { collections } = useContext(SocketContext).SocketState;
   const { byLikes, byComment, likesCount, commentsCount } = useAppSelector(
     (state) => state.filter
   );
@@ -37,15 +33,7 @@ const Collection = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const itemsData = (await ItemService.getItems()).data.data;
         const dBcollection = (await CollectionService.getCollection(id!)).data;
-        if (id) {
-          const currentItems = itemsData.filter(
-            ({ data }) => data.collectionId === id
-          );
-          setItems(currentItems);
-          setFilteredItems(currentItems);
-        }
         if (dBcollection) {
           setAdditionalProps(dBcollection.data.additionalInputs!);
           setCollection(dBcollection.data);
@@ -57,7 +45,7 @@ const Collection = () => {
       }
     };
     fetchData();
-  }, [contextItems, collections, likes, comments]);
+  }, [collections]);
 
   const toggleModal = () => setShow(!show);
 
@@ -87,21 +75,26 @@ const Collection = () => {
         </Form>
       </Container>
       <PageLayout>
-        <>
-          {filteredItems.map(({ data, likes, comments }, index) => {
-            const { count } = likes;
-            return (
-              isVisisble(Number(count), comments) && (
-                <ItemContainer
-                  key={index}
-                  data={data}
-                  likes={likes}
-                  comments={comments}
-                />
-              )
-            );
-          })}
-        </>
+        <CollectionWrapper
+          setItems={setItems}
+          setFilteredItems={setFilteredItems}
+        >
+          <>
+            {filteredItems.map(({ data, likes, comments }, index) => {
+              const { count } = likes;
+              return (
+                isVisisble(Number(count), comments) && (
+                  <ItemContainer
+                    key={index}
+                    data={data}
+                    likes={likes}
+                    comments={comments}
+                  />
+                )
+              );
+            })}
+          </>
+        </CollectionWrapper>
       </PageLayout>
       <Modal show={show} onHide={toggleModal}>
         <CreateItemForm

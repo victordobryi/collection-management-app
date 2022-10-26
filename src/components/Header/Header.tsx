@@ -3,8 +3,9 @@ import { Navbar, Nav, Container, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { SearchResults, Search, NavbarContainer } from '../../components';
 import useSearch from '../../search-hooks/useSearch';
-import { ItemService } from '../../API';
+import { FullDataService, ItemService } from '../../API';
 import { IItem, IComment } from '../../models';
+import './header.scss';
 
 const Header = () => {
   const [items, setItems] = useState<IItem[]>([]);
@@ -13,7 +14,7 @@ const Header = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const items = (await ItemService.getItems()).data.data;
+        const items = (await FullDataService.getFullData()).data.data;
         items.map(({ data }) => setItems((items) => [...items, data]));
         items.map(({ comments }) => {
           if (comments.length) {

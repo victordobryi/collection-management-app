@@ -1,5 +1,3 @@
-import { ILikedUsers } from './IUser';
-
 export interface ILike {
   id?: string;
   postId?: string;
@@ -18,8 +16,6 @@ export interface ILikeResponse {
 }
 
 export interface ILikeButton {
-  isLiked: boolean;
-  likedUsers: ILikedUsers[];
-  count: number;
-  likeId: string;
+  likeId: string | undefined;
+  itemId: string;
 }

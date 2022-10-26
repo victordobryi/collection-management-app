@@ -1,3 +1,6 @@
+import { ReactElement } from 'react';
+import { IFullData } from './IFullData';
+
 export interface ICollection {
   id?: string;
   userId?: string;
@@ -25,4 +28,10 @@ export interface ICollectionContainer {
 
 export interface ISortedCollectionsKeys {
   [key: string]: number;
+}
+
+export interface ICollectionWrapper {
+  setItems: React.Dispatch<React.SetStateAction<IFullData[]>>;
+  setFilteredItems: React.Dispatch<React.SetStateAction<IFullData[]>>;
+  children: ReactElement;
 }

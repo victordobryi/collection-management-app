@@ -42,9 +42,9 @@ export const DeleteItem = async ({ collectionId, itemId }: IDeletedItem) => {
   if (collectionId) {
     const items = (await ItemService.getItems()).data.data;
     const deletedItems = items.filter(
-      ({ data }) => data.collectionId === collectionId
+      (data) => data.collectionId === collectionId
     );
-    deletedItems.forEach(({ data }) => ItemService.deleteItem(String(data.id)));
+    deletedItems.forEach((data) => ItemService.deleteItem(String(data.id)));
   }
   if (itemId) {
     await ItemService.deleteItem(itemId);
