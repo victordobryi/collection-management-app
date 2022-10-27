@@ -9,9 +9,12 @@ import { AdminPanelTable } from '../components';
 
 const AdminPanel = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error>();
   const dispatch = useAppDispatch();
   const { users } = useContext(SocketContext).SocketState;
   const { setUsers } = userSlice.actions;
+
+  if (error) throw new Error(error.message);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -20,7 +23,7 @@ const AdminPanel = () => {
         const users = (await UserService.getUsers()).data;
         dispatch(setUsers(users.data));
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }

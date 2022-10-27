@@ -1,11 +1,11 @@
 import React from 'react';
 import { ILastAddedItems } from '../../models';
-import { ItemContainer, Statistics } from '../../components';
+import { ItemContainer, Statistics, ErrorWrapper } from '../../components';
 
 const LastAddedItems = ({ items }: ILastAddedItems) => {
   return (
     <Statistics title="Last Added Items">
-      <>
+      <ErrorWrapper>
         {items.map(({ data, likes, comments }, index) =>
           index < 5 ? (
             <ItemContainer
@@ -16,7 +16,7 @@ const LastAddedItems = ({ items }: ILastAddedItems) => {
             />
           ) : null
         )}
-      </>
+      </ErrorWrapper>
     </Statistics>
   );
 };

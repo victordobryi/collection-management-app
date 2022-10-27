@@ -14,9 +14,14 @@ const Main = () => {
   const [items, setItems] = useState<IFullData[]>([]);
   const [collections, setCollections] = useState<ICollection[]>([]);
   const [reset, setReset] = useState(false);
+  const [error, setError] = useState<Error>();
   const { items: contextItems } = useContext(SocketContext).SocketState;
   const { collections: contextCollections } =
     useContext(SocketContext).SocketState;
+
+  if (error) {
+    throw new Error(error.message);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +48,7 @@ const Main = () => {
         }
         setCollections(arr);
       } catch (error) {
-        if (error instanceof Error) throw new Error(error.message);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }

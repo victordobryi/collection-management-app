@@ -8,7 +8,8 @@ import {
   CreateCollectionForm,
   UserContainer,
   ContainerButtons,
-  PageLayout
+  PageLayout,
+  ErrorWrapper
 } from '../components';
 import SocketContext from '../context/SocketContext';
 
@@ -19,8 +20,11 @@ const User = () => {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [error, setError] = useState<Error>();
   const { collections: contextCollections, users } =
     useContext(SocketContext).SocketState;
+
+  if (error) throw new Error(error.message);
 
   const handleClose = () => {
     setShow(false);
@@ -47,7 +51,7 @@ const User = () => {
           setUser(dbUser);
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -66,7 +70,9 @@ const User = () => {
       />
       <Container>
         {user ? (
-          <UserContainer user={user} setIsLoading={setIsLoading} />
+          <ErrorWrapper>
+            <UserContainer user={user} setIsLoading={setIsLoading} />
+          </ErrorWrapper>
         ) : null}
       </Container>
       <PageLayout>

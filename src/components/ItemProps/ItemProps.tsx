@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { onSaveProps } from 'react-edit-text';
 import { IItemProps } from '../../models';
 import { FormSelect, EditTextComponent } from '../../components';
@@ -7,24 +7,31 @@ import SocketContext from '../../context/SocketContext';
 
 const ItemProps = ({ data, id, isUser, hovered, newInputs }: IItemProps) => {
   const { socket } = useContext(SocketContext).SocketState;
+  const [error, setError] = useState<Error>();
+
+  if (error) throw new Error(error.message);
+
   const handleSave = async ({ name, value }: onSaveProps) => {
-    console.log(name, value);
-    await ItemService.updateItem(
-      {
-        additionalInputs: JSON.stringify({ ...newInputs, [name]: value })
-      },
-      String(id)
-    );
-    if (socket) {
-      socket.emit(
-        'update_CurrentItem',
-        JSON.stringify({
-          additionalInputs: JSON.stringify({
-            ...newInputs,
-            [name]: value
-          })
-        })
+    try {
+      await ItemService.updateItem(
+        {
+          additionalInputs: JSON.stringify({ ...newInputs, [name]: value })
+        },
+        String(id)
       );
+      if (socket) {
+        socket.emit(
+          'update_CurrentItem',
+          JSON.stringify({
+            additionalInputs: JSON.stringify({
+              ...newInputs,
+              [name]: value
+            })
+          })
+        );
+      }
+    } catch (error) {
+      if (error instanceof Error) setError(error);
     }
   };
 

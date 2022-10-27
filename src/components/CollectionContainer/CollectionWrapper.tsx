@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FullDataService } from '../../API';
 import { ICollectionWrapper } from '../../models';
@@ -11,6 +11,9 @@ const CollectionWrapper = ({
 }: ICollectionWrapper) => {
   const { id } = useParams();
   const { collections } = useContext(SocketContext).SocketState;
+  const [error, setError] = useState<Error>();
+
+  if (error) throw new Error(error.message);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +27,7 @@ const CollectionWrapper = ({
           setFilteredItems(currentItems);
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       }
     };
     fetchData();

@@ -16,7 +16,9 @@ export const Users = () => {
               <>
                 {resolvedUsers.map((user) =>
                   user.username !== 'admin' ? (
-                    <UserContainer key={user.id} user={user} />
+                    <ErrorWrapper>
+                      <UserContainer key={user.id} user={user} />
+                    </ErrorWrapper>
                   ) : null
                 )}
               </>

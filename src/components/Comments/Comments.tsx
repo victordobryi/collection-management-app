@@ -3,16 +3,19 @@ import { Button, Container, Row } from 'react-bootstrap';
 import UserService from '../../API/UserService';
 import SocketContext from '../../context/SocketContext';
 import { IComment, IComments, IUser } from '../../models';
-import { Comment, CommentModal } from '../../components';
+import { Comment, CommentModal, ErrorWrapper } from '../../components';
 import { useTranslation } from 'react-i18next';
 import { CommentService } from '../../API';
 
 const Comments = ({ userId, itemId }: IComments) => {
   const [user, setUser] = useState<IUser>();
   const [show, setShow] = useState(false);
+  const [error, setError] = useState<Error>();
   const [currentComments, setCurrentComments] = useState<IComment[]>([]);
   const { comments } = useContext(SocketContext).SocketState;
   const { t } = useTranslation();
+
+  if (error) throw new Error(error.message);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +35,7 @@ const Comments = ({ userId, itemId }: IComments) => {
           )
         );
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       }
     };
     fetchData();
@@ -57,12 +60,14 @@ const Comments = ({ userId, itemId }: IComments) => {
           ))}
         </Row>
       </Container>
-      <CommentModal
-        show={show}
-        handleClose={handleClose}
-        currentUser={user}
-        itemId={itemId}
-      />
+      <ErrorWrapper>
+        <CommentModal
+          show={show}
+          handleClose={handleClose}
+          currentUser={user}
+          itemId={itemId}
+        />
+      </ErrorWrapper>
     </>
   );
 };

@@ -11,7 +11,10 @@ const ItemContainer = ({ data, likes }: IFullData) => {
   const { id: likesId } = likes;
   const { additionalInputs, createTime, id, img, title, tags } = data;
   const [itemTags, setItemTags] = useState<ITag[]>([]);
+  const [error, setError] = useState<Error>();
   const navigate = useNavigate();
+
+  if (error) throw new Error(error.message);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,14 +22,14 @@ const ItemContainer = ({ data, likes }: IFullData) => {
         const itemTags = JSON.parse(String(tags));
         setItemTags(itemTags);
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       }
     };
     fetchData();
   }, []);
 
   const newData: INewInputsData[] = getNewInputsData(
-    JSON.parse(additionalInputs!)
+    JSON.parse(String(additionalInputs))
   );
 
   const goToItem = () => navigate(`/item/${id}`);

@@ -24,6 +24,9 @@ const CreateItemForm = ({
   const { socket } = useContext(SocketContext).SocketState;
   const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState<ITag[]>([]);
+  const [error, setError] = useState<Error>();
+
+  if (error) throw new Error(error.message);
 
   const createItem = async () => {
     handleClose();
@@ -51,7 +54,7 @@ const CreateItemForm = ({
         socket.emit('add_NewItem', JSON.stringify(item));
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) setError(error);
     } finally {
       setLoading(false);
       setNewInputsData([]);
