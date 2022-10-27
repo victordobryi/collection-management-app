@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { LargestCollections, LastAddedItems } from '../components';
+import {
+  LargestCollections,
+  LastAddedItems,
+  ErrorWrapper
+} from '../components';
 import { Spinner } from 'react-bootstrap';
 import { CollectionService, FullDataService } from '../API';
 import { ICollection, IFullData, ISortedCollectionsKeys } from '../models';
@@ -9,6 +13,7 @@ const Main = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<IFullData[]>([]);
   const [collections, setCollections] = useState<ICollection[]>([]);
+  const [reset, setReset] = useState(false);
   const { items: contextItems } = useContext(SocketContext).SocketState;
   const { collections: contextCollections } =
     useContext(SocketContext).SocketState;
@@ -38,20 +43,24 @@ const Main = () => {
         }
         setCollections(arr);
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) throw new Error(error.message);
       } finally {
         setIsLoading(false);
       }
     };
     fetchData();
-  }, [contextItems, contextCollections]);
+  }, [contextItems, contextCollections, reset]);
 
   return isLoading ? (
     <Spinner animation="border" role="status" />
   ) : (
     <>
-      <LastAddedItems items={items} />
-      <LargestCollections collections={collections} />
+      <ErrorWrapper onReset={() => setReset(!reset)}>
+        <LastAddedItems items={items} />
+      </ErrorWrapper>
+      <ErrorWrapper onReset={() => setReset(!reset)}>
+        <LargestCollections collections={collections} />
+      </ErrorWrapper>
     </>
   );
 };

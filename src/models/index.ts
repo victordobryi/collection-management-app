@@ -78,6 +78,7 @@ import type {
   ILastAddedItems,
   IStatisticsContainer
 } from './IStatistics';
+import type { IErrorFallback, IErrorWrapper } from './IError';
 
 export type {
   IFullData,
@@ -143,5 +144,7 @@ export type {
   ILastAddedItems,
   IStatisticsContainer,
   FullDataResponse,
-  ICollectionWrapper
+  ICollectionWrapper,
+  IErrorFallback,
+  IErrorWrapper
 };

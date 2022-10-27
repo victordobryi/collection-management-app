@@ -12,4 +12,5 @@ export interface ICardContainer {
   deleteElem: () => Promise<void>;
   setHovered: React.Dispatch<React.SetStateAction<boolean>>;
   hovered: boolean;
+  isAvatar?: boolean;
 }

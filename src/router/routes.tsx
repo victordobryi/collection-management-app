@@ -5,15 +5,18 @@ import {
   Item,
   Login,
   Main,
-  Error,
+  NotFound,
   Signup,
   User,
   Users
 } from '../pages';
+import { RequireAuth } from './requireAuth';
+import { usersLoader } from '../pages/Users';
 
 interface IRoutes {
   path: string;
-  component: React.ReactNode;
+  component: React.ReactElement;
+  loader?: () => Promise<DeferredData>;
 }
 
 export enum RoutesName {
@@ -28,18 +31,27 @@ export enum RoutesName {
   MY_PAGE = '/user/:id'
 }
 
-export const publicRoutes: IRoutes[] = [
+export const routes: IRoutes[] = [
   {
     path: RoutesName.LOGIN,
-    component: <Login />
+    component: (
+      <RequireAuth>
+        <Login />
+      </RequireAuth>
+    )
   },
   {
     path: RoutesName.SIGNUP,
-    component: <Signup />
+    component: (
+      <RequireAuth>
+        <Signup />
+      </RequireAuth>
+    )
   },
   {
     path: RoutesName.USERS,
-    component: <Users />
+    component: <Users />,
+    loader: usersLoader
   },
   {
     path: RoutesName.MAIN,
@@ -50,43 +62,8 @@ export const publicRoutes: IRoutes[] = [
     component: <User />
   },
   {
-    path: RoutesName.ITEM,
-    component: <Item />
-  },
-  {
-    path: RoutesName.COLLECTION,
-    component: <Collection />
-  },
-  {
-    path: '/',
-    component: <Navigate to="/main" />
-  },
-  {
-    path: '*',
-    component: <Error />
-  }
-];
-
-export const privateRoutes: IRoutes[] = [
-  {
-    path: RoutesName.LOGIN,
-    component: <Navigate to={RoutesName.USERS} />
-  },
-  {
-    path: RoutesName.SIGNUP,
-    component: <Navigate to={RoutesName.USERS} />
-  },
-  {
     path: RoutesName.USERS,
     component: <Users />
-  },
-  {
-    path: RoutesName.MAIN,
-    component: <Main />
-  },
-  {
-    path: RoutesName.USER,
-    component: <User />
   },
   {
     path: RoutesName.ITEM,
@@ -98,50 +75,19 @@ export const privateRoutes: IRoutes[] = [
   },
   {
     path: RoutesName.MY_PAGE,
-    component: <User />
-  },
-  {
-    path: '/',
-    component: <Navigate to="/main" />
-  },
-  {
-    path: '*',
-    component: <Error />
-  }
-];
-
-export const adminRoutes: IRoutes[] = [
-  {
-    path: RoutesName.LOGIN,
-    component: <Navigate to={RoutesName.ADMIN_PANEL} />
+    component: (
+      <RequireAuth>
+        <User />
+      </RequireAuth>
+    )
   },
   {
     path: RoutesName.ADMIN_PANEL,
-    component: <AdminPanel />
-  },
-  {
-    path: RoutesName.USERS,
-    component: <Users />
-  },
-  {
-    path: RoutesName.MAIN,
-    component: <Main />
-  },
-  {
-    path: RoutesName.USER,
-    component: <User />
-  },
-  {
-    path: RoutesName.MY_PAGE,
-    component: <User />
-  },
-  {
-    path: RoutesName.ITEM,
-    component: <Item />
-  },
-  {
-    path: RoutesName.COLLECTION,
-    component: <Collection />
+    component: (
+      <RequireAuth>
+        <AdminPanel />
+      </RequireAuth>
+    )
   },
   {
     path: '/',
@@ -149,6 +95,6 @@ export const adminRoutes: IRoutes[] = [
   },
   {
     path: '*',
-    component: <Error />
+    component: <NotFound />
   }
 ];

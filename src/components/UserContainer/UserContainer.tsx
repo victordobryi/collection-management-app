@@ -94,6 +94,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
         img={img}
         hovered={hovered}
         setHovered={setHovered}
+        isAvatar
       >
         <EditTextComponent
           hovered={hovered}

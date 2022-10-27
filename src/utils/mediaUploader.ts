@@ -19,7 +19,7 @@ export const mediaUploader = async (files: File[], folder: string) => {
       const data = await res.json();
       media.push(data.secure_url);
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
     }
   }
   return media;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
-import Avatar from 'react-avatar';
 import { IFullData, ITag, INewInputsData } from '../../models';
 import { getCurrentDate, getNewInputsData } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { Tags, Like } from '../../components';
 import './item-container.scss';
+import LazyLoadImg from '../LazyLoadImg';
 
 const ItemContainer = ({ data, likes }: IFullData) => {
   const { id: likesId } = likes;
@@ -33,7 +33,11 @@ const ItemContainer = ({ data, likes }: IFullData) => {
 
   return (
     <Card className="card-container">
-      <Avatar name={title} size="250" src={img} onClick={goToItem} />
+      <LazyLoadImg
+        image={String(img)}
+        className="card-img"
+        onClick={goToItem}
+      />
       <Card.Body onClick={goToItem}>
         <Card.Title>{title}</Card.Title>
         {newData.map(({ name, value }, index) => (
