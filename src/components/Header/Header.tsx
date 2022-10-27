@@ -3,7 +3,7 @@ import { Navbar, Nav, Container, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { SearchResults, Search, NavbarContainer } from '../../components';
 import useSearch from '../../search-hooks/useSearch';
-import { FullDataService, ItemService } from '../../API';
+import { FullDataService } from '../../API';
 import { IItem, IComment } from '../../models';
 import './header.scss';
 
@@ -22,7 +22,7 @@ const Header = () => {
           }
         });
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) throw new Error(error.message);
       }
     };
     fetchUsers();

@@ -56,7 +56,7 @@ const CollectionContainer = ({
           );
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) throw new Error(error.message);
       } finally {
         setIsLoading(false);
       }
@@ -73,7 +73,7 @@ const CollectionContainer = ({
         );
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
     }
   };
 
@@ -90,7 +90,7 @@ const CollectionContainer = ({
         );
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
     }
   };
 
@@ -100,7 +100,7 @@ const CollectionContainer = ({
         setIsLoading(true);
         await DeleteCollection({ collectionId: String(id) });
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) throw new Error(error.message);
       } finally {
         prev.goBack();
         setIsLoading(false);

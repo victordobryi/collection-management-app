@@ -1,30 +1,24 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { useAppSelector } from '../redux-hooks';
-import { adminRoutes, privateRoutes, publicRoutes } from './routes';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route
+} from 'react-router-dom';
+import { ErrorWrapper } from '../components';
+import Layout from '../components/Layout/Layout';
+import { routes } from './routes';
 
-const AppRouter = () => {
-  const { isAuth, isAdmin } = useAppSelector((state) => state.auth);
-
-  return isAuth && isAdmin ? (
-    <Routes>
-      {adminRoutes.map(({ path, component }, index) => (
-        <Route key={index} path={path} element={component} />
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />}>
+      {routes.map(({ path, component, loader }, index) => (
+        <Route
+          key={index}
+          path={path}
+          element={<ErrorWrapper>{component}</ErrorWrapper>}
+          loader={loader}
+        />
       ))}
-    </Routes>
-  ) : isAuth && !isAdmin ? (
-    <Routes>
-      {privateRoutes.map(({ path, component }, index) => (
-        <Route key={index} path={path} element={component} />
-      ))}
-    </Routes>
-  ) : (
-    <Routes>
-      {publicRoutes.map(({ path, component }, index) => (
-        <Route key={index} path={path} element={component} />
-      ))}
-    </Routes>
-  );
-};
-
-export default AppRouter;
+    </Route>
+  )
+);

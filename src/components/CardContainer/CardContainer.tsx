@@ -4,6 +4,7 @@ import { Card, Form } from 'react-bootstrap';
 import { AiOutlineClose } from 'react-icons/ai';
 import { DropImageZone, ConfirmModal } from '../../components';
 import { ICardContainer } from '../../models';
+import LazyLoadImg from '../LazyLoadImg';
 import './card-container.scss';
 
 const CardContainer = ({
@@ -19,7 +20,8 @@ const CardContainer = ({
   isRound = false,
   deleteElem,
   setHovered,
-  hovered
+  hovered,
+  isAvatar = false
 }: ICardContainer) => {
   const [show, setShow] = useState(false);
 
@@ -50,12 +52,18 @@ const CardContainer = ({
                 isUser && sectionName === containerName ? 'auto' : 'none'
             }}
           >
-            <Avatar
-              name={title}
-              size="130"
-              src={img}
-              round={isRound ? '100%' : 'none'}
-            />
+            {isAvatar ? (
+              <Avatar
+                name={title}
+                size="400"
+                src={img}
+                round={isRound ? '100%' : 'none'}
+                className="card-img"
+              />
+            ) : (
+              <LazyLoadImg image={String(img)} className="card-img" />
+            )}
+
             <DropImageZone setFiles={setFiles} isVisible={false} />
           </Form>
         </Card.Header>

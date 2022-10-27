@@ -39,6 +39,8 @@ import Tags from './Tags/Tags';
 import Like from './Like/Like';
 import Statistics from './Statistics/Statistics';
 import CollectionWrapper from './CollectionContainer/CollectionWrapper';
+import ErrorFallback from './ErrorFallback/ErrorFallback';
+import ErrorWrapper from './ErrorFallback/ErrorWrapper';
 
 export {
   UserContainer,
@@ -81,5 +83,7 @@ export {
   Tags,
   Like,
   Statistics,
-  CollectionWrapper
+  CollectionWrapper,
+  ErrorFallback,
+  ErrorWrapper
 };

@@ -1,47 +1,40 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
-import { useAppDispatch, useAppSelector } from '../redux-hooks';
-import { authSlice } from '../store/reducers/auth';
-import SocketContext from '../context/SocketContext';
 import { UserService } from '../API';
-import { UserContainer } from '../components';
-import { IUser } from '../models';
+import { ErrorWrapper, UserContainer } from '../components';
+import { Await, defer, useLoaderData } from 'react-router-dom';
 
-const Users = () => {
-  const [usersFromDb, setUsersFromDb] = useState<IUser[]>([]);
-  const { setLoading } = authSlice.actions;
-  const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((state) => state.auth);
-  const { users } = useContext(SocketContext).SocketState;
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        dispatch(setLoading(true));
-        const users = (await UserService.getUsers()).data;
-        setUsersFromDb(users.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-    fetchUsers();
-  }, [users]);
+export const Users = () => {
+  const { users } = useLoaderData();
 
   return (
     <Row className="d-flex flex-wrap gap-3">
-      {isLoading ? (
-        <Spinner animation="border" role="status" />
-      ) : (
-        usersFromDb.map((user) =>
-          user.username !== 'admin' ? (
-            <UserContainer key={user.id} user={user} />
-          ) : null
-        )
-      )}
+      <ErrorWrapper>
+        <Suspense fallback={<Spinner animation="border" role="status" />}>
+          <Await resolve={users}>
+            {(resolvedUsers) => (
+              <>
+                {resolvedUsers.map((user) =>
+                  user.username !== 'admin' ? (
+                    <UserContainer key={user.id} user={user} />
+                  ) : null
+                )}
+              </>
+            )}
+          </Await>
+        </Suspense>
+      </ErrorWrapper>
     </Row>
   );
 };
 
-export default Users;
+const getUsers = async () => {
+  const users = (await UserService.getUsers()).data;
+  return users.data;
+};
+
+export const usersLoader = async () => {
+  return defer({
+    users: getUsers()
+  });
+};
