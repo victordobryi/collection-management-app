@@ -5,7 +5,7 @@ import { getCurrentDate, getNewInputsData } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { Tags, Like } from '../../components';
 import './item-container.scss';
-import LazyLoadImg from '../LazyLoadImg';
+import LazyLoadImg from '../LazyLoadImg/LazyLoadImg';
 
 const ItemContainer = ({ data, likes }: IFullData) => {
   const { id: likesId } = likes;

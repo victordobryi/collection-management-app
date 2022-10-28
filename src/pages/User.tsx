@@ -93,7 +93,7 @@ const User = () => {
       >
         <CreateCollectionForm
           handleClose={handleClose}
-          userId={id!}
+          userId={String(id)}
           setLoading={setIsLoading}
           setIsVisible={setIsVisible}
         />

@@ -4,7 +4,7 @@ import { Card, Form } from 'react-bootstrap';
 import { AiOutlineClose } from 'react-icons/ai';
 import { DropImageZone, ConfirmModal } from '../../components';
 import { ICardContainer } from '../../models';
-import LazyLoadImg from '../LazyLoadImg';
+import LazyLoadImg from '../LazyLoadImg/LazyLoadImg';
 import './card-container.scss';
 
 const CardContainer = ({

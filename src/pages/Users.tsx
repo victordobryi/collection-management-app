@@ -13,15 +13,13 @@ export const Users = () => {
         <Suspense fallback={<Spinner animation="border" role="status" />}>
           <Await resolve={users}>
             {(resolvedUsers) => (
-              <>
+              <ErrorWrapper>
                 {resolvedUsers.map((user) =>
                   user.username !== 'admin' ? (
-                    <ErrorWrapper>
-                      <UserContainer key={user.id} user={user} />
-                    </ErrorWrapper>
+                    <UserContainer key={user.id} user={user} />
                   ) : null
                 )}
-              </>
+              </ErrorWrapper>
             )}
           </Await>
         </Suspense>

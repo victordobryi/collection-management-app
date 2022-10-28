@@ -10,12 +10,10 @@ const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
   const [more, setMore] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
-
   const goToItem = (id: string) => {
     navigate(`/item/${id}`);
     setSearchValue('');
   };
-
   return (
     <ListGroup className="results__field">
       {results.map((result, index) => {
@@ -25,6 +23,7 @@ const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
             <SearchResult
               onClick={() => goToItem(toItemId ? toItemId : String(id))}
               result={result}
+              value={value}
             />
           )
         );

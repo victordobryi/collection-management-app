@@ -8,8 +8,7 @@ import { authSlice } from '../../store/reducers/auth';
 import { useTranslation, Trans } from 'react-i18next';
 import SocketContext from '../../context/SocketContext';
 import { ILogin } from '../../models';
-import ErrorAlert from '../ErrorAlert/ErrorAlert';
-import { RegistrationFormItem } from '../../components';
+import { RegistrationFormItem, ErrorAlert } from '../../components';
 
 const RegistrationForm = ({ type }: ILogin) => {
   const { error, isLoading } = useAppSelector((state) => state.auth);

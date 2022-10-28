@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { CollectionService } from '../../API';
@@ -13,9 +13,12 @@ import {
   DropImageZone,
   FormItem,
   FormSelect,
-  ModalContainer
+  ModalContainer,
+  ErrorAlert
 } from '../../components';
 import SocketContext from '../../context/SocketContext';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
+import { authSlice } from '../../store/reducers/auth';
 
 const CreateCollectionForm = ({
   handleClose,
@@ -31,6 +34,15 @@ const CreateCollectionForm = ({
   const [additionalProps, setAdditionalProps] = useState<INewInputsProps[]>([]);
   const { t } = useTranslation();
   const { socket } = useContext(SocketContext).SocketState;
+  const { error } = useAppSelector((state) => state.auth);
+  const { setError } = authSlice.actions;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    window.setTimeout(() => {
+      dispatch(setError(''));
+    }, 5000);
+  }, [error]);
 
   const createCollection = async () => {
     setLoading(true);
@@ -50,7 +62,7 @@ const CreateCollectionForm = ({
         socket.emit('add_NewCollection', JSON.stringify(collection));
       }
     } catch (error) {
-      throw new Error('error');
+      if (error instanceof Error) setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -114,6 +126,12 @@ const CreateCollectionForm = ({
           </Form>
         </>
       </ModalContainer>
+      {error && (
+        <ErrorAlert
+          errorMessage={error}
+          setError={() => dispatch(authSlice.actions.setError(''))}
+        />
+      )}
     </>
   );
 };

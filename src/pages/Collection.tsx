@@ -92,14 +92,12 @@ const Collection = () => {
                 const { count } = likes;
                 return (
                   isVisisble(Number(count), comments) && (
-                    <ErrorWrapper>
-                      <ItemContainer
-                        key={index}
-                        data={data}
-                        likes={likes}
-                        comments={comments}
-                      />
-                    </ErrorWrapper>
+                    <ItemContainer
+                      key={index}
+                      data={data}
+                      likes={likes}
+                      comments={comments}
+                    />
                   )
                 );
               })}

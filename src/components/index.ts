@@ -41,6 +41,8 @@ import Statistics from './Statistics/Statistics';
 import CollectionWrapper from './CollectionContainer/CollectionWrapper';
 import ErrorFallback from './ErrorFallback/ErrorFallback';
 import ErrorWrapper from './ErrorFallback/ErrorWrapper';
+import ErrorAlert from './ErrorAlert/ErrorAlert';
+import LazyLoadImg from './LazyLoadImg/LazyLoadImg';
 
 export {
   UserContainer,
@@ -85,5 +87,7 @@ export {
   Statistics,
   CollectionWrapper,
   ErrorFallback,
-  ErrorWrapper
+  ErrorWrapper,
+  ErrorAlert,
+  LazyLoadImg
 };

@@ -15,4 +15,5 @@ export interface ISearchResults {
 export interface ISearchResult {
   onClick: () => void;
   result: IItem & IComment;
+  value: string;
 }
