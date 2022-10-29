@@ -5,9 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { ISearchResults } from '../../models';
 import { SearchResult } from '../../components';
 import './search-results.scss';
+import { useAppSelector } from '../../redux-hooks';
 
-const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
+const SearchResults = ({ results, setSearchValue }: ISearchResults) => {
   const [more, setMore] = useState(false);
+  const { value } = useAppSelector((state) => state.search);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const goToItem = (id: string) => {
@@ -23,7 +25,6 @@ const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
             <SearchResult
               onClick={() => goToItem(toItemId ? toItemId : String(id))}
               result={result}
-              value={value}
             />
           )
         );

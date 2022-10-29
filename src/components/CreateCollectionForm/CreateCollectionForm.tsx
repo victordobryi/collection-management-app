@@ -94,18 +94,24 @@ const CreateCollectionForm = ({
       >
         <>
           <Form>
-            <FormItem type="text" label="Title" onChange={setTitle} />
+            <FormItem
+              value={title}
+              type="text"
+              label="Title"
+              onChange={setTitle}
+            />
             <FormItem
               type="textarea"
               label="Description"
               onChange={setDescription}
+              value={description}
             />
             <FormSelect
               onChange={setTheme}
               defaultValue="Select a category"
               options={[
                 { value: 'Comics' },
-                { value: 'Card' },
+                { value: 'Cards' },
                 { value: 'Figures' }
               ]}
             />

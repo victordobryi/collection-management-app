@@ -36,16 +36,20 @@ const ItemContainer = ({ data, likes }: IFullData) => {
 
   return (
     <Card className="card-container">
-      <LazyLoadImg
-        image={String(img)}
-        className="card-img"
-        onClick={goToItem}
-      />
-      <Card.Body onClick={goToItem}>
+      <Card.Header className="card-container__header card-img-top">
+        <LazyLoadImg
+          image={String(img)}
+          className="card-img"
+          onClick={goToItem}
+        />
+      </Card.Header>
+      <Card.Body className="item-body" onClick={goToItem}>
         <Card.Title>{title}</Card.Title>
-        {newData.map(({ name, value }, index) => (
-          <Card.Text key={index}>{`${name}: ${value}`}</Card.Text>
-        ))}
+        <div className="item-descriptions">
+          {newData.map(({ name, value }, index) => (
+            <Card.Text key={index}>{`${name}: ${value}`}</Card.Text>
+          ))}
+        </div>
       </Card.Body>
       <Like likeId={String(likesId)} itemId={String(data.id)} />
       <Tags data={itemTags} />

@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
 import { CardContainer, EditTextComponent } from '../../components';
 import { DeleteUser, mediaUploader } from '../../utils';
+import { Col } from 'react-bootstrap';
 
 const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { username, img, id } = user;
@@ -84,7 +85,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   };
 
   return (
-    <>
+    <Col>
       <CardContainer
         onClick={goToUser}
         isOnPage={Boolean(userId)}
@@ -108,7 +109,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
           onBlur={changeName}
         />
       </CardContainer>
-    </>
+    </Col>
   );
 };
 

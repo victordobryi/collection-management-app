@@ -8,23 +8,25 @@ export const Users = () => {
   const { users } = useLoaderData();
 
   return (
-    <Row className="d-flex flex-wrap gap-3">
+    <>
       <ErrorWrapper>
         <Suspense fallback={<Spinner animation="border" role="status" />}>
           <Await resolve={users}>
             {(resolvedUsers) => (
               <ErrorWrapper>
-                {resolvedUsers.map((user) =>
-                  user.username !== 'admin' ? (
-                    <UserContainer key={user.id} user={user} />
-                  ) : null
-                )}
+                <Row xl={5} lg={4} md={3} sm={2} xs={1} className="w-100">
+                  {resolvedUsers.map((user) =>
+                    user.username !== 'admin' ? (
+                      <UserContainer key={user.id} user={user} />
+                    ) : null
+                  )}
+                </Row>
               </ErrorWrapper>
             )}
           </Await>
         </Suspense>
       </ErrorWrapper>
-    </Row>
+    </>
   );
 };
 

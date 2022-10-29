@@ -3,45 +3,20 @@ import { ListGroup } from 'react-bootstrap';
 import { ISearchResult, ITag } from '../../models';
 import { useTranslation } from 'react-i18next';
 import Highlighter from 'react-highlight-words';
+import SearchResultItem from './SearchResultItem';
+import { useAppSelector } from '../../redux-hooks';
 
-const SearchResult = ({ onClick, result, value }: ISearchResult) => {
+const SearchResult = ({ onClick, result }: ISearchResult) => {
   const { t } = useTranslation();
+  const { value } = useAppSelector((state) => state.search);
   const { title, tags, comment, fromUserName } = result;
   const itemTags: ITag[] = tags ? JSON.parse(String(tags)) : [];
   return (
     <ListGroup.Item onClick={onClick}>
-      {title && (
-        <>
-          <b>{t('Title')}: </b>
-          <Highlighter
-            searchWords={value.split('')}
-            autoEscape={true}
-            textToHighlight={title}
-          />
-          <br />
-        </>
-      )}
-      {comment && (
-        <>
-          <b>{t('Comment')}: </b>{' '}
-          <Highlighter
-            searchWords={value.split('')}
-            autoEscape={true}
-            textToHighlight={comment}
-          />
-          <br />
-        </>
-      )}
+      {title && <SearchResultItem name="Title" itemValue={title} />}
+      {comment && <SearchResultItem name="Comment" itemValue={comment} />}
       {fromUserName && (
-        <>
-          <b>{t('From User name')}: </b>{' '}
-          <Highlighter
-            searchWords={value.split('')}
-            autoEscape={true}
-            textToHighlight={fromUserName}
-          />
-          <br />
-        </>
+        <SearchResultItem name="From User" itemValue={fromUserName} />
       )}
       {itemTags.length ? (
         <>

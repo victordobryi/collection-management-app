@@ -1,6 +1,7 @@
 import React from 'react';
 import { ILastAddedItems } from '../../models';
 import { ItemContainer, Statistics, ErrorWrapper } from '../../components';
+import { Col } from 'react-bootstrap';
 
 const LastAddedItems = ({ items }: ILastAddedItems) => {
   return (
@@ -8,12 +9,9 @@ const LastAddedItems = ({ items }: ILastAddedItems) => {
       <ErrorWrapper>
         {items.map(({ data, likes, comments }, index) =>
           index < 5 ? (
-            <ItemContainer
-              key={index}
-              data={data}
-              likes={likes}
-              comments={comments}
-            />
+            <Col key={index}>
+              <ItemContainer data={data} likes={likes} comments={comments} />
+            </Col>
           ) : null
         )}
       </ErrorWrapper>

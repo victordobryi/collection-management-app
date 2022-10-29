@@ -14,6 +14,7 @@ export interface IFormItem {
   type?: string;
   placeholder?: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
+  value: string;
 }
 
 export interface IFormSelect {

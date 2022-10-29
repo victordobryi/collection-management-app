@@ -34,7 +34,7 @@ const CardContainer = ({
         style={{
           cursor: isOnPage ? 'default' : 'pointer'
         }}
-        className="p-3"
+        className="card-container"
         onMouseEnter={() => (isOnPage ? setHovered(true) : null)}
         onMouseLeave={() => setHovered(false)}
       >
@@ -45,27 +45,24 @@ const CardContainer = ({
           className="card__close"
           onClick={toggleModal}
         />
-        <Card.Header className="card-container__header">
-          <Form
-            style={{
-              pointerEvents:
-                isUser && sectionName === containerName ? 'auto' : 'none'
-            }}
-          >
-            {isAvatar ? (
-              <Avatar
-                name={title}
-                size="400"
-                src={img}
-                round={isRound ? '100%' : 'none'}
-                className="card-img"
-              />
-            ) : (
-              <LazyLoadImg image={String(img)} className="card-img" />
-            )}
-
-            <DropImageZone setFiles={setFiles} isVisible={false} />
-          </Form>
+        <Card.Header
+          className="card-container__header card-img-top"
+          style={{
+            pointerEvents:
+              isUser && sectionName === containerName ? 'auto' : 'none'
+          }}
+        >
+          {isAvatar ? (
+            <Avatar
+              name={title}
+              src={img}
+              round={isRound ? '100%' : 'none'}
+              className="card-img"
+            />
+          ) : (
+            <LazyLoadImg image={String(img)} className="card-img" />
+          )}
+          <DropImageZone setFiles={setFiles} isVisible={false} />
         </Card.Header>
         <Card.Body style={{ pointerEvents: isUser ? 'auto' : 'none' }}>
           {children}

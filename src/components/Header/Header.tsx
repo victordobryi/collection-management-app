@@ -6,10 +6,14 @@ import useSearch from '../../search-hooks/useSearch';
 import { FullDataService } from '../../API';
 import { IItem, IComment } from '../../models';
 import './header.scss';
+import { useAppDispatch } from '../../redux-hooks';
+import { searchSlice } from '../../store/reducers/search';
 
 const Header = () => {
   const [items, setItems] = useState<IItem[]>([]);
   const [comments, setComments] = useState<IComment[]>([]);
+  const dispatch = useAppDispatch();
+  const { setSearchValue: setValue } = searchSlice.actions;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,10 +39,11 @@ const Header = () => {
 
   const searchData = (value: string) => {
     setSearchValue(value);
+    dispatch(setValue(value));
   };
 
   return (
-    <Navbar expand="lg" bg="dark" variant="dark">
+    <Navbar expand="xl" bg="dark" variant="dark">
       <Container className="navbar__container">
         <Navbar.Brand>
           <LinkContainer to="/">
@@ -48,14 +53,9 @@ const Header = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Form className="d-flex ms-auto navbar__form">
-            <Search
-              placeholder="Search"
-              action={searchData}
-              value={searchValue}
-            />
+            <Search placeholder="Search" action={searchData} />
             <SearchResults
               results={searchValue ? results : []}
-              value={searchValue}
               setSearchValue={setSearchValue}
             />
           </Form>

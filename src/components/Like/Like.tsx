@@ -77,7 +77,7 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
   return (
     <Button
       variant="primary"
-      className="my-3"
+      className="item-like"
       onClick={() => {
         isLiked ? removeLike() : addLike();
       }}
@@ -85,8 +85,7 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
         pointerEvents: user.id ? 'auto' : 'none'
       }}
     >
-      {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
-      {count}
+      {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {count}
     </Button>
   );
 };

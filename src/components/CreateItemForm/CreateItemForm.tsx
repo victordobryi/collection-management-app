@@ -80,7 +80,7 @@ const CreateItemForm = ({
         onCreate={createItem}
       >
         <Form>
-          <FormItem label="Title" onChange={setTitle} />
+          <FormItem label="Title" onChange={setTitle} value={title} />
           <TagCreator tags={tags} setTags={setTags} />
           {newInputs.map(({ name, type }, index) => (
             <Form.Group className="mb-3" key={index}>
