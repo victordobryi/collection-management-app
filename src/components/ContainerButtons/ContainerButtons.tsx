@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import UsePrevPage from '../../hooks/UsePrevPage';
 import { IPageLayoutButtons } from '../../models';
 import { useAppSelector } from '../../redux-hooks';
+import './container-buttons.scss';
 
 const ContainerButtons = ({
   createText,
@@ -17,7 +18,7 @@ const ContainerButtons = ({
   const isUserId = localStorageId === userId || isAdmin;
 
   return (
-    <Container className="d-flex justify-content-between my-3">
+    <Container className="d-flex justify-content-between my-3 container-buttons">
       <Button className="align-self-start" onClick={() => prev.goBack()}>
         {t('Go back')}
       </Button>

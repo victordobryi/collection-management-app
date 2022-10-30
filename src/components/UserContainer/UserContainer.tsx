@@ -9,6 +9,7 @@ import { userLogout } from '../../store/action-creators/users';
 import { CardContainer, EditTextComponent } from '../../components';
 import { DeleteUser, mediaUploader } from '../../utils';
 import { Col } from 'react-bootstrap';
+import './user-container.scss';
 
 const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { username, img, id } = user;
@@ -99,6 +100,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
         hovered={hovered}
         setHovered={setHovered}
         isAvatar
+        idName="card-users"
       >
         <EditTextComponent
           hovered={hovered}

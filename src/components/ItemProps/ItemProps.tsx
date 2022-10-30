@@ -36,7 +36,7 @@ const ItemProps = ({ data, id, isUser, hovered, newInputs }: IItemProps) => {
   };
 
   return (
-    <>
+    <div className="item-descriptions">
       {data.map(({ name, value, type }, index) =>
         type === 'checkbox' ? (
           <FormSelect
@@ -64,7 +64,7 @@ const ItemProps = ({ data, id, isUser, hovered, newInputs }: IItemProps) => {
           />
         )
       )}
-    </>
+    </div>
   );
 };
 

@@ -11,9 +11,9 @@ const TableHead = ({ all, setAll }: ITableHead) => {
     <thead>
       <tr className="table-head__row">
         <th>
-          {t('select all')}
-          <br />
-          {t('/deselect')}
+          <span className="hide">
+            {t('select all')} {t('/deselect')}
+          </span>
           <Form.Check
             type="checkbox"
             id="all"
@@ -23,11 +23,11 @@ const TableHead = ({ all, setAll }: ITableHead) => {
         </th>
         <th>#</th>
         <th>{t('name')}</th>
-        <th>{t('id')}</th>
+        <th className="hide">{t('id')}</th>
         <th>{t('password')}</th>
-        <th>{t('isAdmin')}</th>
-        <th>{t('isBlocked')}</th>
-        <th>{t('avatar')}</th>
+        <th>{t('admin')}</th>
+        <th>{t('blocked')}</th>
+        <th className="hide">{t('avatar')}</th>
       </tr>
     </thead>
   );

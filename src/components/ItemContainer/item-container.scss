@@ -6,6 +6,29 @@
   }
 }
 
+#item {
+  height: 800px;
+  & .card-body {
+    max-height: 50%;
+    & .item-descriptions {
+      height: 37%;
+      & p {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+  & .card-container__header {
+    min-height: 60%;
+  }
+  & .item-tags {
+    height: 15%;
+  }
+  & button {
+    margin: 0 auto;
+    display: block;
+  }
+}
+
 .item-descriptions {
   height: 60%;
   & p {
@@ -29,6 +52,13 @@
   }
 }
 
+.dark {
+  & .item-like {
+    background-color: #fff;
+    border-color: #012345;
+    color: #012345;
+  }
+}
 .item-like {
   margin: 0px auto;
 }

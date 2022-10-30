@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Avatar from 'react-avatar';
-import { Card, Form } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { AiOutlineClose } from 'react-icons/ai';
 import { DropImageZone, ConfirmModal } from '../../components';
 import { ICardContainer } from '../../models';
@@ -21,7 +21,8 @@ const CardContainer = ({
   deleteElem,
   setHovered,
   hovered,
-  isAvatar = false
+  isAvatar = false,
+  idName
 }: ICardContainer) => {
   const [show, setShow] = useState(false);
 
@@ -37,6 +38,7 @@ const CardContainer = ({
         className="card-container"
         onMouseEnter={() => (isOnPage ? setHovered(true) : null)}
         onMouseLeave={() => setHovered(false)}
+        id={idName}
       >
         <AiOutlineClose
           style={{
@@ -57,7 +59,7 @@ const CardContainer = ({
               name={title}
               src={img}
               round={isRound ? '100%' : 'none'}
-              className="card-img"
+              size="100%"
             />
           ) : (
             <LazyLoadImg image={String(img)} className="card-img" />

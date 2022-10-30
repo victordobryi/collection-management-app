@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { CollectionService, UserService } from '../API';
 import { ICollection, IUser } from '../models';
-import { Container, Spinner, Modal } from 'react-bootstrap';
+import { Spinner, Modal, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import {
   CollectionContainer,
@@ -57,7 +57,7 @@ const User = () => {
       }
     };
     fetchCollections();
-  }, [contextCollections, users]);
+  }, [contextCollections, users, id]);
 
   return isLoading ? (
     <Spinner animation="border" role="status" />
@@ -68,13 +68,13 @@ const User = () => {
         handleShow={handleShow}
         userId={String(user?.id)}
       />
-      <Container>
+      <Row xl={3} lg={3} md={2} sm={2} xs={1} className="w-100">
         {user ? (
           <ErrorWrapper>
             <UserContainer user={user} setIsLoading={setIsLoading} />
           </ErrorWrapper>
         ) : null}
-      </Container>
+      </Row>
       <PageLayout>
         <>
           {collections.map((collection, index) => (

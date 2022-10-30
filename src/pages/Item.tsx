@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Card, Container, Spinner } from 'react-bootstrap';
+import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useLocation, useParams } from 'react-router-dom';
 import { ItemService } from '../API';
 import { IItem, INewInputsData, ITag, ILike } from '../models';
@@ -127,42 +127,47 @@ const Item = () => {
     <>
       <ContainerButtons userId={String(currentItem?.userId)} />
       <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
-        <CardContainer
-          isOnPage={Boolean(id)}
-          containerName="item"
-          sectionName={section}
-          isUser={isUser}
-          deleteElem={deleteItem}
-          setFiles={setFiles}
-          title={currentItem?.title}
-          img={src}
-          hovered={hovered}
-          setHovered={setHovered}
-        >
-          <>
-            <EditTextComponent
-              hovered={hovered}
-              setValue={setNewTitle}
-              defaultValue={String(newTitle)}
-              value={newTitle}
-              title="Title"
+        <Row className="w-100 justify-content-center">
+          <Col xl={6}>
+            <CardContainer
+              isOnPage={Boolean(id)}
+              containerName="item"
+              sectionName={section}
               isUser={isUser}
-              onBlur={changeTitle}
-            />
-            <ErrorWrapper>
-              <ItemProps
-                isUser={isUser}
-                hovered={hovered}
-                data={newData}
-                id={id}
-                newInputs={newInputsData}
-              />
-            </ErrorWrapper>
-            <Like likeId={like?.id} itemId={String(id)} />
-            <Tags data={itemTags} />
-            <Card.Footer>{date}</Card.Footer>
-          </>
-        </CardContainer>
+              deleteElem={deleteItem}
+              setFiles={setFiles}
+              title={currentItem?.title}
+              img={src}
+              hovered={hovered}
+              setHovered={setHovered}
+              idName="item"
+            >
+              <>
+                <EditTextComponent
+                  hovered={hovered}
+                  setValue={setNewTitle}
+                  defaultValue={String(newTitle)}
+                  value={newTitle}
+                  title="Title"
+                  isUser={isUser}
+                  onBlur={changeTitle}
+                />
+                <ErrorWrapper>
+                  <ItemProps
+                    isUser={isUser}
+                    hovered={hovered}
+                    data={newData}
+                    id={id}
+                    newInputs={newInputsData}
+                  />
+                </ErrorWrapper>
+                <Like likeId={like?.id} itemId={String(id)} />
+                <Tags data={itemTags} />
+                <Card.Footer>{date}</Card.Footer>
+              </>
+            </CardContainer>
+          </Col>
+        </Row>
       </Container>
       <ErrorWrapper>
         <Comments userId={currentItem?.userId} itemId={id} />

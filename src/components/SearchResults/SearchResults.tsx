@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ISearchResults } from '../../models';
 import { SearchResult } from '../../components';
-import './search-results.scss';
 import { useAppSelector } from '../../redux-hooks';
+import './search-results.scss';
 
 const SearchResults = ({ results, setSearchValue }: ISearchResults) => {
   const [more, setMore] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Container, Row } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import UserService from '../../API/UserService';
 import SocketContext from '../../context/SocketContext';
 import { IComment, IComments, IUser } from '../../models';
@@ -46,10 +46,10 @@ const Comments = ({ userId, itemId }: IComments) => {
 
   return (
     <>
-      <Container>
+      <div className="flex-grow-1 w-100">
         <Button onClick={handleShow}>{t('Write a comment')}</Button>
         <h2>{t('Comments')}:</h2>
-        <Row>
+        <Row className="w-100">
           {currentComments.map(({ comment, currentDate, fromUserName }, id) => (
             <Comment
               key={id}
@@ -59,7 +59,7 @@ const Comments = ({ userId, itemId }: IComments) => {
             />
           ))}
         </Row>
-      </Container>
+      </div>
       <ErrorWrapper>
         <CommentModal
           show={show}

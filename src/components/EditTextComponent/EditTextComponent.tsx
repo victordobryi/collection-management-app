@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap';
 import { EditText, EditTextarea } from 'react-edit-text';
 import { useTranslation } from 'react-i18next';
 import { IEditTextComponent } from '../../models';
+import './edit-textcomponent.scss';
 
 const EditTextComponent = ({
   isTextArea = false,

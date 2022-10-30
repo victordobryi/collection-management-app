@@ -14,7 +14,15 @@ export const Users = () => {
           <Await resolve={users}>
             {(resolvedUsers) => (
               <ErrorWrapper>
-                <Row xl={5} lg={4} md={3} sm={2} xs={1} className="w-100">
+                <Row
+                  xxl={5}
+                  xl={4}
+                  lg={3}
+                  md={2}
+                  sm={2}
+                  xs={1}
+                  className="w-100"
+                >
                   {resolvedUsers.map((user) =>
                     user.username !== 'admin' ? (
                       <UserContainer key={user.id} user={user} />

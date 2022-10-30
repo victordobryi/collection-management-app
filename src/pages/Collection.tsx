@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Form, Modal, Spinner } from 'react-bootstrap';
+import { Modal, Spinner, Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { CollectionService } from '../API';
 import {
@@ -69,18 +69,20 @@ const Collection = () => {
         handleShow={toggleModal}
         userId={String(collection?.userId)}
       />
-      <Container className="d-flex justify-content-between">
+      <Row xl={12} className="d-flex justify-content-between w-100">
         {collection ? (
-          <CollectionContainer
-            collection={collection}
-            setIsLoading={setIsLoading}
-          />
+          <Col xl={3} md={5}>
+            <CollectionContainer
+              collection={collection}
+              setIsLoading={setIsLoading}
+            />
+          </Col>
         ) : null}
-        <Form>
+        <Col xl={3} md={5}>
           <Filter items={items} setItems={setFilteredItems} />
           <SortComponent items={items} setItems={setFilteredItems} />
-        </Form>
-      </Container>
+        </Col>
+      </Row>
       <PageLayout>
         <ErrorWrapper>
           <CollectionWrapper

@@ -1,6 +1,11 @@
+.dark .card {
+  background-color: #012345;
+}
+
 .card-container {
   height: 450px;
   justify-content: space-between;
+  padding: 0;
   &__header {
     position: relative;
     padding: 0;

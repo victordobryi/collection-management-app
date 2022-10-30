@@ -56,11 +56,11 @@ const AdminPanelTable = () => {
                 </td>
                 <td>{index + 1}</td>
                 <td>{username}</td>
-                <td>{id}</td>
+                <td className="hide">{id}</td>
                 <td>{password}</td>
-                <td>{isAdmin ? 'admin' : 'not admin'}</td>
-                <td>{isBlocked ? 'blocked' : 'not blocked'}</td>
-                <td>
+                <td>{isAdmin ? 'true' : 'false'}</td>
+                <td>{isBlocked ? 'true' : 'false'}</td>
+                <td className="hide">
                   <Avatar
                     name={username}
                     size="45"

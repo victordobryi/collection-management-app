@@ -21,7 +21,7 @@ const RegistrationForm = ({ type }: ILogin) => {
     username: Yup.string()
       .required('Lastname is required')
       .min(3, 'Lastname must be at least 3 characters')
-      .max(20, 'Lastname must not exceed 20 characters'),
+      .max(14, 'Lastname must not exceed 14 characters'),
     password: Yup.string()
       .required('Password is required')
       .min(6, 'Password must be at least 6 characters')

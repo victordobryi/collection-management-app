@@ -13,4 +13,5 @@ export interface ICardContainer {
   setHovered: React.Dispatch<React.SetStateAction<boolean>>;
   hovered: boolean;
   isAvatar?: boolean;
+  idName?: string;
 }

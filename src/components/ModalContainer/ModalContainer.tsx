@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import './modal-container.scss';
 
 interface IModal {
   title: string;
@@ -27,7 +28,7 @@ const ModalContainer = ({
         <Modal.Title>{t(title)}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>
-      <Modal.Footer className="d-flex justify-content-center">
+      <Modal.Footer className="d-flex justify-content-center modal-footer">
         <Button variant="secondary" onClick={onClose}>
           {t(closeButtonText || 'Close')}
         </Button>

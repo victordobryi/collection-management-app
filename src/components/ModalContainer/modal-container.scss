@@ -1,0 +1,13 @@
+@media (max-width: 400px) {
+  .modal-footer {
+    & button {
+      font-size: 18px;
+    }
+  }
+  .modal-content {
+    font-size: 18px;
+    & .form-select:focus::placeholder {
+      color: transparent;
+    }
+  }
+}

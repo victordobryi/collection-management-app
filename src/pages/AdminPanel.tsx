@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Row, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import SocketContext from '../context/SocketContext';
 import { useAppDispatch } from '../redux-hooks';
 import { userSlice } from '../store/reducers/users';
@@ -33,13 +33,13 @@ const AdminPanel = () => {
   }, [users]);
 
   return (
-    <Row className="d-flex flex-wrap gap-3">
+    <>
       {isLoading ? (
         <Spinner animation="border" role="status" />
       ) : (
         <AdminPanelTable />
       )}
-    </Row>
+    </>
   );
 };
 
