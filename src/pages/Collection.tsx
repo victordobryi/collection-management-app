@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Form, Modal, Spinner } from 'react-bootstrap';
+import { Modal, Spinner, Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { CollectionService } from '../API';
 import {
@@ -10,7 +10,8 @@ import {
   PageLayout,
   Filter,
   SortComponent,
-  CollectionWrapper
+  CollectionWrapper,
+  ErrorWrapper
 } from '../components';
 import { IFullData, IComment, ICollection } from '../models';
 import SocketContext from '../context/SocketContext';
@@ -24,22 +25,28 @@ const Collection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [additionalProps, setAdditionalProps] = useState('');
+  const [error, setError] = useState<Error>();
   const { collections } = useContext(SocketContext).SocketState;
   const { byLikes, byComment, likesCount, commentsCount } = useAppSelector(
     (state) => state.filter
   );
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const dBcollection = (await CollectionService.getCollection(id!)).data;
+        const dBcollection = (await CollectionService.getCollection(String(id)))
+          .data;
         if (dBcollection) {
-          setAdditionalProps(dBcollection.data.additionalInputs!);
+          setAdditionalProps(String(dBcollection.data.additionalInputs));
           setCollection(dBcollection.data);
         }
       } catch (error) {
-        if (error instanceof Error) throw new Error(error.message);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -62,44 +69,48 @@ const Collection = () => {
         handleShow={toggleModal}
         userId={String(collection?.userId)}
       />
-      <Container className="d-flex justify-content-between">
+      <Row xl={12} className="d-flex justify-content-between w-100">
         {collection ? (
-          <CollectionContainer
-            collection={collection}
-            setIsLoading={setIsLoading}
-          />
+          <Col xl={3} md={5}>
+            <CollectionContainer
+              collection={collection}
+              setIsLoading={setIsLoading}
+            />
+          </Col>
         ) : null}
-        <Form>
+        <Col xl={3} md={5}>
           <Filter items={items} setItems={setFilteredItems} />
           <SortComponent items={items} setItems={setFilteredItems} />
-        </Form>
-      </Container>
+        </Col>
+      </Row>
       <PageLayout>
-        <CollectionWrapper
-          setItems={setItems}
-          setFilteredItems={setFilteredItems}
-        >
-          <>
-            {filteredItems.map(({ data, likes, comments }, index) => {
-              const { count } = likes;
-              return (
-                isVisisble(Number(count), comments) && (
-                  <ItemContainer
-                    key={index}
-                    data={data}
-                    likes={likes}
-                    comments={comments}
-                  />
-                )
-              );
-            })}
-          </>
-        </CollectionWrapper>
+        <ErrorWrapper>
+          <CollectionWrapper
+            setItems={setItems}
+            setFilteredItems={setFilteredItems}
+          >
+            <>
+              {filteredItems.map(({ data, likes, comments }, index) => {
+                const { count } = likes;
+                return (
+                  isVisisble(Number(count), comments) && (
+                    <ItemContainer
+                      key={index}
+                      data={data}
+                      likes={likes}
+                      comments={comments}
+                    />
+                  )
+                );
+              })}
+            </>
+          </CollectionWrapper>
+        </ErrorWrapper>
       </PageLayout>
       <Modal show={show} onHide={toggleModal}>
         <CreateItemForm
           handleClose={toggleModal}
-          collectionId={id!}
+          collectionId={String(id)}
           userId={String(collection?.userId)}
           setLoading={setIsLoading}
           additionalInputs={additionalProps}

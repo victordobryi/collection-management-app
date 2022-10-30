@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { CollectionService, UserService } from '../API';
 import { ICollection, IUser } from '../models';
-import { Container, Spinner, Modal } from 'react-bootstrap';
+import { Spinner, Modal, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import {
   CollectionContainer,
   CreateCollectionForm,
   UserContainer,
   ContainerButtons,
-  PageLayout
+  PageLayout,
+  ErrorWrapper
 } from '../components';
 import SocketContext from '../context/SocketContext';
 
@@ -19,8 +20,11 @@ const User = () => {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [error, setError] = useState<Error>();
   const { collections: contextCollections, users } =
     useContext(SocketContext).SocketState;
+
+  if (error) throw new Error(error.message);
 
   const handleClose = () => {
     setShow(false);
@@ -47,13 +51,13 @@ const User = () => {
           setUser(dbUser);
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }
     };
     fetchCollections();
-  }, [contextCollections, users]);
+  }, [contextCollections, users, id]);
 
   return isLoading ? (
     <Spinner animation="border" role="status" />
@@ -64,11 +68,13 @@ const User = () => {
         handleShow={handleShow}
         userId={String(user?.id)}
       />
-      <Container>
+      <Row xl={3} lg={3} md={2} sm={2} xs={1} className="w-100">
         {user ? (
-          <UserContainer user={user} setIsLoading={setIsLoading} />
+          <ErrorWrapper>
+            <UserContainer user={user} setIsLoading={setIsLoading} />
+          </ErrorWrapper>
         ) : null}
-      </Container>
+      </Row>
       <PageLayout>
         <>
           {collections.map((collection, index) => (
@@ -87,7 +93,7 @@ const User = () => {
       >
         <CreateCollectionForm
           handleClose={handleClose}
-          userId={id!}
+          userId={String(id)}
           setLoading={setIsLoading}
           setIsVisible={setIsVisible}
         />

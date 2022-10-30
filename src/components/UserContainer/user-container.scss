@@ -1,0 +1,16 @@
+#card-users {
+  height: 300px;
+  & .card-header {
+    min-height: 70%;
+  }
+  & .card-body {
+    margin: 0 auto;
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 560px) {
+  #card-users {
+    height: 400px;
+  }
+}

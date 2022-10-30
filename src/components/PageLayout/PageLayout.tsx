@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IPageLayout } from '../../models';
 

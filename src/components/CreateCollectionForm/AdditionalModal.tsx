@@ -31,9 +31,10 @@ const AdditionalModal = ({
               label="Сhoose the name of the new property"
               onChange={setName}
               placeholder=" "
+              value={name}
             />
             <FormSelect
-              defaultValue="Сhoose the type of the new property"
+              defaultValue="Сhoose the type"
               onChange={setType}
               options={[
                 { value: 'text' },

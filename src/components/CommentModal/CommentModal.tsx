@@ -15,6 +15,9 @@ const CommentModal = ({
   const [comment, setComment] = useState('');
   const { user } = useAppSelector((state) => state.users);
   const { socket } = useContext(SocketContext).SocketState;
+  const [error, setError] = useState<Error>();
+
+  if (error) throw new Error(error.message);
 
   const addComment = async () => {
     try {
@@ -22,7 +25,7 @@ const CommentModal = ({
         comment,
         fromUserId: user?.id,
         toUserId: currentUser?.id,
-        toItemId: itemId!,
+        toItemId: String(itemId),
         currentDate: String(Date.now()),
         fromUserName: user?.username
       };
@@ -31,7 +34,7 @@ const CommentModal = ({
         socket.emit('add_NewComment', JSON.stringify(newComment));
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) setError(error);
     } finally {
       handleClose();
     }

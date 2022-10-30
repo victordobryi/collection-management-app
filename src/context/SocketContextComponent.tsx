@@ -81,12 +81,10 @@ const SocketContextComponent: React.FunctionComponent<PropsWithChildren> = (
     });
 
     socket.on('user_connected', (users: string[]) => {
-      console.info('User connected message received');
       SocketDispatch({ type: 'update_users', payload: users });
     });
 
     socket.on('user_disconnected', (uid: string) => {
-      console.info('User disconnected message received');
       SocketDispatch({ type: 'remove_user', payload: uid });
     });
 
@@ -104,7 +102,6 @@ const SocketContextComponent: React.FunctionComponent<PropsWithChildren> = (
     });
 
     socket.io.on('reconnect_failed', () => {
-      console.info('Reconnection failure.');
       alert(
         'We are unable to connect you to the chat service.  Please make sure your internet connection is stable or try again later.'
       );

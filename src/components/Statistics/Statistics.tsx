@@ -2,15 +2,18 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row } from 'react-bootstrap';
 import { IStatisticsContainer } from '../../models';
+import './statistics.scss';
 
 const Statistics = ({ title, children }: IStatisticsContainer) => {
   const { t } = useTranslation();
 
   return (
-    <Row className="d-flex flex-wrap gap-3 mt-5" xl={4} lg={4} md={3} sm={2}>
-      <h2>{t(title)}:</h2>
-      {children}
-    </Row>
+    <div className="w-100">
+      <h2 className="mt-5 statistics__title">{t(title)}:</h2>
+      <Row className="mt-3 statistics__row" xl={5} lg={4} md={3} sm={2} xs={1}>
+        {children}
+      </Row>
+    </div>
   );
 };
 

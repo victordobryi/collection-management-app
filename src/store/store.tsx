@@ -2,11 +2,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import auth from './reducers/auth';
 import users from './reducers/users';
 import filter from './reducers/filter';
+import search from './reducers/search';
 
 const rootReducer = combineReducers({
   auth,
   users,
-  filter
+  filter,
+  search
 });
 
 export const setupStore = () => {

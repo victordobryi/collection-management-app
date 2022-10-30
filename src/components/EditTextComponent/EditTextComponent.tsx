@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap';
 import { EditText, EditTextarea } from 'react-edit-text';
 import { useTranslation } from 'react-i18next';
 import { IEditTextComponent } from '../../models';
+import './edit-textcomponent.scss';
 
 const EditTextComponent = ({
   isTextArea = false,
@@ -21,7 +22,7 @@ const EditTextComponent = ({
     <div
       className={`d-flex ${
         isTextArea ? 'align-items-flex-start' : 'align-items-baseline'
-      }`}
+      } ${isTextArea ? 'flex-column' : ''}`}
     >
       {title && <Card.Text>{`${t(title || '')}: `}</Card.Text>}
       {isTextArea ? (
@@ -32,6 +33,7 @@ const EditTextComponent = ({
           value={value}
           onBlur={onBlur}
           onSave={onSave}
+          className="edit-textarea"
         />
       ) : (
         <EditText
@@ -43,6 +45,7 @@ const EditTextComponent = ({
           value={value}
           onBlur={onBlur}
           onSave={onSave}
+          className="edit-text"
         />
       )}
     </div>

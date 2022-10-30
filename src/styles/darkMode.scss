@@ -5,6 +5,7 @@
   $secondary: #111111;
   $success: #222222;
   $dark: #000;
+  $light: #000;
 
   $theme-colors: (
     'primary': $primary,
@@ -13,7 +14,7 @@
     'danger': $danger,
     'info': $indigo,
     'dark': $dark,
-    'light': #aaa
+    'light': $light
   );
 
   @each $color, $value in $theme-colors {
@@ -28,7 +29,11 @@
 
   $body-color: #eeeeee;
   $body-bg: #263c5c;
+  $btn-bg: '#263c5c';
+  $btn-color: 'red';
 
   --#{$variable-prefix}body-color: #{$body-color};
   --#{$variable-prefix}body-bg: #{$body-bg};
+  --#{$variable-prefix}btn-bg: #{$btn-bg} !important;
+  --#{$variable-prefix}btn-color: #{$btn-color} !important;
 }

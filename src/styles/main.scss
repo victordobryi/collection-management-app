@@ -2,16 +2,17 @@
 @import 'fonts';
 @import '~bootstrap/scss/bootstrap';
 @import 'reset';
-@import 'darkMode';
 @import 'react-edit-text/dist/index.css';
 @import 'react-bootstrap-typeahead/css/Typeahead.css';
+@import url(https://fonts.googleapis.com/css?family=Oswald:200,300,regular,500,600,700);
+@import 'darkMode';
 
 html,
 body {
   line-height: 1;
   font-size: 22px;
   height: 100%;
-  font-family: 'Roboto';
+  font-family: 'Oswald';
 }
 
 #root {
@@ -20,20 +21,6 @@ body {
   flex-direction: column;
   overflow: hidden;
   margin: 0 auto;
-}
-
-._container-wide {
-  min-height: 100%;
-  overflow: hidden;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-._container {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 15px;
 }
 
 main {
@@ -78,4 +65,8 @@ main {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
   }
+}
+
+.row {
+  row-gap: 1.5rem;
 }

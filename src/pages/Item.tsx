@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Card, Container, Spinner } from 'react-bootstrap';
+import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useLocation, useParams } from 'react-router-dom';
 import { ItemService } from '../API';
 import { IItem, INewInputsData, ITag, ILike } from '../models';
@@ -18,7 +18,8 @@ import {
   EditTextComponent,
   ItemProps,
   Tags,
-  Like
+  Like,
+  ErrorWrapper
 } from '../components';
 import UsePrevPage from '../hooks/UsePrevPage';
 import { useAppSelector } from '../redux-hooks';
@@ -30,6 +31,7 @@ const Item = () => {
   const [show, setShow] = useState(false);
   const [currentItem, setCurrentItem] = useState<IItem>();
   const [newTitle, setNewTitle] = useState<string>();
+  const [error, setError] = useState<Error>();
   const [newInputsData, setNewInputsData] = useState<INewInputsData[]>([]);
   const prev = UsePrevPage();
   const { isAdmin } = useAppSelector((state) => state.auth);
@@ -43,20 +45,22 @@ const Item = () => {
   const [like, setLike] = useState<ILike>();
   const [src, setSrc] = useState('');
 
+  if (error) throw new Error(error.message);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const item = (await ItemService.getItem(id!)).data;
+        const item = (await ItemService.getItem(String(id))).data;
         setLike(item.likes);
         setCurrentItem(item.data);
         setSrc(item.data.img ?? '');
-        setNewInputsData(JSON.parse(item.data.additionalInputs!));
+        setNewInputsData(JSON.parse(String(item.data.additionalInputs)));
         setNewTitle(String(item.data.title));
         const tags = JSON.parse(String(item.data.tags));
         setItemTags(tags);
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -73,7 +77,7 @@ const Item = () => {
   const date = getCurrentDate(currentItem?.createTime);
 
   const newData: INewInputsData[] = getNewInputsData(
-    JSON.parse(currentItem ? currentItem.additionalInputs! : '[]')
+    JSON.parse(currentItem ? String(currentItem.additionalInputs) : '[]')
   );
 
   const toggleModal = () => setShow(!show);
@@ -89,7 +93,7 @@ const Item = () => {
           socket.emit('update_CurrentItem', JSON.stringify({ img: url[0] }));
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -109,7 +113,7 @@ const Item = () => {
         setIsLoading(true);
         await DeleteItem({ itemId: id });
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         prev.goBack();
         setIsLoading(false);
@@ -123,42 +127,51 @@ const Item = () => {
     <>
       <ContainerButtons userId={String(currentItem?.userId)} />
       <Container className="d-flex align-items-center justify-content-center flex-column flex-grow-1">
-        <CardContainer
-          isOnPage={Boolean(id)}
-          containerName="item"
-          sectionName={section}
-          isUser={isUser}
-          deleteElem={deleteItem}
-          setFiles={setFiles}
-          title={currentItem?.title}
-          img={src}
-          hovered={hovered}
-          setHovered={setHovered}
-        >
-          <>
-            <EditTextComponent
-              hovered={hovered}
-              setValue={setNewTitle}
-              defaultValue={String(newTitle)}
-              value={newTitle}
-              title="Title"
+        <Row className="w-100 justify-content-center">
+          <Col xl={6}>
+            <CardContainer
+              isOnPage={Boolean(id)}
+              containerName="item"
+              sectionName={section}
               isUser={isUser}
-              onBlur={changeTitle}
-            />
-            <ItemProps
-              isUser={isUser}
+              deleteElem={deleteItem}
+              setFiles={setFiles}
+              title={currentItem?.title}
+              img={src}
               hovered={hovered}
-              data={newData}
-              id={id}
-              newInputs={newInputsData}
-            />
-            <Like likeId={like?.id} itemId={String(id)} />
-            <Tags data={itemTags} />
-            <Card.Footer>{date}</Card.Footer>
-          </>
-        </CardContainer>
+              setHovered={setHovered}
+              idName="item"
+            >
+              <>
+                <EditTextComponent
+                  hovered={hovered}
+                  setValue={setNewTitle}
+                  defaultValue={String(newTitle)}
+                  value={newTitle}
+                  title="Title"
+                  isUser={isUser}
+                  onBlur={changeTitle}
+                />
+                <ErrorWrapper>
+                  <ItemProps
+                    isUser={isUser}
+                    hovered={hovered}
+                    data={newData}
+                    id={id}
+                    newInputs={newInputsData}
+                  />
+                </ErrorWrapper>
+                <Like likeId={like?.id} itemId={String(id)} />
+                <Tags data={itemTags} />
+                <Card.Footer>{date}</Card.Footer>
+              </>
+            </CardContainer>
+          </Col>
+        </Row>
       </Container>
-      <Comments userId={currentItem?.userId} itemId={id} />
+      <ErrorWrapper>
+        <Comments userId={currentItem?.userId} itemId={id} />
+      </ErrorWrapper>
       <ConfirmModal show={show} onHide={toggleModal} deleteFunc={deleteItem} />
     </>
   );

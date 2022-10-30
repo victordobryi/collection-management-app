@@ -10,9 +10,12 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
   const [count, setCount] = useState(0);
   const [likedUsers, setLikedUsers] = useState<ILikedUsers[]>([]);
   const [isLiked, setIsLike] = useState(false);
+  const [error, setError] = useState<Error>();
   const localStorageId = localStorage.getItem('id');
   const { socket, likes } = useContext(SocketContext).SocketState;
   const { user } = useAppSelector((state) => state.users);
+
+  if (error) throw new Error(error.message);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +30,7 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
           setCount(Number(likes.count ?? 0));
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       }
     };
     fetchData();
@@ -41,13 +44,13 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
           likedUsers: JSON.stringify([...newUsers]),
           count: count + 1
         },
-        likeId!
+        String(likeId)
       );
       if (socket) {
         socket.emit('add_CurrentLike', JSON.stringify({ ...newUsers }));
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) setError(error);
     }
   };
 
@@ -61,20 +64,20 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
           likedUsers: JSON.stringify([...updatedUsers]),
           count: count - 1
         },
-        likeId!
+        String(likeId)
       );
       if (socket) {
         socket.emit('remove_CurrentLike', JSON.stringify({ ...updatedUsers }));
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) setError(error);
     }
   };
 
   return (
     <Button
       variant="primary"
-      className="my-3"
+      className="item-like"
       onClick={() => {
         isLiked ? removeLike() : addLike();
       }}
@@ -82,8 +85,7 @@ const Like = ({ likeId, itemId }: ILikeButton) => {
         pointerEvents: user.id ? 'auto' : 'none'
       }}
     >
-      {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
-      {count}
+      {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {count}
     </Button>
   );
 };

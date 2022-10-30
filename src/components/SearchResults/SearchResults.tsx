@@ -4,18 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ISearchResults } from '../../models';
 import { SearchResult } from '../../components';
+import { useAppSelector } from '../../redux-hooks';
 import './search-results.scss';
 
-const SearchResults = ({ results, value, setSearchValue }: ISearchResults) => {
+const SearchResults = ({ results, setSearchValue }: ISearchResults) => {
   const [more, setMore] = useState(false);
+  const { value } = useAppSelector((state) => state.search);
   const navigate = useNavigate();
   const { t } = useTranslation();
-
   const goToItem = (id: string) => {
     navigate(`/item/${id}`);
     setSearchValue('');
   };
-
   return (
     <ListGroup className="results__field">
       {results.map((result, index) => {

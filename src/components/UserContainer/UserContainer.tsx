@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogout } from '../../store/action-creators/users';
 import { CardContainer, EditTextComponent } from '../../components';
 import { DeleteUser, mediaUploader } from '../../utils';
+import { Col } from 'react-bootstrap';
+import './user-container.scss';
 
 const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const { username, img, id } = user;
@@ -24,6 +26,9 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   const location = useLocation();
   const section = location.pathname.split('/')[1];
   const [files, setFiles] = useState<File[]>([]);
+  const [error, setError] = useState<Error>();
+
+  if (error) throw new Error(error.message);
 
   useEffect(() => {
     if (files.length) {
@@ -41,7 +46,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
           socket.emit('update_CurrentUser', JSON.stringify({ img: url[0] }));
         }
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -61,7 +66,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
         socket.emit('update_CurrentUser', JSON.stringify({ username: name }));
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) setError(error);
     }
   };
 
@@ -71,7 +76,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
         setIsLoading(true);
         await DeleteUser(String(userId));
       } catch (error) {
-        console.log(error);
+        if (error instanceof Error) setError(error);
       } finally {
         prev.goBack();
         dispatch(userLogout());
@@ -81,7 +86,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
   };
 
   return (
-    <>
+    <Col>
       <CardContainer
         onClick={goToUser}
         isOnPage={Boolean(userId)}
@@ -95,6 +100,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
         hovered={hovered}
         setHovered={setHovered}
         isAvatar
+        idName="card-users"
       >
         <EditTextComponent
           hovered={hovered}
@@ -105,7 +111,7 @@ const UserContainer = ({ user, setIsLoading }: IUserContainer) => {
           onBlur={changeName}
         />
       </CardContainer>
-    </>
+    </Col>
   );
 };
 
