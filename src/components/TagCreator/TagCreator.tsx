@@ -6,7 +6,7 @@ import { Option } from 'react-bootstrap-typeahead/types/types';
 import * as TypeaheadType from 'react-bootstrap-typeahead/types/core/Typeahead';
 import { Tag } from '../../components';
 import { TagService } from '../../API';
-import { ITagCreator } from '../../models';
+import { ITag, ITagCreator } from '../../models';
 
 const TagCreator = ({ tags, setTags }: ITagCreator) => {
   const [value, setValue] = useState<string | Option>('');
@@ -18,7 +18,13 @@ const TagCreator = ({ tags, setTags }: ITagCreator) => {
   useEffect(() => {
     const fetchData = async () => {
       const tags = (await TagService.getTags()).data.data;
-      tags.map(({ name }) => setOptions((option) => [...option, name]));
+      const newTagsArray = tags.reduce<ITag[]>((o, i) => {
+        if (!o.find((v) => v.name === i.name)) {
+          o.push(i);
+        }
+        return o;
+      }, []);
+      newTagsArray.map(({ name }) => setOptions((option) => [...option, name]));
     };
     fetchData();
   }, []);
